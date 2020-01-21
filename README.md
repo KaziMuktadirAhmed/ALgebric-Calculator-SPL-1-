@@ -1,5 +1,6 @@
 # ALgebric-Calculator-SPL-1-
- 1st goalL: linier equation solver using prefix and postfix notation 
+
+ 1st goal: linier equation solver using prefix and postfix notation 
  
  steps:
  1) define basic arithmatic procedure
