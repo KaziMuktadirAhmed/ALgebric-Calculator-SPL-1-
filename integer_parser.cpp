@@ -8,21 +8,26 @@ vector<int>* simple_integer_parser(char* str){
 	static vector<int> vec[27];
 
 	int num = 0;
-	bool flag = false;
+	bool flag = false, isNeg = false;
 	for(int i=0; str[i] != '\0'; ++i){
 		if(str[i] >= 48 && str[i] <= 57){
 			flag = true;
 			num = num*10 + (str[i] - '0');
 		}
 		else if(flag){
+			if(isNeg) num *= -1;
+
 			if(str[i] >= 'a' && str[i] <= 'z')
 				vec[str[i] - 'a'].push_back(num);
-			else
+			else{
+				num *= -1;
 				vec[26].push_back(num);
+			}
 			
 			num = 0;
 			flag = false;
 		}
+		else if(str[i] == '=') isNeg = true;
 		else flag = false;
 	}
 
