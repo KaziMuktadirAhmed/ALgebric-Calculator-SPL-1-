@@ -4,11 +4,11 @@
 #include <string.h>
 using namespace std;
 
-vector<int>* simple_integer_parser(char* str){
+vector<int>* integer_parser(string str){
 	static vector<int> vec[27];
 
 	int num = 0;
-	bool flag = false, isNeg = false;
+	bool flag = false, isNeg = false, negSign = false;
 	for(int i=0; str[i] != '\0'; ++i){
 		if(str[i] >= 48 && str[i] <= 57){
 			flag = true;
@@ -16,6 +16,7 @@ vector<int>* simple_integer_parser(char* str){
 		}
 		else if(flag){
 			if(isNeg) num *= -1;
+			if(negSign){num *= -1; negSign = false;}
 
 			if(str[i] >= 'a' && str[i] <= 'z')
 				vec[str[i] - 'a'].push_back(num);
@@ -27,6 +28,7 @@ vector<int>* simple_integer_parser(char* str){
 			num = 0;
 			flag = false;
 		}
+		else if(str[i] == '-') negSign = true;
 		else if(str[i] == '=') isNeg = true;
 		else flag = false;
 	}
@@ -55,62 +57,3 @@ int main(void){
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
