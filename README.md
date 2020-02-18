@@ -10,3 +10,4 @@
  3) create a user interface for input and output. maybe a notepad or any type of text editor.
  
 NOTE : for some reason using getline to input the string results in a bug not containing the constant value after the equal sign. Used fgets to read the string input instead of getline.
+NOTE : Single variable linier eqn solve deos not counts a variable with no coefficient 
