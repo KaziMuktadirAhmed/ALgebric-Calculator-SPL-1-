@@ -107,11 +107,11 @@ void single_var_linier_eqn_solve(string inpt){
 	//STEP - 01: separating variables and constant terms
 	output = (implies + " ");
 	for(int i=0; i<vec[id].size(); ++i){
-		if(i == 0)				output += (to_string(vec[id][i]) + "x ");
+		if(vec[id][i] < 0) output += ("- " + to_string(abs(vec[id][i])) + (char)(id + 'a') + " ");
 		
-		else{
-			if(vec[id][i] < 0) output += ("- " + to_string(abs(vec[id][i])) + "x ");
-			else			   output += ("+ " + to_string(abs(vec[id][i])) + "x ");
+		else {
+			if(i == 0)	   output += (to_string(abs(vec[id][i])) + (char)(id + 'a') + " ");
+			else		   output += ("+ " + to_string(abs(vec[id][i])) + (char)(id + 'a') + " ");
 		}
 	}
 
@@ -136,12 +136,12 @@ void single_var_linier_eqn_solve(string inpt){
 	for(int i=0; i<vec[id].size(); ++i) var_sum += vec[id][i];
 	for(int i=0; i<vec[26].size(); ++i) const_sum += vec[26][i];
 
-	output += to_string(var_sum) + "x = " + to_string(const_sum) + "\n";
+	output += to_string(var_sum) + (char)(id + 'a') + " = " + to_string(const_sum) + "\n";
 	cout << output;
 	// end of step 2
 
 	// STEP - 03: calculate the value of x
-	output = (implies + " x = ");
+	output = (implies + " " + (char)(id + 'a') + " = ");
 
 	if((const_sum < 0 && var_sum > 0) || (const_sum >= 0 && var_sum < 0)){
 		fraction = to_string(abs(const_sum)) + '/' + to_string(abs(var_sum));
