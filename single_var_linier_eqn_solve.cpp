@@ -151,7 +151,7 @@ void single_var_linier_eqn_solve(string inpt){
 		output += "-";
 	}
 	else
-		fraction = to_string(const_sum) + '/' + to_string(var_sum); 
+		fraction = to_string(abs(const_sum)) + '/' + to_string(abs(var_sum)); 
 	
 	output += reduceFraction(fraction) + '\n';
 	cout << output;
