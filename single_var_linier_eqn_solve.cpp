@@ -45,7 +45,10 @@ string reduceFraction(string inpt) {
 	array[0] /= gcd;
 	array[1] /= gcd;
 
-	ans += (to_string(array[0]) + '/' + to_string(array[1]));
+	if(array[1] != 1)
+		ans += (to_string(array[0]) + '/' + to_string(array[1]));
+	else
+		ans += to_string(array[0]);
 
 	return ans;
 }
