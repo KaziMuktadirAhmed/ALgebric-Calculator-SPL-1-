@@ -91,16 +91,14 @@ void single_var_linier_eqn_solve(string inpt){
 
 	int id,steps,var_count = 0;
 	for(int i=0; i<26; ++i){
-		if(vec[i].size() > 0) ++var_count;
-
-		if(vec[i].size() > 1){
+		if(vec[i].size() > 0){
+			++var_count;
 			id = i;
-			steps = 3;
 		}
 	}
 
 	if(var_count > 1){
-		cout << "Can't Do it!!!";
+		cout << "Can't Do it!!!\n";
 		return;
 	}
 
