@@ -28,9 +28,10 @@ vector<int>* integer_parser(string str){
 			num = 0;
 			flag = false;
 		}
-		else if(str[i] == '-') negSign = true;
-		else if(str[i] == '=') isNeg = true;
 		else flag = false;
+		
+		if(str[i] == '-') negSign = true;
+		if(str[i] == '=') isNeg = true;
 	}
 
 	return vec;
