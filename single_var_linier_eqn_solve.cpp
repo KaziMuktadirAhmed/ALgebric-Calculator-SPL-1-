@@ -64,22 +64,24 @@ vector<int>* integer_parser(string str){
 			num = num*10 + (str[i] - '0');
 		}
 		else if(flag){
-			if(isNeg) num *= -1;
 			if(negSign){num *= -1; negSign = false;}
 
-			if(str[i] >= 'a' && str[i] <= 'z')
+			if(str[i] >= 'a' && str[i] <= 'z'){
+				if(isNeg) num *= -1;
 				vec[str[i] - 'a'].push_back(num);
+			}
 			else{
-				num *= -1;
+				if(!isNeg) num *= -1; 
 				vec[26].push_back(num);
 			}
 			
 			num = 0;
 			flag = false;
 		}
-		else if(str[i] == '-') negSign = true;
-		else if(str[i] == '=') isNeg = true;
 		else flag = false;
+
+	 	if(str[i] == '-') negSign = true;
+	 	if(str[i] == '=') isNeg = true;
 	}
 
 	return vec;
