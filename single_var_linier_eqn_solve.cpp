@@ -58,12 +58,17 @@ vector<int>* integer_parser(string str){
 
 	int num = 0;
 	bool flag = false, isNeg = false, negSign = false;
+	
 	for(int i=0; str[i] != '\0'; ++i){
+		if(str[i] == '-') negSign = true;
+	 	if(str[i] == '=') isNeg = true;
+
 		if(str[i] >= 48 && str[i] <= 57){
 			flag = true;
 			num = num*10 + (str[i] - '0');
 		}
-		else if(flag){
+		else if(flag || (str[i] >= 'a' && str[i] <= 'z')){
+			if(num == 0) num = 1;
 			if(negSign){num *= -1; negSign = false;}
 
 			if(str[i] >= 'a' && str[i] <= 'z'){
@@ -79,9 +84,6 @@ vector<int>* integer_parser(string str){
 			flag = false;
 		}
 		else flag = false;
-
-	 	if(str[i] == '-') negSign = true;
-	 	if(str[i] == '=') isNeg = true;
 	}
 
 	return vec;
@@ -90,7 +92,7 @@ vector<int>* integer_parser(string str){
 void single_var_linier_eqn_solve(string inpt){
 	vector<int>* vec;
 	string implies = "->";
-	string fraction,output = "";
+	string fraction, output = "", variable = "";
 
 	vec = integer_parser(inpt);
 
@@ -107,21 +109,32 @@ void single_var_linier_eqn_solve(string inpt){
 		return;
 	}
 
+	//Setting the variable for the equation
+	variable += (char)(id + 'a');
+
 	//STEP - 01: separating variables and constant terms
 	output = (implies + " ");
 	for(int i=0; i<vec[id].size(); ++i){
-		if(vec[id][i] < 0) output += ("- " + to_string(abs(vec[id][i])) + (char)(id + 'a') + " ");
-		
+		if(vec[id][i] < 0){
+			if(vec[id][i] < -1)	output += ("- " + to_string(abs(vec[id][i])) + variable + " ");
+			else				output += ("- " + variable + " ");
+		}
 		else {
-			if(i == 0)	   output += (to_string(abs(vec[id][i])) + (char)(id + 'a') + " ");
-			else		   output += ("+ " + to_string(abs(vec[id][i])) + (char)(id + 'a') + " ");
+			if(i == 0){
+				if(vec[id][i] > 1)   output += (to_string(abs(vec[id][i])) + variable + " ");
+				else				 output += (variable + " ");
+			}
+			else{
+				if(vec[id][i] > 1)	 output += ("+ " + to_string(abs(vec[id][i])) + variable + " ");
+				else				 output += ("+ " + variable + " ");
+			}
 		}
 	}
 
 	output += "= ";
 
 	for(int i=0; i<vec[26].size(); ++i){
-		if(i == 0)				output += (to_string(vec[26][i]) + " ");
+		if(i == 0)			   output += (to_string(vec[26][i]) + " ");
 		
 		else{
 			if(vec[26][i] < 0) output += ("- " + to_string(abs(vec[26][i])) + " ");
@@ -133,18 +146,21 @@ void single_var_linier_eqn_solve(string inpt){
 	// end of step 1
 
 	//STEP - 02: Calculating the co-effieicient and constant terms
-	output = (implies + " "); 
+	output = (implies + " ");
 	int var_sum = 0, const_sum = 0;
 
 	for(int i=0; i<vec[id].size(); ++i) var_sum += vec[id][i];
 	for(int i=0; i<vec[26].size(); ++i) const_sum += vec[26][i];
 
-	output += to_string(var_sum) + (char)(id + 'a') + " = " + to_string(const_sum) + "\n";
+	if(var_sum > 1 || var_sum < -1)		output += to_string(var_sum) + variable + " = " + to_string(const_sum) + "\n";
+	else if(var_sum == 1)				output += variable + " = " + to_string(const_sum) + "\n";
+	else if (var_sum == -1)				output += "-" + variable + " = " + to_string(const_sum) + "\n";
+
 	cout << output;
 	// end of step 2
 
 	// STEP - 03: calculate the value of x
-	output = (implies + " " + (char)(id + 'a') + " = ");
+	output = (implies + " " + variable + " = ");
 
 	if((const_sum < 0 && var_sum > 0) || (const_sum >= 0 && var_sum < 0)){
 		fraction = to_string(abs(const_sum)) + '/' + to_string(abs(var_sum));
@@ -161,90 +177,6 @@ void single_var_linier_eqn_solve(string inpt){
 int main(void){
 	char str[100];
 	fgets(str,100,stdin);
-	//cout << str;
 	single_var_linier_eqn_solve(str);
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
