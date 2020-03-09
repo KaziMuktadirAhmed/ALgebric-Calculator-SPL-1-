@@ -68,16 +68,20 @@ vector<int>* integer_parser(string str){
 			num = num*10 + (str[i] - '0');
 		}
 		else if(flag || (str[i] >= 'a' && str[i] <= 'z')){
-			if(num == 0) num = 1;
+			if(num == 0 && flag == false) num = 1;
 			if(negSign){num *= -1; negSign = false;}
 
 			if(str[i] >= 'a' && str[i] <= 'z'){
 				if(isNeg) num *= -1;
-				vec[str[i] - 'a'].push_back(num);
+
+				if(num != 0)
+					vec[str[i] - 'a'].push_back(num);
 			}
 			else{
 				if(!isNeg) num *= -1; 
-				vec[26].push_back(num);
+				
+				if(num != 0)
+					vec[26].push_back(num);
 			}
 			
 			num = 0;
@@ -151,6 +155,8 @@ void single_var_linier_eqn_solve(string inpt){
 
 	for(int i=0; i<vec[id].size(); ++i) var_sum += vec[id][i];
 	for(int i=0; i<vec[26].size(); ++i) const_sum += vec[26][i];
+
+	if(var_sum == 0) {cout << "Invalid Equation\n"; return;}
 
 	if(var_sum > 1 || var_sum < -1)		output += to_string(var_sum) + variable + " = " + to_string(const_sum) + "\n";
 	else if(var_sum == 1)				output += variable + " = " + to_string(const_sum) + "\n";
