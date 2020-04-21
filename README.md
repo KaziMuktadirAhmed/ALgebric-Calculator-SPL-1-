@@ -1,9 +1,17 @@
 # ALgebric-Calculator-SPL-1-
 
- 1st goal: linier equation solver using prefix and postfix notation 
+ This branch is alternative parsing section which uses resource from "C The Complete reference - Chapter 24 - Expression parsing      and Evaluation"
  
- steps:
- 1) define basic arithmatic procedure.
-          Example: converting conjugate root, reducing fractoin, GCD and LCM.
- 2) create a integer parser to separate integer from string input.
-          Example: parseFraction(string inpt) in reducing fraction.
+ get_token(): 
+ The function can be used to parse any expression string. The function separates a string into 3 types of token
+        1. NUMBER
+        2. VARIABLE
+        3. DELIMETER
+ NUMBER - are considered the digits and  numerical values in the expression string
+ VARIABLES - any type of alphabatic charecter is considered as VRIABLE type token in this function
+ DELIMITER - are considered as operators or braces in a expression.
+ 
+ 1. The get_token() need a delimeter to set diffence from one token type to another. 
+ 2. The delimiter considered in this function are ' ', +, -, /, *, %, ^, (, ), = 
+ 3. The function will not separate a text 555x into 555 and x beacuse there is no delimeter between them 
+ 4. But it will separte 555*x or 555 x into 555 and x
