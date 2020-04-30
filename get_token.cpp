@@ -54,8 +54,13 @@ void get_token(void)
 		*temp++ = *prog++;
 	}
 	else if(is_alphabte(*prog)) {
-		while(!is_delimiter(*prog) && !is_digit(*prog) && !isspace(*prog)) *temp++ = *prog++;
+		/*
+			The following loop is to handel variable name with multiple charecter
+		*/
+		//while(!is_delimiter(*prog) && !is_digit(*prog) && !isspace(*prog)) *temp++ = *prog++; 
+		
 		token_type = VARIABlE;
+		*temp++ = *prog++;
 	}
 	else if(is_digit(*prog)) {
 		while(!is_delimiter(*prog) && !is_alphabte(*prog) && !isspace(*prog)) *temp++ = *prog++;
