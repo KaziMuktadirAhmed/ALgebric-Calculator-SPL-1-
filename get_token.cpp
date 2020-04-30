@@ -30,7 +30,7 @@ bool is_digit(int str)
 
 bool is_delimiter(char c)
 {
-	if(strchr(" +-/*%^=()", c) || c == 9 || c == '\r' || c == 0)
+	if(strchr(" +-/*%^=()", c) || c == 9 || c == '\r' || c == 0 || c == '\n')
 		return true;
 	else
 		return false;
@@ -44,9 +44,12 @@ void get_token(void)
 	temp = token;
 	*temp = '\0';
 
-	if(!*prog) return; // at the end of expression
-
 	while(isspace(*prog)) ++prog; // skip over the white space
+
+	if(*prog == '\0') {
+		token_type = 0;
+		return;
+	} // at the end of expression
 
 	if(strchr("+-*/%^=()", *prog)) {
 		token_type = DELIMITER;
@@ -87,6 +90,9 @@ int main(void)
 			printf("This token is a variable\n");
 		else if(token_type == NUMBER)
 			printf("This token is  a number\n");
+		else{
+			printf("END");
+		}
 	}
 
 	return 0;
