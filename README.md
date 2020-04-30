@@ -11,5 +11,3 @@
  
  1. The get_token() need a delimeter to set diffence from one token type to another. 
  2. The delimiter considered in this function are ' ', +, -, /, *, %, ^, (, ), = 
- 3. The function will not separate a text 555x into 555 and x beacuse there is no delimeter between them 
- 4. But it will separte 555*x or 555 x into 555 and x
