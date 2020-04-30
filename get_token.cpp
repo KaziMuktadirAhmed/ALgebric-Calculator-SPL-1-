@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define DELIMITER 1
-#define VARIABlE  2
+#define VARIABLE  2
 #define NUMBER    3
 
 char *prog; /* points to the expression to be analyzed */
@@ -50,8 +50,7 @@ void get_token(void)
 
 	if(strchr("+-*/%^=()", *prog)) {
 		token_type = DELIMITER;
-		// advance to next char
-		*temp++ = *prog++;
+		*temp++ = *prog++;		// advance to next char
 	}
 	else if(is_alphabte(*prog)) {
 		/*
@@ -59,7 +58,7 @@ void get_token(void)
 		*/
 		//while(!is_delimiter(*prog) && !is_digit(*prog) && !isspace(*prog)) *temp++ = *prog++; 
 		
-		token_type = VARIABlE;
+		token_type = VARIABLE;
 		*temp++ = *prog++;
 	}
 	else if(is_digit(*prog)) {
@@ -84,7 +83,7 @@ int main(void)
 
 		if(token_type == DELIMITER)
 			printf("This token is an oparator or braces\n");
-		else if(token_type == VARIABlE)
+		else if(token_type == VARIABLE)
 			printf("This token is a variable\n");
 		else if(token_type == NUMBER)
 			printf("This token is  a number\n");
