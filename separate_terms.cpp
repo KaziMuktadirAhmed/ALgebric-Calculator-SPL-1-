@@ -95,9 +95,24 @@ void separate_term(){
 		if((prog - input) >= strlen(input)) break;
 		get_token();
 
-		tokens.push_back(token);
-        types.push_back(token_type);
+        string demo;
+        demo.assign(token);
+
+        if(token_type >= 1 && token_type <= 3){
+		    tokens.push_back(demo);
+            types.push_back(token_type);
+        }
 	}
+
+    for(int i=0; i<types.size(); ++i){
+         // print the output
+		if(types[i] == DELIMITER)
+			cout << tokens[i] << ":\tThis token is an oparator or braces\n";
+		else if(types[i] == VARIABLE)
+			cout << tokens[i] << ":\tThis token is a variable\n";
+		else if(types[i] == NUMBER)
+			cout << tokens[i] << ":\tThis token is a number\n";
+    }
 
     bool passedEqualSign = false;
     bool passedNegSign = false;
@@ -106,6 +121,13 @@ void separate_term(){
     for(int i=0; i<types.size(); ++i){
         if(types[i] == NUMBER){
             num = token_to_int(tokens[i]);
+
+            if(i == types.size() - 1){ 
+                if(!passedEqualSign) num *= -1;
+                if(passedNegSign) {num *= -1; passedNegSign = false;}
+                
+                vec[26].push_back(num);
+            }
         }
         else if(types[i] == VARIABLE){
             if(num == 0) num = 1;
@@ -114,12 +136,33 @@ void separate_term(){
             if(passedNegSign) {num *= -1; passedNegSign = false;}
 
             vec[tokens[i][0] - 'a'].push_back(num);
+            num = 0;
         }
         else if(types[i] == DELIMITER){
-            if(num != 0) vec[26].push_back(num);
+            if(num != 0){ 
+                if(!passedEqualSign) num *= -1;
+                if(passedNegSign) {num *= -1; passedNegSign = false;}
+
+                vec[26].push_back(num);
+            }
+            num = 0;
 
             if(tokens[i][0] == '=') passedEqualSign = true;
             if(tokens[i][0] == '-') passedNegSign = true;
+        }
+    }
+}
+
+void cheak_container(){
+    for(int i=0; i<27; ++i){
+        if(vec[i].size() > 0){
+            
+            if(i == 26)    cout << "Const: ";
+            else           cout << (char)('a' + i) << ": ";
+
+            for(int k=0; k<vec[i].size(); ++k) cout << vec[i][k] << " ";
+            cout << endl;
+        
         }
     }
 }
@@ -131,6 +174,7 @@ int main(void)
 	prog = input;
 
 	separate_term();
+    cheak_container();
 
 	return 0;
 }
