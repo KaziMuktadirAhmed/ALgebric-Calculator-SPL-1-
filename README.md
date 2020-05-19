@@ -10,3 +10,5 @@
  3) create a user interface for input and output. maybe a notepad or any type of text editor.
  
 NOTE : for some reason using getline to input the string results in a bug not containing the constant value after the equal sign. Used fgets to read the string input instead of getline.
+
+NOTE : the new eqaution solver uses the recursive decent parser as it's parsing function. it's more accurate then the custom made parser the preveious one used. both of the function can only solve single variable linear eqn. the recursive decent parser can parse every kind of algebraic expression. the separate term function should be diffrent for linear and non linear expression. the given one is only applicable for linear expression.
