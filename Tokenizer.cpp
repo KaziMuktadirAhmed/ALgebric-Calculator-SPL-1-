@@ -124,12 +124,38 @@ public:
 	~Tokenizer() {}
 
 	vector<string> tokens;
-    vector<int> types;	
+    vector<int> types;
+
+    unsigned int length = types.size();	
 
 	void start(string user_input)
 	{
 		tokenize_input(user_input);
 	}
+
+	void testTokenizer()
+	{
+		if (types.size() == 0){
+			cout << "No input given to the Tokenizer.\n";
+			return;
+		}
+
+		for(int i=0; i<tokens.size(); ++i)
+    	{
+        	if(types[i] == DELIMITER)      cout << "It's Delimeter \t";
+        	else if (types[i] == VARIABLE) cout << "It's Variable \t";
+        	else if (types[i] == NUMBER)   cout << "It's Number \t";
+        	
+        	cout << "token : " << tokens[i] << "\n"; 
+    	}
+	}
+
+	void clear_data()
+	{
+		tokens.clear();
+		types.clear();
+	}
+
 };
 
 int main(void)
