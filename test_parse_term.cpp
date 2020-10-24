@@ -178,7 +178,23 @@ public:
     vector< pair <string, int> > variable_and_exponent;
 };
 
+class Parser
+{
+private:
+    /* data */
+	Tokenizer tokenized_input;
+public:
+    Parser(/* args */) {}
+    ~Parser() {}
 
+	void take_input(string user_input)
+	{
+		tokenized_input.start(user_input);
+	}
+
+	
+
+};
 
 
 
