@@ -53,3 +53,10 @@ void MainWindow::on_btn_clear_clicked()
     clearData();
     plot();
 }
+
+void MainWindow::on_btn_zoomFull_clicked()
+{
+    ui->plot->xAxis->setRange(*std::min_element(qv_x.begin(), qv_x.end()), *std::max_element(qv_x.begin(), qv_x.end()));
+    ui->plot->yAxis->setRange(*std::min_element(qv_y.begin(), qv_y.end()), *std::max_element(qv_y.begin(), qv_y.end()));
+    plot();
+}

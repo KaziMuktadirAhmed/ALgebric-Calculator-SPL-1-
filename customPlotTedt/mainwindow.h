@@ -24,6 +24,8 @@ private slots:
 
     void on_btn_clear_clicked();
 
+    void on_btn_zoomFull_clicked();
+
 private:
     Ui::MainWindow *ui;
 
