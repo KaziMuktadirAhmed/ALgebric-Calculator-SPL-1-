@@ -33,6 +33,12 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="minimum">
+     <double>-9999.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>9999.000000000000000</double>
+    </property>
    </widget>
    <widget class="QDoubleSpinBox" name="bx_y">
     <property name="geometry">
@@ -42,6 +48,12 @@
       <width>101</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="minimum">
+     <double>-9999.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>9999.000000000000000</double>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_x">

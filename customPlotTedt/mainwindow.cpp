@@ -7,9 +7,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // custom plot
     ui->plot->addGraph();
     ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
     //ui->plot->graph(0)->setLineStyle(QCPGraph::lsNone);
+
+    // interactive zoom and drag
+    ui->plot->setInteraction(QCP::iRangeDrag, true);
+    ui->plot->setInteraction(QCP::iRangeZoom, true);
 }
 
 MainWindow::~MainWindow()
