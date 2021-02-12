@@ -104,18 +104,6 @@ private:
             	types.push_back(token_type);
         	}
 		}
-
-		// tesing part //
-    	// for(int i=0; i<tokens.size(); ++i)
-    	// {
-     //    	if(types[i] == DELIMITER)      cout << "It's Delimeter \t";
-     //    	else if (types[i] == VARIABLE) cout << "It's Variable \t";
-     //    	else if (types[i] == NUMBER)   cout << "It's Number \t";
-        	
-     //    	cout << "token : " << tokens[i] << "\n"; 
-    	// }
-    	// end of testing part //
-
 	}	
 
 
@@ -166,7 +154,7 @@ public:
     Term(/* args */) {}
     ~Term() {}
 
-    bool isOperate;
+    bool isOperator;
     string awperator;
 
     bool isBrace;
@@ -181,18 +169,56 @@ public:
 class Parser
 {
 private:
-    /* data */
+    const int DELIMITER = 1;
+	const int VARIABLE = 2;
+	const int NUMBER = 3;
+
 	Tokenizer tokenized_input;
+
+	Term get_term(int start_index)
+	{
+		Term demo;
+
+		if (tokenized_input.types[start_index] == DELIMITER) {
+			if (strchr("(){}[]", tokenized_input.tokens[start_index][0])) {
+				demo.isOperator = true;
+				demo.isBrace = false;
+				demo.isConstant = false;
+
+				demo.awperator = tokenized_input.tokens[start_index];
+
+				cout << "hoise\n";
+			}
+			else {
+				demo.isOperator = false;
+				demo.isBrace = true;
+				demo.isConstant = false;
+
+				demo.brace = tokenized_input.tokens[start_index];
+
+				cout << "hoise ?? I think";
+			}
+
+
+		}
+		
+
+		
+		return demo;
+	}
+
 public:
     Parser(/* args */) {}
     ~Parser() {}
 
+	vector <Term> terms; // Cx^n .... braces ...... operators ... constant
+
 	void take_input(string user_input)
 	{
 		tokenized_input.start(user_input);
-	}
-
-	
+		tokenized_input.testTokenizer();
+		get_term(0);
+	}	
 
 };
 
@@ -207,12 +233,14 @@ public:
 
 int main(void)
 {
-	Tokenizer t1;
+	// Tokenizer t1;
+	Parser p1;
 
 	string inpt;
     getline(cin, inpt, '\n');
 
-    t1.start(inpt);
+    // t1.start(inpt);
+	p1.take_input(inpt);
 
 	return 0;
 }

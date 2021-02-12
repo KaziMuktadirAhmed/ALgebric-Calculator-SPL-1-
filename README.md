@@ -7,3 +7,9 @@
           Example: converting conjugate root, reducing fractoin, GCD and LCM.
  2) create a integer parser to separate integer from string input.
           Example: parseFraction(string inpt) in reducing fraction.
+
+
+cd command for windows to change drive 
+X:
+
+x = drive letter
