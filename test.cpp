@@ -315,7 +315,7 @@ void getToken_chk(string inpt){
 
     for(int i=0; i<tokens.size(); ++i)
     {
-        if (types[i] == DELIMITER)      cout << "It's Delimeter \t";
+        if (types[i] == DELIMITER)     cout << "It's Delimeter \t";
         else if (types[i] == VARIABLE) cout << "It's Variable \t";
         else if (types[i] == NUMBER)   cout << "It's Number \t";
         
