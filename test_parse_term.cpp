@@ -180,7 +180,7 @@ private:
 		Term demo;
 
 		if (tokenized_input.types[start_index] == DELIMITER) {
-			if (strchr("(){}[]", tokenized_input.tokens[start_index][0])) {
+			if (strchr("+-/*^", tokenized_input.tokens[start_index][0])) {
 				demo.isOperator = true;
 				demo.isBrace = false;
 				demo.isConstant = false;
