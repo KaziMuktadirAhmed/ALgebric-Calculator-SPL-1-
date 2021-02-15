@@ -14,6 +14,9 @@ private:
 	const int DELIMITER = 1;
 	const int VARIABLE = 2;
 	const int NUMBER = 3;
+	const int BRACES = 4;
+	const int EXPONENT_SIGN = 5;
+	const int EQUAL_SIGN = 6;
 
 	char *prog;         /* points to the expression to be analyzed */
 	char input[100];    // global input container
@@ -59,8 +62,21 @@ private:
 			return;
 		} // at the end of expression
 
-		if(strchr("+-*/%^=(){}[]", *prog)) {
+		if(strchr("+-*/%", *prog)) {
 			token_type = DELIMITER;
+			*temp++ = *prog++;		// advance to next char
+		}
+		else if(strchr("+-*/%^=(){}[]", *prog)) {
+
+			if(strchr("+-*/%", *prog)) // Differentiate the delimeters
+				token_type = DELIMITER;
+			else if(*prog == '=')
+				token_type = EQUAL_SIGN;
+			else if(*prog == '^')
+				token_type = EXPONENT_SIGN;
+			else if(strchr("(){}[]", *prog))			
+				token_type = BRACES;
+
 			*temp++ = *prog++;		// advance to next char
 		}
 		else if(is_alphabte(*prog)) {
@@ -99,7 +115,7 @@ private:
         	string demo;
         	demo.assign(token);
 
-        	if(token_type >= 1 && token_type <= 3){
+        	if(token_type >= 1 && token_type <= 6){
 		    	tokens.push_back(demo);
             	types.push_back(token_type);
         	}
@@ -130,9 +146,12 @@ public:
 
 		for(int i=0; i<tokens.size(); ++i)
     	{
-        	if(types[i] == DELIMITER)      cout << "It's Delimeter \t";
+        	if(types[i] == DELIMITER)      cout << "It's Operator \t";
         	else if (types[i] == VARIABLE) cout << "It's Variable \t";
         	else if (types[i] == NUMBER)   cout << "It's Number \t";
+			else if (types[i] == BRACES)   cout << "It's Braces \t";
+			else if (types[i] == EQUAL_SIGN)   cout << "It's Equal sign \t";
+			else if (types[i] == EXPONENT_SIGN)   cout << "It's Exponent sign \t";
         	
         	cout << "token : " << tokens[i] << "\n"; 
     	}
