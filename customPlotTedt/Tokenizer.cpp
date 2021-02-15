@@ -38,9 +38,21 @@ void Tokenizer::get_token()
                 return;
             } // at the end of expression
 
-            if(strchr("+-*/%^=(){}[]", *prog)) {
+            if(strchr("+-*/%", *prog)) {
                 token_type = DELIMITER;
                 *temp++ = *prog++;		// advance to next char
+            }
+            else if(strchr("+-*/%^=(){}[]", *prog)) {
+                if(strchr("+-*/%", *prog))  // Differentiate the delimeters
+                    token_type = DELIMITER;
+                else if(*prog == '=')
+                    token_type = EQUAL_SIGN;
+                else if(*prog == '^')
+                    token_type = EXPONENT_SIGN;
+                else if(strchr("(){}[]", *prog))
+                    token_type = BRACES;
+
+                 *temp++ = *prog++;		// advance to next char
             }
             else if(is_alphabte(*prog)) {
                 /*
@@ -67,7 +79,7 @@ void Tokenizer::tokenize_input(string inpt)
             prog = input;
 
             while(1){
-                if((prog - input) >= strlen(input))
+                if((prog - input) >= (int)strlen(input))
                     break;
 
                 get_token();
@@ -75,22 +87,11 @@ void Tokenizer::tokenize_input(string inpt)
                 string demo;
                 demo.assign(token);
 
-                if(token_type >= 1 && token_type <= 3){
+                if(token_type >= 1 && token_type <= 6){
                     tokens.push_back(demo);
                     types.push_back(token_type);
                 }
             }
-
-            // tesing part //
-//             for(unsigned int i=0; i<tokens.size(); ++i)
-//             {
-//                if(types[i] == DELIMITER)      cout << "It's Delimeter \t";
-//                else if (types[i] == VARIABLE) cout << "It's Variable \t";
-//                else if (types[i] == NUMBER)   cout << "It's Number \t";
-
-//                cout << "token : " << tokens[i] << "\n";
-//             }
-            // end of testing part //
 }
 
 Tokenizer::Tokenizer()

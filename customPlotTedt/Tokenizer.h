@@ -16,6 +16,9 @@ private:
     const int DELIMITER = 1;
     const int VARIABLE = 2;
     const int NUMBER = 3;
+    const int BRACES = 4;
+    const int EXPONENT_SIGN = 5;
+    const int EQUAL_SIGN = 6;
 
     char *prog;         /* points to the expression to be analyzed */
     char input[100];    // global input container
