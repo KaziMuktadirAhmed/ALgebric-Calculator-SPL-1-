@@ -8,334 +8,258 @@
 
 using namespace std;
 
-#define DELIMITER 1
-#define VARIABLE  2
-#define NUMBER    3
-
-char *prog;         /* points to the expression to be analyzed */
-char input[100];    // global input container
-char token[100];    // global token container
-int token_type;     // global token type container
-
-struct term												// Experimental area
-{														// at the declaration stage 
-    bool isConst;										// this structure is a experimantal
-	bool isBraces;										// structure to separate a given expression	
-	char braceType;										// into algebraic terms.
-														// terms contain a co-efficient 
-    vector < pair <char, int> > variable_list; 			// a list of variables along with respective exponent
-	string leadingOperator;								// and a short chek if its a constant term or not
-    int constant;										// and a string to contain the leading opearator
-};														// for the sake of handling braces; braces will also be included
-														// in the term structure
-vector <term> term_container;							// GLOBALLY MANAGED CONTAINER FOR TERMS
-
-bool is_alphabte(int str)
+class Tokenizer
 {
-	if((str >= 'a' && str <= 'z') || (str >= 'A' && str <= 'Z'))
-		return true;
-	else
-		return false;
-}
+private:
+	const int DELIMITER = 1;
+	const int VARIABLE = 2;
+	const int NUMBER = 3;
+	const int BRACES = 4;
+	const int EXPONENT_SIGN = 5;
+	const int EQUAL_SIGN = 6;
 
-bool is_digit(int str)
-{
-	if(str >= '0' && str <= '9')
-		return true;
-	else
-		return false;
-}
+	char *prog;         /* points to the expression to be analyzed */
+	char input[100];    // global input container
+	char token[100];    // global token container
+	int token_type;     // global token type container
 
-bool is_delimiter(char c)
-{
-	if(strchr(" +-/*%^=(){}[]", c) || c == 9 || c == '\r' || c == 0 || c == '\n')
-		return true;
-	else
-		return false;
-}
-
-// Retruns the next token 
-void get_token(void)
-{
-	register char *temp;
-	token_type = 0;
-	temp = token;
-	*temp = '\0';
-
-	while(isspace(*prog)) ++prog; // skip over the white space
-
-	if(*prog == '\0') {
-		token_type = 0;
-		return;
-	} // at the end of expression
-
-	if(strchr("+-*/%^=(){}[]", *prog)) {
-		token_type = DELIMITER;
-		*temp++ = *prog++;		// advance to next char
-	}
-	else if(is_alphabte(*prog)) {
-		/*
-			The following loop is to handel variable name with multiple charecter
-		*/
-		//while(!is_delimiter(*prog) && !is_digit(*prog) && !isspace(*prog)) *temp++ = *prog++; 
-		
-		token_type = VARIABLE;
-		*temp++ = *prog++;
-	}
-	else if(is_digit(*prog)) {
-		while(!is_delimiter(*prog) && !is_alphabte(*prog) && !isspace(*prog)) *temp++ = *prog++;
-		token_type = NUMBER;
-	}
-
-	*temp = '\0';
-}
-
-int token_to_int(string temp){
-    int toNum = 0;
-
-    for(int i=0; temp[i] != '\0'; ++i)
-        toNum = toNum*10 + (temp[i]-'0');
-    
-    return toNum;
-}
-
-////// EXPERIMENTAL AREA //////
-
-// make term takes a small list of toekns and returns a term structure//
-term make_term(vector <int> type, vector <string> token, int size, string leadingOperator){
-	struct term finalTerm;              //...........................................// final return value
-
-	bool foundExponetSign = false;		//...........................................// boolean trigger for exponential sign token
-	bool foundVariable = false;			//...........................................// boolean trigger for vaiable cahr
-	bool foundNumber = false;			//...........................................// boolean trigger for number value
-	bool foundMultiplicationSign = false;//..........................................// boolean trigger for multiplication sign token
-	bool foundDivisionSign = false;		//...........................................// boolean trigger for division sign token
-
-	int value = 0;				//...................................................// temporary container for number value
-	char variableChar = '\0';   //...................................................// temporary container for charecter variable
-
-	for(int i=0; i<size; ++i)           //...........................................// initializing loop to separate co-efficeint from exponent
+	bool is_alphabte(int str)
 	{
-		// Special term containing only braces
-		if(strchr("(){}[]", token[i][0]))
-		{
-			finalTerm.isBraces = true;
-			finalTerm.braceType = token[i][0];
-			break;
+		if((str >= 'a' && str <= 'z') || (str >= 'A' && str <= 'Z'))
+			return true;
+		else
+			return false;
+	}
+
+	bool is_digit(int str)
+	{
+		if(str >= '0' && str <= '9')
+			return true;
+		else
+			return false;
+	}
+
+	bool is_delimiter(char c)
+	{
+		if(strchr(" +-/*%^=(){}[]", c) || c == 9 || c == '\r' || c == 0 || c == '\n')
+			return true;
+		else
+			return false;
+	}
+
+	// Retruns the next token 
+	void get_token(void)
+	{
+		register char *temp;
+		token_type = 0;
+		temp = token;
+		*temp = '\0';
+
+		while(isspace(*prog)) ++prog; // skip over the white space
+
+		if(*prog == '\0') {
+			token_type = 0;
+			return;
+		} // at the end of expression
+
+		if(strchr("+-*/%", *prog)) {
+			token_type = DELIMITER;
+			*temp++ = *prog++;		// advance to next char
 		}
-		// end of special if step	
+		else if(strchr("+-*/%^=(){}[]", *prog)) {
 
+			if(strchr("+-*/%", *prog)) // Differentiate the delimeters
+				token_type = DELIMITER;
+			else if(*prog == '=')
+				token_type = EQUAL_SIGN;
+			else if(*prog == '^')
+				token_type = EXPONENT_SIGN;
+			else if(strchr("(){}[]", *prog))			
+				token_type = BRACES;
 
-		// initially storing in temporary container 
-		if (type[i] == NUMBER)
-		{ 
-			value = token_to_int(token[i]);
-			foundNumber = true;
+			*temp++ = *prog++;		// advance to next char
 		}
-		else if (type[i] == DELIMITER)
-		{
-			if(token[i][0] == '^')	
-			{
-				foundExponetSign = true;
-				continue;
-			}
-		}
-		else if (type[i] == VARIABLE)
-		{
-			if (!foundVariable)
-			{
-				variableChar = token[i][0];
-				foundVariable = true;
-					
-				if (i < size - 1)	continue;
-			}
-			else if (foundVariable)
-			{
-				i--;	//........................................................// repeate this iteration
-			}
-		}
-		// end of the step
-
-
-		// fill up the variable container
-		if (foundVariable)
-		{
-			if(foundExponetSign)
-			{
-				if(foundNumber)
-				{
-					finalTerm.variable_list.push_back(make_pair(variableChar, value));
-					
-					variableChar = '\0';
-					value = 0;
-
-					foundVariable = false;
-					foundExponetSign = false;
-					foundNumber = false;
-				}
-			}
-			else
-			{
-				finalTerm.variable_list.push_back(make_pair(variableChar, 1));
-
-				variableChar = '\0';
-				value = 0;
-
-				foundVariable = false;
-				foundNumber = false;
-				foundExponetSign = false;
-			}
-			
-		}
-		else if (foundNumber)
-		{
-			if (finalTerm.constant == 0) finalTerm.constant = value;
-			else 						 finalTerm.constant *= value;
+		else if(is_alphabte(*prog)) {
+			/*
+				The following loop is to handel variable name with multiple charecter
+			*/
+			//while(!is_delimiter(*prog) && !is_digit(*prog) && !isspace(*prog)) *temp++ = *prog++; 
 		
-			foundNumber = false;
+			token_type = VARIABLE;
+			*temp++ = *prog++;
 		}
-	}
-
-	return finalTerm;
-}
-// end of make term //
-
-// start of packing tokens //
-
-void chek_packing(vector<int> types, vector<string> tokens, string leadingOP){
-	cout << " A Pack with leading op: " << leadingOP << endl; 
-	for (int i=0; i<types.size(); ++i){
-		cout << types[i] << "\t" << tokens[i] << endl;
-	}
-}
-
-
-void getAndPackTokens(string inpt){
-    vector<string> tokens;
-    vector<int> types;
-    
-    strcpy(input, inpt.c_str());
-    prog = input;
-
-    while(1){
-		if((prog - input) >= strlen(input)) break;
-		get_token();
-
-        string demo;
-        demo.assign(token);
-
-        if(token_type >= 1 && token_type <= 3){
-		    tokens.push_back(demo);
-            types.push_back(token_type);
-        }
-	}
-
-	vector <int> pack_types;
-	vector<string> pack_tokens;
-	string leadingOperator = "+";
-
-    for(int i=0; i<tokens.size(); ++i)
-    {
-        if(types[i] == DELIMITER || i == types.size() - 1)
-		{
-			if(pack_types.size() > 0) //..........................................................................................// chaking if pack already has something in before prcessing for the new delimiter
-			{	
-				chek_packing(pack_types, pack_tokens, leadingOperator);
-				//term_container.push_back(make_term(pack_types, pack_tokens, pack_types.size(), leadingOperator));
+		else if(is_digit(*prog)) {
+			while(!is_delimiter(*prog) && !is_alphabte(*prog) && !isspace(*prog)) 
+				*temp++ = *prog++;
 			
-				pack_tokens.clear();
-				pack_types.clear();
-			}
-
-			if(tokens[i][0] == '=') continue; //................................................................................// go to the next container if it has a equal sign
-
-			if(strchr("(){}[]", tokens[i][0])) //...............................................................................// special term containing only braces
-			{
-				pack_types.push_back(types[i]);
-				pack_tokens.push_back(tokens[i]);
-
-				chek_packing(pack_types, pack_tokens, "none");
-				//term_container.push_back(make_term(pack_types, pack_tokens, 1));
-				
-				pack_tokens.clear();
-				pack_types.clear();
-
-				continue;
-			} //.................................................................................................................// End of special if
-			else
-			{
-				leadingOperator = tokens[i];
-				continue;
-			}
+			token_type = NUMBER;
 		}
 
-		pack_types.push_back(types[i]);    //....................................................................................// standard packing of token types
-		pack_tokens.push_back(tokens[i]);  //....................................................................................// standard packing of tokens
-    }
-
-}
-
-
-
-
-// End of packing tokens //
-
-
-
-
-
-
-////// EXPERIMENTAL AREA //////
-
-
-
-
-
-//// TESTING AREA /////
-
-void getToken_chk(string inpt){
-    vector<string> tokens;
-    vector<int> types;
-    
-    strcpy(input, inpt.c_str());
-    prog = input;
-
-    while(1){
-		if((prog - input) >= strlen(input)) break;
-		get_token();
-
-        string demo;
-        demo.assign(token);
-
-        if(token_type >= 1 && token_type <= 3){
-		    tokens.push_back(demo);
-            types.push_back(token_type);
-        }
+		*temp = '\0';
 	}
 
-    for(int i=0; i<tokens.size(); ++i)
-    {
-        if (types[i] == DELIMITER)     cout << "It's Delimeter \t";
-        else if (types[i] == VARIABLE) cout << "It's Variable \t";
-        else if (types[i] == NUMBER)   cout << "It's Number \t";
-        
-        cout << "token : " << tokens[i] << "\n"; 
-    }
+	void tokenize_input(string inpt)
+	{
+    	// vector<string> tokens;
+    	// vector<int> types;
+    
+    	strcpy(input, inpt.c_str());
+    	prog = input;
 
-}
+    	while(1){
+			if((prog - input) >= strlen(input)) 
+				break;
 
-void test(){
+			get_token();
+
+        	string demo;
+        	demo.assign(token);
+
+        	if(token_type >= 1 && token_type <= 6){
+		    	tokens.push_back(demo);
+            	types.push_back(token_type);
+        	}
+		}
+	}	
+
+
+public:
+	Tokenizer() {}
+	~Tokenizer() {}
+
+	vector<string> tokens;
+    vector<int> types;
+
+    unsigned int length = types.size();	
+
+	void start(string user_input)
+	{
+		tokenize_input(user_input);
+	}
+
+	void testTokenizer()
+	{
+		if (types.size() == 0){
+			cout << "No input given to the Tokenizer.\n";
+			return;
+		}
+
+		for(int i=0; i<tokens.size(); ++i)
+    	{
+        	if(types[i] == DELIMITER)      cout << "It's Operator \t";
+        	else if (types[i] == VARIABLE) cout << "It's Variable \t";
+        	else if (types[i] == NUMBER)   cout << "It's Number \t";
+			else if (types[i] == BRACES)   cout << "It's Braces \t";
+			else if (types[i] == EQUAL_SIGN)   cout << "It's Equal sign \t";
+			else if (types[i] == EXPONENT_SIGN)   cout << "It's Exponent sign \t";
+        	
+        	cout << "token : " << tokens[i] << "\n"; 
+    	}
+	}
+
+	void clear_data()
+	{
+		tokens.clear();
+		types.clear();
+	}
+
+};
+
+class Term
+{
+private:
+    /* data */
+public:
+    Term(/* args */) {}
+    ~Term() {}
+
+    bool isOperator;
+    string awperator;
+
+    bool isBrace;
+    string brace;
+
+    bool isConstant;
+
+    int co_efficient;
+    vector< pair <string, int> > variable_and_exponent;
+};
+
+class Parser
+{
+private:
+    const int DELIMITER = 1;
+	const int VARIABLE = 2;
+	const int NUMBER = 3;
+
+	Tokenizer tokenized_input;
+
+	Term get_term(int start_index)
+	{
+		Term demo;
+
+		if (tokenized_input.types[start_index] == DELIMITER) {
+			if (strchr("+-/*^", tokenized_input.tokens[start_index][0])) {
+				demo.isOperator = true;
+				demo.isBrace = false;
+				demo.isConstant = false;
+
+				demo.awperator = tokenized_input.tokens[start_index];
+
+				cout << "hoise\n";
+			}
+			else {
+				demo.isOperator = false;
+				demo.isBrace = true;
+				demo.isConstant = false;
+
+				demo.brace = tokenized_input.tokens[start_index];
+
+				cout << "hoise ?? I think";
+			}
+
+
+		}
+		
+
+		
+		return demo;
+	}
+
+public:
+    Parser(/* args */) {}
+    ~Parser() {}
+
+	vector <Term> terms; // Cx^n .... braces ...... operators ... constant
+
+	void take_input(string user_input)
+	{
+		tokenized_input.start(user_input);
+		tokenized_input.testTokenizer();
+		get_term(0);
+	}	
+
+};
+
+
+
+
+
+
+
+
+
+
+int main(void)
+{
+	// Tokenizer t1;
+	Parser p1;
+
 	string inpt;
     getline(cin, inpt, '\n');
 
-	getAndPackTokens(inpt);
-}
+    // t1.start(inpt);
+	p1.take_input(inpt);
 
-///// TESTING AREA /////
-
-int main (void){
-    
-    test();
-
-    return 0;
+	return 0;
 }
