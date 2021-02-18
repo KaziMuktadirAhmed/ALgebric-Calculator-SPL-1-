@@ -11,7 +11,7 @@ using namespace std;
 class Tokenizer
 {
 private:
-	const int DELIMITER = 1;
+	const int OPERATOR = 1;
 	const int VARIABLE = 2;
 	const int NUMBER = 3;
 	const int BRACES = 4;
@@ -63,13 +63,13 @@ private:
 		} // at the end of expression
 
 		if(strchr("+-*/%", *prog)) {
-			token_type = DELIMITER;
+			token_type = OPERATOR;
 			*temp++ = *prog++;		// advance to next char
 		}
 		else if(strchr("+-*/%^=(){}[]", *prog)) {
 
 			if(strchr("+-*/%", *prog))  // Differentiate the delimeters
-				token_type = DELIMITER;
+				token_type = OPERATOR;
 			else if(*prog == '=')
 				token_type = EQUAL_SIGN;
 			else if(*prog == '^')
@@ -146,7 +146,7 @@ public:
 
 		for(int i=0; i<tokens.size(); ++i)
     	{
-        	if(types[i] == DELIMITER)      cout << "It's Operator \t";
+        	if(types[i] == OPERATOR)      cout << "It's Operator \t";
         	else if (types[i] == VARIABLE) cout << "It's Variable \t";
         	else if (types[i] == NUMBER)   cout << "It's Number \t";
 			else if (types[i] == BRACES)   cout << "It's Braces \t";

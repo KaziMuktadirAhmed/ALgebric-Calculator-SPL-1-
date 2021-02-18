@@ -11,7 +11,7 @@ using namespace std;
 class Tokenizer
 {
 private:
-	const int DELIMITER = 1;
+	const int OPERATOR = 1;
 	const int VARIABLE = 2;
 	const int NUMBER = 3;
 	const int BRACES = 4;
@@ -63,13 +63,13 @@ private:
 		} // at the end of expression
 
 		if(strchr("+-*/%", *prog)) {
-			token_type = DELIMITER;
+			token_type = OPERATOR;
 			*temp++ = *prog++;		// advance to next char
 		}
 		else if(strchr("+-*/%^=(){}[]", *prog)) {
 
-			if(strchr("+-*/%", *prog)) // Differentiate the delimeters
-				token_type = DELIMITER;
+			if(strchr("+-*/%", *prog))  // Differentiate the delimeters
+				token_type = OPERATOR;
 			else if(*prog == '=')
 				token_type = EQUAL_SIGN;
 			else if(*prog == '^')
@@ -146,7 +146,7 @@ public:
 
 		for(int i=0; i<tokens.size(); ++i)
     	{
-        	if(types[i] == DELIMITER)      cout << "It's Operator \t";
+        	if(types[i] == OPERATOR)      cout << "It's Operator \t";
         	else if (types[i] == VARIABLE) cout << "It's Variable \t";
         	else if (types[i] == NUMBER)   cout << "It's Number \t";
 			else if (types[i] == BRACES)   cout << "It's Braces \t";
@@ -173,6 +173,7 @@ public:
     Term(/* args */) {}
     ~Term() {}
 
+	bool isEqualSign;
     bool isOperator;
     string awperator;
 
@@ -188,39 +189,51 @@ public:
 class Parser
 {
 private:
-    const int DELIMITER = 1;
+    const int OPERATOR = 1;
 	const int VARIABLE = 2;
 	const int NUMBER = 3;
+	const int BRACES = 4;
+	const int EXPONENT_SIGN = 5;
+	const int EQUAL_SIGN = 6;
+
+	int start_index = 0;
 
 	Tokenizer tokenized_input;
 
-	Term get_term(int start_index)
+	Term get_term()
 	{
 		Term demo;
 
-		if (tokenized_input.types[start_index] == DELIMITER) {
-			if (strchr("+-/*^", tokenized_input.tokens[start_index][0])) {
-				demo.isOperator = true;
-				demo.isBrace = false;
-				demo.isConstant = false;
+		if (tokenized_input.types[start_index] == OPERATOR) {  
+			demo.isOperator = true;
+			demo.isEqualSign = false;                                     /* Separating  the operator */
+			demo.isBrace = false;
+			demo.isConstant = false;
 
-				demo.awperator = tokenized_input.tokens[start_index];
-
-				cout << "hoise\n";
-			}
-			else {
-				demo.isOperator = false;
-				demo.isBrace = true;
-				demo.isConstant = false;
-
-				demo.brace = tokenized_input.tokens[start_index];
-
-				cout << "hoise ?? I think";
-			}
-
-
+			demo.awperator = tokenized_input.tokens[start_index];
+			++start_index;
 		}
-		
+		else if (tokenized_input.types[start_index] == EQUAL_SIGN) {
+			demo.isOperator = false;
+			demo.isEqualSign = false;                                     /* Separating  the equal operator */
+			demo.isBrace = true;
+			demo.isConstant = false;
+
+			demo.awperator = tokenized_input.tokens[start_index];
+			++start_index;
+		}
+		else if (tokenized_input.types[start_index] == BRACES) {
+			demo.isOperator = false;
+			demo.isEqualSign = false;                                     /* Separating  the braces */
+			demo.isBrace = true;
+			demo.isConstant = false;
+
+			demo.brace = tokenized_input.tokens[start_index];
+			++start_index;
+		}
+		else {
+			
+		} 
 
 		
 		return demo;
@@ -236,7 +249,7 @@ public:
 	{
 		tokenized_input.start(user_input);
 		tokenized_input.testTokenizer();
-		get_term(0);
+		get_term();
 	}	
 
 };
