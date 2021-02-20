@@ -130,7 +130,10 @@ public:
 	vector<string> tokens;
     vector<int> types;
 
-    unsigned int length = types.size();	
+    int get_token_count()
+	{
+		return types.size();
+	}
 
 	void start(string user_input)
 	{
@@ -184,6 +187,11 @@ public:
 
     int co_efficient = 1;
     vector< pair <string, int> > variable_and_exponent;
+
+	int get_variable_count() 
+	{
+		return variable_and_exponent.size();
+	}
 };
 
 class Parser
@@ -226,8 +234,8 @@ private:
 		}
 		else if (tokenized_input.types[start_index] == EQUAL_SIGN) {
 			demo.isOperator = false;
-			demo.isEqualSign = false;                                     /* Separating  the equal operator */
-			demo.isBrace = true;
+			demo.isEqualSign = true;                                     /* Separating  the equal operator */
+			demo.isBrace = false;
 			demo.isConstant = false;
 
 			demo.awperator = tokenized_input.tokens[start_index];
@@ -344,7 +352,6 @@ private:
 						++start_index;
 					}
 				}
-
 			}
 		} 
 		
@@ -356,6 +363,19 @@ private:
 		pr.second = 0;
 	}
 
+	void parse_term() 
+	{
+		Term demo;
+		int token_count = tokenized_input.get_token_count();
+
+		start_index = 0;
+
+		while (start_index < token_count) {
+			demo = get_term(token_count);
+			terms.push_back(demo); 	
+		}
+	}
+
 public:
     Parser(/* args */) {}
     ~Parser() {}
@@ -364,15 +384,48 @@ public:
 
 	void take_input(string user_input)
 	{
-		Term temp;
+		Term temp, temp1;
 
 		tokenized_input.start(user_input);
 		tokenized_input.testTokenizer();
-		temp = get_term(tokenized_input.tokens.size());
+		// temp = get_term(tokenized_input.tokens.size());
 
-		cout << temp.co_efficient << " ";
-		for(int i=0; i<temp.variable_and_exponent.size(); ++i)
-			cout << temp.variable_and_exponent[i].first << "^" << temp.variable_and_exponent[i].second << " "; 
+		// cout << temp.co_efficient << " ";
+		// for(int i=0; i<temp.variable_and_exponent.size(); ++i)
+		// 	cout << temp.variable_and_exponent[i].first << "^" << temp.variable_and_exponent[i].second << " "; 
+		// cout << endl; 
+
+		// temp1 = get_term(tokenized_input.tokens.size());
+		// if (temp1.isOperator)
+		// 	cout << temp1.awperator << endl;
+		// else if (temp1.isBrace)
+		// 	cout << temp1.brace << endl;
+		// else if (temp1.isEqualSign)
+		// 	cout << temp1.awperator << endl;
+		
+		parse_term();
+		test_parse_term();
+	}
+
+	void test_parse_term()
+	{
+		for(int i=0; i<terms.size(); ++i) {
+			if (terms[i].isOperator)
+				cout << terms[i].awperator << endl;
+			else if (terms[i].isBrace)
+				cout << terms[i].brace << endl;
+			else if (terms[i].isEqualSign)
+				cout << terms[i].awperator << endl;
+			else if (terms[i].isConstant)
+				cout << terms[i].co_efficient << endl;
+			else {
+				cout << terms[i].co_efficient << "  ";
+
+				for(int j=0; j<terms[i].get_variable_count(); ++j) {
+					cout << terms[i].variable_and_exponent[j].first << "^" << terms[i].variable_and_exponent[j].second << " ";
+				} cout << endl;
+			}
+		}
 	}	
 
 };
