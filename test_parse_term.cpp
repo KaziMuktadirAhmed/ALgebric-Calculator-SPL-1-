@@ -443,15 +443,15 @@ public:
 	{
 		for(int i=0; i<terms.size(); ++i) {
 			if (terms[i].isOperator)
-				cout << terms[i].awperator << endl;
+				cout << "Term type: operator.\tTerm: " << terms[i].awperator << endl;
 			else if (terms[i].isBrace)
-				cout << terms[i].brace << endl;
+				cout << "Term type: Brace.\tTerm: " << terms[i].brace << endl;
 			else if (terms[i].isEqualSign)
-				cout << terms[i].awperator << endl;
+				cout << "Term type: eqaul_sign.\tTerm: " << terms[i].awperator << endl;
 			else if (terms[i].isConstant)
-				cout << terms[i].co_efficient << endl;
+				cout << "Term type: constant.\tTerm: " << terms[i].co_efficient << endl;
 			else {
-				cout << terms[i].co_efficient << "  ";
+				cout << "Term type: Cx^n.\tTerm: " << terms[i].co_efficient << "  ";
 
 				for(int j=0; j<terms[i].get_variable_count(); ++j) {
 					cout << terms[i].variable_and_exponent[j].first << "^" << terms[i].variable_and_exponent[j].second << " ";
