@@ -248,6 +248,10 @@ private:
 			demo.isConstant = false;
 
 			demo.brace = tokenized_input.tokens[start_index];
+
+			if (tokenized_input.types[start_index + 1] == EXPONENT_SIGN && start_index < token_count)
+				get_term_flag = true;
+
 			++start_index;
 		}
 		else {
@@ -318,6 +322,7 @@ private:
 					demo.isConstant = false;
 
 					demo.awperator = tokenized_input.tokens[start_index];
+					get_term_flag = false;
 					++start_index;
 				}
 			}
