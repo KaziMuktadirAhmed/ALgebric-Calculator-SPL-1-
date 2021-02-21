@@ -13,7 +13,7 @@ using namespace std;
 class Tokenizer
 {
 private:
-    const int DELIMITER = 1;
+    const int OPERATOR = 1;
     const int VARIABLE = 2;
     const int NUMBER = 3;
     const int BRACES = 4;
@@ -39,7 +39,11 @@ public:
 
     unsigned int length = types.size();
 
+    // User interface part
     void start(string user_input);
+
+    // Utility functions
+    int get_token_count();
     void testTokenizer();
     void clear_data();
 

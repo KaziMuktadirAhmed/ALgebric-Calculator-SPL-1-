@@ -39,12 +39,12 @@ void Tokenizer::get_token()
             } // at the end of expression
 
             if(strchr("+-*/%", *prog)) {
-                token_type = DELIMITER;
+                token_type = OPERATOR;
                 *temp++ = *prog++;		// advance to next char
             }
             else if(strchr("+-*/%^=(){}[]", *prog)) {
                 if(strchr("+-*/%", *prog))  // Differentiate the delimeters
-                    token_type = DELIMITER;
+                    token_type = OPERATOR;
                 else if(*prog == '=')
                     token_type = EQUAL_SIGN;
                 else if(*prog == '^')
@@ -104,21 +104,29 @@ void Tokenizer::start(string user_input)
     tokenize_input(user_input);
 }
 
+int Tokenizer::get_token_count()
+{
+    return types.size();
+}
+
 void Tokenizer::testTokenizer()
 {
-            if (types.size() == 0){
-                cout << "No input given to the Tokenizer.\n";
-                return;
-            }
+    if (types.size() == 0){
+        cout << "No input given to the Tokenizer.\n";
+        return;
+    }
 
-            for(unsigned int i=0; i<tokens.size(); ++i)
-            {
-                if(types[i] == DELIMITER)      cout << "It's Delimeter \t";
-                else if (types[i] == VARIABLE) cout << "It's Variable \t";
-                else if (types[i] == NUMBER)   cout << "It's Number \t";
+    for(int i=0; i<(int)tokens.size(); ++i)
+    {
+        if(types[i] == OPERATOR)      cout << "It's Operator \t";
+        else if (types[i] == VARIABLE) cout << "It's Variable \t";
+        else if (types[i] == NUMBER)   cout << "It's Number \t";
+        else if (types[i] == BRACES)   cout << "It's Braces \t";
+        else if (types[i] == EQUAL_SIGN)   cout << "It's Equal_sign \t";
+        else if (types[i] == EXPONENT_SIGN)   cout << "It's Exponent_sign \t";
 
-                cout << "token : " << tokens[i] << "\n";
-            }
+        cout << "token : " << tokens[i] << "\n";
+    }
 }
 
 void Tokenizer::clear_data()
