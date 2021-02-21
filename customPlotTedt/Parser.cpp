@@ -134,9 +134,18 @@ Term Parser::get_term(int token_count)
                                 if (tokenized_input.types[start_index + 1] == EXPONENT_SIGN && start_index + 1 < token_count) {
                                     ++start_index;
 
+                                    int sign = 1;
+
+                                    if (tokenized_input.types[start_index + 1] == OPERATOR && start_index + 1 < token_count) {
+                                        if (tokenized_input.tokens[start_index + 1].compare("-") == 0) {
+                                            ++start_index;
+                                            sign = -1;
+                                        }
+                                    }
+
                                     if (tokenized_input.types[start_index + 1] == NUMBER && start_index + 1 < token_count) {
                                         ++start_index;
-                                        temp.second = token_to_int(tokenized_input.tokens[start_index]);
+                                        temp.second = sign * token_to_int(tokenized_input.tokens[start_index]);
                                     }
                                 }
                                 else {
@@ -179,9 +188,18 @@ Term Parser::get_term(int token_count)
                         if (tokenized_input.types[start_index + 1] == EXPONENT_SIGN && start_index + 1 < token_count) {
                             ++start_index;
 
+                            int sign = 1;
+
+                            if (tokenized_input.types[start_index + 1] == OPERATOR && start_index + 1 < token_count) {
+                                if (tokenized_input.tokens[start_index + 1].compare("-") == 0) {
+                                    ++start_index;
+                                    sign = -1;
+                                }
+                            }
+
                             if (tokenized_input.types[start_index + 1] == NUMBER && start_index + 1 < token_count) {
                                 ++start_index;
-                                temp.second = token_to_int(tokenized_input.tokens[start_index]);
+                                temp.second = sign * token_to_int(tokenized_input.tokens[start_index]);
                             }
                         }
                         else {
