@@ -249,8 +249,16 @@ private:
 
 			demo.brace = tokenized_input.tokens[start_index];
 
-			if (tokenized_input.types[start_index + 1] == EXPONENT_SIGN && start_index < token_count)
-				get_term_flag = true;
+			if (tokenized_input.types[start_index + 1] == EXPONENT_SIGN && start_index + 1 < token_count) {
+				string comp = tokenized_input.tokens[start_index];
+
+				if (comp.compare(")") == 0 || comp.compare("}") == 0 || comp.compare("]") == 0) {
+					get_term_flag = true;
+				}
+				else {
+					cout << "False input\n";
+				}
+			}
 
 			++start_index;
 		}
