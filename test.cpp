@@ -363,12 +363,12 @@ private:
 
 							int sign = 1;
 
-									if (tokenized_input.types[start_index + 1] == OPERATOR && start_index + 1 < token_count) {
-										if (tokenized_input.tokens[start_index + 1].compare("-") == 0) {
-											++start_index;
-											sign = -1;
-										}
-									}
+							if (tokenized_input.types[start_index + 1] == OPERATOR && start_index + 1 < token_count) {
+								if (tokenized_input.tokens[start_index + 1].compare("-") == 0) {
+									++start_index;
+									sign = -1;
+								}
+							}
 
 							if (tokenized_input.types[start_index + 1] == NUMBER && start_index + 1 < token_count) {
 								++start_index;
@@ -389,8 +389,7 @@ private:
 		return demo;
 	}
 
-	void clear_pair(pair <char, int> &pr) 
-	{
+	void clear_pair(pair <char, int> &pr) {
 		pr.first = '\0';
 		pr.second = 0;
 	}
