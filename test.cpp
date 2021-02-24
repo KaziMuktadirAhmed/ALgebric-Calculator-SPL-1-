@@ -415,10 +415,12 @@ public:
 
 	void take_input(string user_input)
 	{
-		Term temp, temp1;
 
 		tokenized_input.start(user_input);
-		tokenized_input.testTokenizer();
+		
+		// tokenized_input.testTokenizer();
+		
+		// Term temp, temp1;
 		// temp = get_term(tokenized_input.tokens.size());
 
 		// cout << temp.co_efficient << " ";
@@ -435,7 +437,7 @@ public:
 		// 	cout << temp1.awperator << endl;
 		
 		parse_term();
-		test_parse_term();
+		// test_parse_term();
 	}
 
 	void test_parse_term()
@@ -461,8 +463,56 @@ public:
 
 };
 
+class Algebraic_Opeartion
+{
+private:
+
+public:
+	Algebraic_Opeartion(/* args */) {}
+	~Algebraic_Opeartion() {}
+
+	void shroten_terms (Term &demo)
+	{
+		/* Initial sorting between variables to smoothen the later calculations */
+	
+		sort(demo.variable_and_exponent.begin(), demo.variable_and_exponent.end());
+	}
+};
 
 
+class Driver_class
+{
+private:
+    /* data */ 
+
+public:
+    Driver_class(/* args */) {} 
+    ~Driver_class() {}
+
+    void start ()
+    {
+        /* Taking input form the user */
+        
+        string inpt;
+        getline(cin, inpt, '\n');
+
+        /* declaring utility objet */
+
+        Tokenizer t1;
+        Parser p1;
+        Algebraic_Opeartion alg1;
+
+        p1.take_input(inpt);
+        p1.test_parse_term();
+
+		alg1.shroten_terms(p1.terms[0]);
+
+
+		cout << "after sorting\n";
+		p1.test_parse_term();
+    }
+
+};
 
 
 
@@ -472,14 +522,16 @@ public:
 
 int main(void)
 {
-	// Tokenizer t1;
-	Parser p1;
+	// // Tokenizer t1;
+	// Parser p1;
 
-	string inpt;
-    getline(cin, inpt, '\n');
+	// string inpt;
+    // getline(cin, inpt, '\n');
 
-    // t1.start(inpt);
-	p1.take_input(inpt);
+    // // t1.start(inpt);
+	// p1.take_input(inpt);
+	Driver_class driver;
+	driver.start();
 
 	return 0;
 }

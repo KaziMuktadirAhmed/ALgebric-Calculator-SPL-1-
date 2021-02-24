@@ -415,10 +415,11 @@ public:
 
 	void take_input(string user_input)
 	{
-		Term temp, temp1;
-
 		tokenized_input.start(user_input);
-		tokenized_input.testTokenizer();
+		
+		//tokenized_input.testTokenizer();
+
+        // Term temp, temp1;
 		// temp = get_term(tokenized_input.tokens.size());
 
 		// cout << temp.co_efficient << " ";
@@ -435,10 +436,7 @@ public:
 		// 	cout << temp1.awperator << endl;
 		
 		parse_term();
-
-		Algebraic_Opeartion alg;
-		alg.shroten_terms(terms);
-		test_parse_term();
+		//test_parse_term();
 	}
 
 	void test_parse_term()
@@ -467,37 +465,53 @@ public:
 class Algebraic_Opeartion
 {
 private:
-	/* data */
-	// Comparator function to sort the 
-	// array of string wrt given conditions 
-	bool lex_compare(pair <string, int> a, pair <string, int> b) 
-	{ 
-    	// Check if a string is present as 
-    	// prefix in another string, then 
-    	// compare the size of the string 
-    	// and return the larger size 
-   		if (a.first.compare(0, b.first.size(), b.first) == 0 || b.first.compare(0, a.first.size(), a.first) == 0) 
-  
-       		return a.first.size() > b.first.size(); 
-  
-    	// Else return lexicographically 
-    	// smallest string 
-    	else
-        	return a.first < b.first; 
-	} 
 
 public:
 	Algebraic_Opeartion(/* args */) {}
 	~Algebraic_Opeartion() {}
 
-	void shroten_terms (vector <Term> &container)
+	void shroten_terms (Term &demo)
 	{
-		sort(container.begin(), container.end(), lex_compare);
+		/* Initial sorting between variables to smoothen the later calculations */
+	
+		sort(demo.variable_and_exponent.begin(), demo.variable_and_exponent.end());
 	}
 };
 
 
+class Driver_class
+{
+private:
+    /* data */ 
 
+public:
+    Driver_class(/* args */) {} 
+    ~Driver_class() {}
+
+    void start ()
+    {
+        /* Taking input form the user */
+        
+        string inpt;
+        getline(cin, inpt, '\n');
+
+        /* declaring utility objet */
+
+        Tokenizer t1;
+        Parser p1;
+        Algebraic_Opeartion alg1;
+
+        p1.take_input(inpt);
+        p1.test_parse_term();
+
+		alg1.shroten_terms(p1.terms[0]);
+
+
+		cout << "after sorting\n";
+		p1.test_parse_term();
+    }
+
+};
 
 
 
@@ -628,14 +642,10 @@ public:
 
 int main(void)
 {
-	// Tokenizer t1;
-	Parser p1;
+	
+	Driver_class driver;
 
-	string inpt;
-    getline(cin, inpt, '\n');
-
-    // t1.start(inpt);
-	p1.take_input(inpt);
+    driver.start();
 
 	return 0;
 }
