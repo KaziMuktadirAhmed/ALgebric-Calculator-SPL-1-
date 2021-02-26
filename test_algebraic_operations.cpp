@@ -470,11 +470,28 @@ public:
 	Algebraic_Opeartion(/* args */) {}
 	~Algebraic_Opeartion() {}
 
-	void shroten_terms (Term &demo)
+	void shroten_terms (Term &container)
 	{
 		/* Initial sorting between variables to smoothen the later calculations */
 	
-		sort(demo.variable_and_exponent.begin(), demo.variable_and_exponent.end());
+		sort(container.variable_and_exponent.begin(), container.variable_and_exponent.end());
+
+		pair<string, int> pr = container.variable_and_exponent[0];
+		vector< pair<string, int> > temp_container;
+
+		for(int i=1; i<container.variable_and_exponent.size(); ++i) {
+			if (pr.first.compare(container.variable_and_exponent[i].first) != 0) {
+				temp_container.push_back(pr);
+
+				pr.first = container.variable_and_exponent[i].first;
+				pr.second = container.variable_and_exponent[i].second;
+			} else {
+				pr.second += container.variable_and_exponent[i].second;
+			}
+		} 	temp_container.push_back(pr);
+
+		container.variable_and_exponent.clear();
+		container.variable_and_exponent.assign(temp_container.begin(), temp_container.end());
 	}
 };
 
