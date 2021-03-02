@@ -458,8 +458,7 @@ public:
 				} cout << endl;
 			}
 		}
-	}	
-
+	}
 };
 
 class Algebraic_Opeartion
@@ -472,6 +471,9 @@ public:
 
 	void shroten_terms (Term &container)
 	{
+		if (container.get_variable_count() <= 0)
+			return;
+
 		/* Initial sorting between variables to smoothen the later calculations */
 	
 		sort(container.variable_and_exponent.begin(), container.variable_and_exponent.end());
@@ -493,6 +495,13 @@ public:
 		container.variable_and_exponent.clear();
 		container.variable_and_exponent.assign(temp_container.begin(), temp_container.end());
 	}
+
+	void normalize_terms (vector <Term> &container)
+	{
+		for (int i=0; i < container.size(); ++i) {
+			shroten_terms(container[i]);
+		}
+	}	
 };
 
 
@@ -501,12 +510,20 @@ class Driver_class
 private:
     /* data */ 
 
+	
+
 public:
+	
+
     Driver_class(/* args */) {} 
     ~Driver_class() {}
 
     void start ()
     {
+		Tokenizer t1;
+    	Parser p1;
+    	Algebraic_Opeartion alg1;
+
         /* Taking input form the user */
         
         string inpt;
@@ -514,15 +531,14 @@ public:
 
         /* declaring utility objet */
 
-        Tokenizer t1;
-        Parser p1;
-        Algebraic_Opeartion alg1;
+        
 
         p1.take_input(inpt);
         p1.test_parse_term();
 
-		alg1.shroten_terms(p1.terms[0]);
-
+		// alg1.normalize_terms(p1.terms);
+		alg1.normalize_terms(p1.terms);
+		// alg1.shroten_terms(p1.terms[0]);
 
 		cout << "after sorting\n";
 		p1.test_parse_term();
