@@ -518,6 +518,44 @@ public:
     Driver_class(/* args */) {} 
     ~Driver_class() {}
 
+	string print_line(vector<Term> container)
+	{
+		string output_line;
+
+		for (int i=0; i<container.size(); ++i) {
+			if (container[i].isOperator == true) {
+				output_line += container[i].awperator;
+				// continue;
+			} 
+			else if (container[i].isBrace == true) {
+				output_line += container[i].brace;
+			} 
+			else if (container[i].isEqualSign == true) {
+				output_line += container[i].awperator;
+			}
+			else if (container[i].isConstant == true) {
+				output_line += to_string(container[i].co_efficient);
+			}
+			else {
+				if (container[i].co_efficient > 1)
+					output_line += to_string(container[i].co_efficient);
+
+				for (int j=0; j<container[i].get_variable_count(); ++j) {
+					output_line += container[i].variable_and_exponent[j].first;
+
+					if (container[i].variable_and_exponent[j].second > 1) {
+						output_line += "^";
+						output_line += to_string(container[i].variable_and_exponent[j].second);
+					}
+				}
+			}
+
+			output_line += " ";
+		}
+
+		return output_line;
+	}
+
     void start ()
     {
 		Tokenizer t1;
@@ -542,6 +580,9 @@ public:
 
 		cout << "after sorting\n";
 		p1.test_parse_term();
+
+		string out = print_line(p1.terms);
+		cout << endl << out << endl;
     }
 
 };
