@@ -469,6 +469,44 @@ public:
 	Algebraic_Opeartion(/* args */) {}
 	~Algebraic_Opeartion() {}
 
+	int is_addable(Term a, Term b)
+	{
+		if(a.isBrace || b.isBrace)
+			return 0;
+		else if (a.isEqualSign || b.isEqualSign)
+			return 0;
+		else if (a.isOperator || b.isOperator)
+			return 0;
+		else if (a.isConstant && !(b.isConstant) )
+			return 0;
+		else if (!(a.isConstant) && b.isConstant)
+			return 0;
+		else if (a.isConstant && b.isConstant)
+			return 1;
+		else {
+			bool flag = true;
+
+			if (a.get_variable_count() != b.get_variable_count())
+				flag = false;
+			else {
+				for (int i=0; i<a.get_variable_count(); ++i) {
+					if (a.variable_and_exponent[i].first.compare(b.variable_and_exponent[i].first) != 0)
+						flag = false;
+					else if(a.variable_and_exponent[i].second != b.variable_and_exponent[i].second)
+						flag = false;
+
+					if (flag == false)
+						break;
+				}
+			}
+
+			if (flag)
+				return 2;
+			else
+				return 0;
+		}
+	}
+
 	void shroten_terms (Term &container)
 	{
 		if (container.get_variable_count() <= 0)
@@ -501,7 +539,9 @@ public:
 		for (int i=0; i < container.size(); ++i) {
 			shroten_terms(container[i]);
 		}
-	}	
+	}
+	
+		
 };
 
 
