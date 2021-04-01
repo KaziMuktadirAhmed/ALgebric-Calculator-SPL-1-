@@ -192,6 +192,15 @@ public:
 	{
 		return variable_and_exponent.size();
 	}
+
+	bool isEmpty()
+	{
+		if (isEqualSign == false && isOperator == false && isBrace == false && isConstant == false)
+			if (variable_and_exponent.size() == 0)
+				return true;
+
+		return false; 	
+	}
 };
 
 class Parser
@@ -507,6 +516,53 @@ public:
 		}
 	}
 
+	Term add_term (Term A, Term B)
+	{
+		int comparator_value = is_addable(A, B);
+
+		Term result;
+
+		if (comparator_value == 1) {
+			result.isConstant = true;
+			result.co_efficient = A.co_efficient + B.co_efficient;
+		}
+		else if (comparator_value == 2) {
+			result.co_efficient = A.co_efficient + B.co_efficient;
+
+			for (int i=0; i<A.get_variable_count(); ++i)
+				result.variable_and_exponent.push_back(A.variable_and_exponent[i]);
+		}
+
+		return result;
+	}
+
+	Term sub_term (Term A, Term B)
+	{
+		int comparator_value = is_addable(A, B);
+
+		Term result;
+
+		if (comparator_value == 1) {
+			result.co_efficient = A.co_efficient - B.co_efficient;
+
+			if (result.co_efficient != 0)
+				result.isConstant = true;
+		}
+		else if (comparator_value == 2) {
+			result.co_efficient = A.co_efficient - B.co_efficient;
+
+			if (result.co_efficient != 0) {
+				for (int i=0; i<A.get_variable_count(); ++i)
+					result.variable_and_exponent.push_back(A.variable_and_exponent[i]);
+			}
+		}
+
+		return result;
+	}
+
+
+	// Normalizing utility functions
+
 	void shroten_terms (Term &container)
 	{
 		if (container.get_variable_count() <= 0)
@@ -579,6 +635,10 @@ public:
 			else {
 				if (container[i].co_efficient > 1)
 					output_line += to_string(container[i].co_efficient);
+				else if (container[i].co_efficient < -1)
+					output_line += to_string(container[i].co_efficient);
+				else if (container[i].co_efficient == -1)
+					output_line += "-";
 
 				for (int j=0; j<container[i].get_variable_count(); ++j) {
 					output_line += container[i].variable_and_exponent[j].first;
@@ -607,9 +667,7 @@ public:
         string inpt;
         getline(cin, inpt, '\n');
 
-        /* declaring utility objet */
-
-        
+        /* declaring utility objet */       
 
         p1.take_input(inpt);
         p1.test_parse_term();
@@ -623,7 +681,13 @@ public:
 
 		string out = print_line(p1.terms);
 		cout << endl << out << endl;
-    }
+    
+		vector <Term> testing_container_for_add;
+		testing_container_for_add.push_back(alg1.sub_term(p1.terms[0], p1.terms[2]));
+
+		out = print_line(testing_container_for_add);
+		cout << endl << out << endl;
+	}
 
 };
 
