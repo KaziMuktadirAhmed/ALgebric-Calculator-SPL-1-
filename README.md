@@ -10,12 +10,16 @@
 
 
 cd command for windows to change drive 
+
 X:
 
 x = drive letter
 
 parser input bug:
+
 can not handel expression as xC (example: x2y)
+
 parser crashes at this point
+
 will be ignored from this point
 
