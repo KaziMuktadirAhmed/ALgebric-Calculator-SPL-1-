@@ -682,11 +682,11 @@ public:
 		string out = print_line(p1.terms);
 		cout << endl << out << endl;
     
-		vector <Term> testing_container_for_add;
-		testing_container_for_add.push_back(alg1.sub_term(p1.terms[0], p1.terms[2]));
+// 		vector <Term> testing_container_for_add;
+// 		testing_container_for_add.push_back(alg1.sub_term(p1.terms[0], p1.terms[2]));
 
-		out = print_line(testing_container_for_add);
-		cout << endl << out << endl;
+// 		out = print_line(testing_container_for_add);
+// 		cout << endl << out << endl;
 	}
 
 };
