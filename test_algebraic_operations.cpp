@@ -478,14 +478,25 @@ public:
 	Algebraic_Opeartion(/* args */) {}
 	~Algebraic_Opeartion() {}
 
-	int is_addable(Term a, Term b)
+	int is_operable(Term a, Term b)
 	{
+		/* 
+			The funtion takes 2 term a and b as input. depending on the input the funtion
+			retuns a integer value between -1 to 3. They represent
+
+			-1 = inoperable condition (a or b contains brace/equalSign/operator)
+			0  = can only perform multiplication or division (either a  or b is constant)
+			1  = all operation can be performed (both a and b are constant)
+			2  = all operation can be performed (both a and b has same variable and exponent list)
+			3  = can oly perform multiplication or division (a and b contains diffrent set of variable and exponents)
+		*/
+
 		if(a.isBrace || b.isBrace)
-			return 0;
+			return -1;
 		else if (a.isEqualSign || b.isEqualSign)
-			return 0;
+			return -1;
 		else if (a.isOperator || b.isOperator)
-			return 0;
+			return -1;
 		else if (a.isConstant && !(b.isConstant) )
 			return 0;
 		else if (!(a.isConstant) && b.isConstant)
@@ -512,13 +523,13 @@ public:
 			if (flag)
 				return 2;
 			else
-				return 0;
+				return 3;
 		}
 	}
 
 	Term add_term (Term A, Term B)
 	{
-		int comparator_value = is_addable(A, B);
+		int comparator_value = is_operable(A, B);
 
 		Term result;
 
@@ -538,7 +549,7 @@ public:
 
 	Term sub_term (Term A, Term B)
 	{
-		int comparator_value = is_addable(A, B);
+		int comparator_value = is_operable(A, B);
 
 		Term result;
 
@@ -560,6 +571,26 @@ public:
 		return result;
 	}
 
+	Term mul_term (Term A, Term B) 
+	{
+		int comparator_value = is_operable(A, B);
+		
+		Term result;
+		
+		if (comparator_value > -1) {
+			result.co_efficient = A.co_efficient * B.co_efficient;
+
+			for (int i=0; i<A.get_variable_count(); ++i)
+				result.variable_and_exponent.push_back(A.variable_and_exponent[i]);
+
+			for (int i=0; i<B.get_variable_count(); ++i)
+				result.variable_and_exponent.push_back(B.variable_and_exponent[i]);
+
+			shroten_terms(result);
+		}
+
+		return result;
+	}
 
 	// Normalizing utility functions
 
@@ -682,11 +713,11 @@ public:
 		string out = print_line(p1.terms);
 		cout << endl << out << endl;
     
-// 		vector <Term> testing_container_for_add;
-// 		testing_container_for_add.push_back(alg1.sub_term(p1.terms[0], p1.terms[2]));
+		vector <Term> testing_container_for_add;
+		testing_container_for_add.push_back(alg1.mul_term(p1.terms[0], p1.terms[2]));
 
-// 		out = print_line(testing_container_for_add);
-// 		cout << endl << out << endl;
+		out = print_line(testing_container_for_add);
+		cout << endl << out << endl;
 	}
 
 };
