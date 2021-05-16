@@ -24,8 +24,11 @@ public:
     string brace;
 
     bool isConstant = false;
+    bool isFraction = false;
 
     int co_efficient = 1;
+    int co_efficient_fraction[2];
+
     vector< pair <string, int> > variable_and_exponent;
 };
 
