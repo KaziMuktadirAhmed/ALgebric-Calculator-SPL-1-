@@ -184,8 +184,11 @@ public:
     string brace;
 
     bool isConstant = false;
+	bool isFraction = false;
 
     int co_efficient = 1;
+	int co_efficient_fraction[2];
+
     vector< pair <string, int> > variable_and_exponent;
 
 	int get_variable_count() 
@@ -470,6 +473,79 @@ public:
 	}
 };
 
+class Handle_Fractions
+{
+private:
+	/* data */
+
+	/*
+		Parsing function to find 
+		two integer values from a 
+		string input.
+	*/
+	int* parseFraction(string inpt) {
+		int isDiv = 0;
+		static int fraction[2] = { 0,0 };
+
+		for (int i = inpt.length()-1, j = 1; i>=0; --i) {
+			if (inpt[i] == '/') {
+				j = 1;
+				isDiv = 1;
+				continue;
+			}
+
+			if (isDiv == 0) {
+				fraction[1] += j * (inpt[i] - '0');
+				j *= 10;
+			}
+			else {
+				fraction[0] += j * (inpt[i] - '0');
+				j *= 10;
+			}
+		}
+
+		return fraction;
+	}
+
+	//GCD for 2 integers
+	int gcd_2_int(int a, int b) {
+		if (a == 0) return b;
+		return gcd_2_int(b % a, a);
+	}
+
+	//Function to reduce fraction
+	void reduceFraction(int a, int b) {
+		int array[2];
+
+		array[0] = a;
+		array[1] = b;
+
+		int gcd = gcd_2_int(array[0],array[1]);
+	
+		array[0] /= gcd;
+		array[1] /= gcd;
+
+		result[0] = array[0];
+		result[1] = array[1];
+	}
+
+public:
+	Handle_Fractions(/* args */) {}
+	~Handle_Fractions() {}
+
+	int result[2]; 
+
+	void start (int input[]) {
+		result[0] = input[0];
+		result[1] = input[1];
+
+		reduceFraction(result[0], result[1]);
+
+		input[0] = result[0];
+		input[1] = result[1];
+	}
+};
+
 class Algebraic_Opeartion
 {
 private:
@@ -488,7 +564,7 @@ public:
 			0  = can only perform multiplication or division (either a  or b is constant)
 			1  = all operation can be performed (both a and b are constant)
 			2  = all operation can be performed (both a and b has same variable and exponent list)
-			3  = can oly perform multiplication or division (a and b contains diffrent set of variable and exponents)
+			3  = can only perform multiplication or division (a and b contains diffrent set of variable and exponents)
 		*/
 
 		if(a.isBrace || b.isBrace)
@@ -592,6 +668,57 @@ public:
 		return result;
 	}
 
+	Term div_term (Term A, Term B) 
+	{
+		int comparator_value = is_operable(A, B);
+		
+		Term result;
+		int temp_fraction[2];
+		pair <string, int> temp_pr;
+
+		Handle_Fractions reduce_fraction;
+
+		if (comparator_value > -1) {
+
+			if(A.co_efficient % B.co_efficient != 0) {
+
+				temp_fraction[0] = A.co_efficient;
+				temp_fraction[1] = B.co_efficient;
+
+				reduce_fraction.start(temp_fraction);
+
+				result.isFraction = true;
+				result.co_efficient_fraction[0] = temp_fraction[0];
+				result.co_efficient_fraction[1] = temp_fraction[1];
+			}
+			else {
+				result.co_efficient = A.co_efficient / B.co_efficient;
+			}
+
+			for (int i=0; i<A.get_variable_count(); ++i)
+				result.variable_and_exponent.push_back(A.variable_and_exponent[i]);
+
+			for (int i=0; i<B.get_variable_count(); ++i) {
+				// result.variable_and_exponent.push_back(B.variable_and_exponent[i]);
+
+				temp_pr.first = B.variable_and_exponent[i].first;
+				temp_pr.second = -1 * B.variable_and_exponent[i].second;
+
+				result.variable_and_exponent.push_back(temp_pr);
+			}
+
+			shroten_terms(result);
+
+			for (int i=0; i < result.get_variable_count(); ++i) {
+				if (result.variable_and_exponent[i].second == 0)
+					result.variable_and_exponent.erase( result.variable_and_exponent.begin() + i);
+			}
+		}
+
+		return result;
+	}
+
+
 	// Normalizing utility functions
 
 	void shroten_terms (Term &container)
@@ -670,11 +797,17 @@ public:
 					output_line += to_string(container[i].co_efficient);
 				else if (container[i].co_efficient == -1)
 					output_line += "-";
+				else if (container[i].isFraction == true) {
+					output_line += to_string(container[i].co_efficient_fraction[0]);
+					output_line += "/";
+					output_line += to_string(container[i].co_efficient_fraction[1]);
+					output_line += " ";
+				}
 
 				for (int j=0; j<container[i].get_variable_count(); ++j) {
 					output_line += container[i].variable_and_exponent[j].first;
 
-					if (container[i].variable_and_exponent[j].second > 1) {
+					if (container[i].variable_and_exponent[j].second != 1) {
 						output_line += "^";
 						output_line += to_string(container[i].variable_and_exponent[j].second);
 					}
@@ -714,7 +847,7 @@ public:
 		cout << endl << out << endl;
     
 		vector <Term> testing_container_for_add;
-		testing_container_for_add.push_back(alg1.mul_term(p1.terms[0], p1.terms[2]));
+		testing_container_for_add.push_back(alg1.div_term(p1.terms[0], p1.terms[2]));
 
 		out = print_line(testing_container_for_add);
 		cout << endl << out << endl;
