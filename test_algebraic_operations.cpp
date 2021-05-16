@@ -710,8 +710,11 @@ public:
 			shroten_terms(result);
 
 			for (int i=0; i < result.get_variable_count(); ++i) {
-				if (result.variable_and_exponent[i].second == 0)
+				
+				if (result.variable_and_exponent[i].second == 0){
 					result.variable_and_exponent.erase( result.variable_and_exponent.begin() + i);
+					--i;
+				}
 			}
 		}
 
