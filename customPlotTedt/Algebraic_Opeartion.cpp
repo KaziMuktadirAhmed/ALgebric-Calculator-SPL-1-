@@ -1,0 +1,211 @@
+#include "Algebraic_Opeartion.h"
+
+Algebraic_Opeartion::Algebraic_Opeartion()
+{
+
+}
+
+int Algebraic_Opeartion::is_operable(Term a, Term b)
+{
+    /*
+        The funtion takes 2 term a and b as input. depending on the input the funtion
+        retuns a integer value between -1 to 3. They represent
+
+        -1 = inoperable condition (a or b contains brace/equalSign/operator)
+        0  = can only perform multiplication or division (either a  or b is constant)
+        1  = all operation can be performed (both a and b are constant)
+        2  = all operation can be performed (both a and b has same variable and exponent list)
+        3  = can only perform multiplication or division (a and b contains diffrent set of variable and exponents)
+    */
+
+            if(a.isBrace || b.isBrace)
+                return -1;
+            else if (a.isEqualSign || b.isEqualSign)
+                return -1;
+            else if (a.isOperator || b.isOperator)
+                return -1;
+            else if (a.isConstant && !(b.isConstant) )
+                return 0;
+            else if (!(a.isConstant) && b.isConstant)
+                return 0;
+            else if (a.isConstant && b.isConstant)
+                return 1;
+            else {
+                bool flag = true;
+
+                if (a.get_variable_count() != b.get_variable_count())
+                    flag = false;
+                else {
+                    for (int i=0; i<a.get_variable_count(); ++i) {
+                        if (a.variable_and_exponent[i].first.compare(b.variable_and_exponent[i].first) != 0)
+                            flag = false;
+                        else if(a.variable_and_exponent[i].second != b.variable_and_exponent[i].second)
+                            flag = false;
+
+                        if (flag == false)
+                            break;
+                    }
+                }
+
+                if (flag)
+                    return 2;
+                else
+                    return 3;
+            }
+}
+
+// Basic Operations //
+
+Term Algebraic_Opeartion::add_term(Term A, Term B)
+{
+    int comparator_value = is_operable(A, B);
+
+    Term result;
+
+    if (comparator_value == 1) {
+        result.isConstant = true;
+        result.co_efficient = A.co_efficient + B.co_efficient;
+    }
+    else if (comparator_value == 2) {
+        result.co_efficient = A.co_efficient + B.co_efficient;
+
+        for (int i=0; i<A.get_variable_count(); ++i)
+            result.variable_and_exponent.push_back(A.variable_and_exponent[i]);
+    }
+
+    return result;
+}
+
+Term Algebraic_Opeartion::sub_term(Term A, Term B)
+{
+    int comparator_value = is_operable(A, B);
+
+    Term result;
+
+    if (comparator_value == 1) {
+        result.co_efficient = A.co_efficient - B.co_efficient;
+
+        if (result.co_efficient != 0)
+            result.isConstant = true;
+    }
+    else if (comparator_value == 2) {
+        result.co_efficient = A.co_efficient - B.co_efficient;
+
+        if (result.co_efficient != 0) {
+            for (int i=0; i<A.get_variable_count(); ++i)
+                result.variable_and_exponent.push_back(A.variable_and_exponent[i]);
+            }
+    }
+
+    return result;
+}
+
+Term Algebraic_Opeartion::mul_term(Term A, Term B)
+{
+    int comparator_value = is_operable(A, B);
+
+    Term result;
+
+    if (comparator_value > -1) {
+        result.co_efficient = A.co_efficient * B.co_efficient;
+
+        for (int i=0; i<A.get_variable_count(); ++i)
+            result.variable_and_exponent.push_back(A.variable_and_exponent[i]);
+
+        for (int i=0; i<B.get_variable_count(); ++i)
+            result.variable_and_exponent.push_back(B.variable_and_exponent[i]);
+
+        shroten_terms(result);
+    }
+
+    return result;
+}
+
+Term Algebraic_Opeartion::div_term(Term A, Term B)
+{
+            int comparator_value = is_operable(A, B);
+
+            Term result;
+            int temp_fraction[2];
+            pair <string, int> temp_pr;
+
+            Handle_Fractions reduce_fraction;
+
+            if (comparator_value > -1) {
+
+                if(A.co_efficient % B.co_efficient != 0) {
+
+                    temp_fraction[0] = A.co_efficient;
+                    temp_fraction[1] = B.co_efficient;
+
+                    reduce_fraction.start(temp_fraction);
+
+                    result.isFraction = true;
+                    result.co_efficient_fraction[0] = temp_fraction[0];
+                    result.co_efficient_fraction[1] = temp_fraction[1];
+                }
+                else {
+                    result.co_efficient = A.co_efficient / B.co_efficient;
+                }
+
+                for (int i=0; i<A.get_variable_count(); ++i)
+                    result.variable_and_exponent.push_back(A.variable_and_exponent[i]);
+
+                for (int i=0; i<B.get_variable_count(); ++i) {
+                    // result.variable_and_exponent.push_back(B.variable_and_exponent[i]);
+
+                    temp_pr.first = B.variable_and_exponent[i].first;
+                    temp_pr.second = -1 * B.variable_and_exponent[i].second;
+
+                    result.variable_and_exponent.push_back(temp_pr);
+                }
+
+                shroten_terms(result);
+
+                for (int i=0; i < result.get_variable_count(); ++i) {
+
+                    if (result.variable_and_exponent[i].second == 0){
+                        result.variable_and_exponent.erase( result.variable_and_exponent.begin() + i);
+                        --i;
+                    }
+                }
+            }
+
+            return result;
+}
+
+// Normalizing utility functions //
+
+void Algebraic_Opeartion::shroten_terms(Term &container)
+{
+            if (container.get_variable_count() <= 0)
+                return;
+
+            /* Initial sorting between variables to smoothen the later calculations */
+
+            sort(container.variable_and_exponent.begin(), container.variable_and_exponent.end());
+
+            pair<string, int> pr = container.variable_and_exponent[0];
+            vector< pair<string, int> > temp_container;
+
+            for(size_t i=1; i<container.variable_and_exponent.size(); ++i) {
+                if (pr.first.compare(container.variable_and_exponent[i].first) != 0) {
+                    temp_container.push_back(pr);
+
+                    pr.first = container.variable_and_exponent[i].first;
+                    pr.second = container.variable_and_exponent[i].second;
+                } else {
+                    pr.second += container.variable_and_exponent[i].second;
+                }
+            } 	temp_container.push_back(pr);
+
+            container.variable_and_exponent.clear();
+            container.variable_and_exponent.assign(temp_container.begin(), temp_container.end());
+}
+
+void Algebraic_Opeartion::normalize_terms(vector<Term> &container)
+{
+    for (size_t i=0; i < container.size(); ++i) {
+        shroten_terms(container[i]);
+    }
+}

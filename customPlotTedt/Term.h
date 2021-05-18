@@ -15,6 +15,7 @@ class Term
 public:
     Term();
     int get_variable_count();
+    bool isEmpty();
 
     bool isEqualSign = false;
     bool isOperator = false;
