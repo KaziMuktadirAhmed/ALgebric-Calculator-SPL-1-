@@ -477,6 +477,7 @@ class Handle_Fractions
 {
 private:
 	/* data */
+	int result[2]; 
 
 	/*
 		Parsing function to find 
@@ -533,7 +534,6 @@ public:
 	Handle_Fractions(/* args */) {}
 	~Handle_Fractions() {}
 
-	int result[2]; 
 
 	void start (int input[]) {
 		result[0] = input[0];
@@ -653,7 +653,11 @@ public:
 		
 		Term result;
 		
-		if (comparator_value > -1) {
+		if (comparator_value == 1) {
+			result.isConstant = true;
+			result.co_efficient = A.co_efficient * B.co_efficient;
+		}
+		else if (comparator_value > -1) {
 			result.co_efficient = A.co_efficient * B.co_efficient;
 
 			for (int i=0; i<A.get_variable_count(); ++i)
@@ -678,7 +682,25 @@ public:
 
 		Handle_Fractions reduce_fraction;
 
-		if (comparator_value > -1) {
+		if (comparator_value == 1) {
+			result.isConstant = true;
+
+			if(A.co_efficient % B.co_efficient != 0) {
+
+				temp_fraction[0] = A.co_efficient;
+				temp_fraction[1] = B.co_efficient;
+
+				reduce_fraction.start(temp_fraction);
+
+				result.isFraction = true;
+				result.co_efficient_fraction[0] = temp_fraction[0];
+				result.co_efficient_fraction[1] = temp_fraction[1];
+			}
+			else {
+				result.co_efficient = A.co_efficient / B.co_efficient;
+			}
+		}
+		else if (comparator_value > -1) {
 
 			if(A.co_efficient % B.co_efficient != 0) {
 
@@ -791,7 +813,14 @@ public:
 				output_line += container[i].awperator;
 			}
 			else if (container[i].isConstant == true) {
-				output_line += to_string(container[i].co_efficient);
+				if (container[i].isFraction == true) {
+					output_line += to_string(container[i].co_efficient_fraction[0]);
+					output_line += "/";
+					output_line += to_string(container[i].co_efficient_fraction[1]);
+					output_line += " ";
+				}
+				else
+					output_line += to_string(container[i].co_efficient);
 			}
 			else {
 				if (container[i].co_efficient > 1)
