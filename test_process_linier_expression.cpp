@@ -785,14 +785,14 @@ public:
 class Process_Linier_Expression
 {
 private:
-    /* data */
-    vector <Term> initial_input;
-
     // Utility functions //
     Parser parser;
     Algebraic_Opeartion algebraic_opeartion;
 
 public:
+    /* data */
+    vector <Term> initial_input;
+
     Process_Linier_Expression(/* args */) {}
     ~Process_Linier_Expression() {}
 
@@ -802,12 +802,16 @@ public:
 
         for (int i=0; i<parser.terms.size(); ++i)
             initial_input.push_back(parser.terms[i]);
+
+		algebraic_opeartion.normalize_terms(initial_input);
     }
 
     void get_input (vector <Term> vec_input) 
     {
         for (int i=0; i<vec_input.size(); ++i)
             initial_input.push_back(vec_input[i]);
+
+		algebraic_opeartion.normalize_terms(initial_input);
     }
 
     Term reverse_operator (Term input)
@@ -816,19 +820,19 @@ public:
 
         if (input.isOperator == true) {
 
-            if (input.awperator.compare("+")) {
+            if (input.awperator.compare("+") == 0) {
                 result.isOperator = true;
                 result.awperator = "-";
             }
-            else if (input.awperator.compare("-")) {
+            else if (input.awperator.compare("-") == 0) {
                 result.isOperator = true;
                 result.awperator = "+";
             }
-            else if (input.awperator.compare("*")) {
+            else if (input.awperator.compare("*") == 0) {
                 result.isOperator = true;
                 result.awperator = "/";
             }
-            else if (input.awperator.compare("/")) {
+            else if (input.awperator.compare("/") == 0) {
                 result.isOperator = true;
                 result.awperator = "*";
             }
@@ -840,31 +844,94 @@ public:
 	vector <Term> separate_variable_constant (vector <Term> input_line) 
 	{
 		int equal_index = 0;
-		int secondary_index = 0;
 		vector <Term> result, LHS, RHS;
 
+		Term plus_sign, equal_sign;
+
+		plus_sign.isOperator = true;
+		plus_sign.awperator = "+";
+
+		equal_sign.isOperator = true;
+		equal_sign.awperator = "=";
+
 		for (int i=0; input_line[i].isEqualSign != true; ++i) {
-			// keeping a record of last index //
+			// keeping a record of last variable term //
 			equal_index = i;
 
 			if (input_line[i].isOperator == false && input_line[i].isBrace == false) {
 				// secondary if filter //
 				if (input_line[i].isConstant == false) {
 					if (i == 0) {
-						LHS.push_back(input_line[i]);
+						LHS.push_back(plus_sign);
+						LHS.push_back(input_line[i]); 
 					}
 					else {
-						if (1) {
+						if (input_line[i-1].isOperator == true) 
+							LHS.push_back(input_line[i-1]);
 
-						}
+						LHS.push_back(input_line[i]);
 					}
 				}
 				else {
+					if (i == 0) {
+						RHS.push_back(reverse_operator(plus_sign));
+						RHS.push_back(input_line[i]);
+					}
+					else {
+						if (input_line[i-1].isOperator == true)
+							RHS.push_back(reverse_operator(input_line[i-1]));
 
+						RHS.push_back(input_line[i]);
+					}
 				}
 			}
 
 		}	equal_index++;
+
+		for (int i = equal_index + 1; i<input_line.size(); ++i) {
+			
+			if (input_line[i].isOperator == false && input_line[i].isBrace == false) {
+				// secondary if filter //
+				if (input_line[i].isConstant == false) {
+					if (i == equal_index + 1) {
+						LHS.push_back(reverse_operator(plus_sign));
+						LHS.push_back(input_line[i]); 
+					}
+					else {
+						if (input_line[i-1].isOperator == true) 
+							LHS.push_back(reverse_operator(input_line[i-1]));
+
+						LHS.push_back(input_line[i]);
+					}
+				}
+				else {
+					if (i == 0) {
+						RHS.push_back(plus_sign);
+						RHS.push_back(input_line[i]);
+					}
+					else {
+						if (input_line[i-1].isOperator == true)
+							RHS.push_back(input_line[i-1]);
+
+						RHS.push_back(input_line[i]);
+					}
+				}
+			}
+		}
+
+		if (LHS[0].isOperator == true && LHS[0].awperator.compare("+") == 0)
+			LHS.erase(LHS.begin());
+
+		if (RHS[0].isOperator == true && RHS[0].awperator.compare("+") == 0)
+			RHS.erase(RHS.begin());
+
+		for (int i=0; i<LHS.size(); ++i)
+			result.push_back(LHS[i]);
+
+		result.push_back(equal_sign);
+		
+		for (int i=0; i<RHS.size(); ++i)
+			result.push_back(RHS[i]);
 
 		return result;
 	}
@@ -943,6 +1010,7 @@ public:
 		Tokenizer t1;
     	Parser p1;
     	Algebraic_Opeartion alg1;
+		Process_Linier_Expression lexp1;
 
         /* Taking input form the user */
         
@@ -964,11 +1032,15 @@ public:
 		string out = print_line(p1.terms);
 		cout << endl << out << endl;
     
-		vector <Term> testing_container_for_add;
-		testing_container_for_add.push_back(alg1.div_term(p1.terms[0], p1.terms[2]));
+		vector <Term> testing_container;
+		lexp1.get_input(inpt);
 
-		out = print_line(testing_container_for_add);
-		cout << endl << out << endl;
+		// out = print_line(lexp1.initial_input);
+		// cout << out << endl;
+
+		out = print_line(lexp1.separate_variable_constant(lexp1.initial_input));
+		cout << out << endl;
+		//print_line(testing_container);
 	}
 
 };
