@@ -905,7 +905,7 @@ public:
 					}
 				}
 				else {
-					if (i == 0) {
+					if (i == equal_index + 1) {
 						RHS.push_back(plus_sign);
 						RHS.push_back(input_line[i]);
 					}
@@ -935,8 +935,22 @@ public:
 
 		return result;
 	}
-};
 
+	vector <Term> shorten_each_side (vector <Term> input_line) 
+	{
+		vector <Term> result, LHS, RHS;
+
+		
+
+		int equal_index = 0;
+		for (int i=0; input_line[i].isEqualSign != true; ++i) {
+			equal_index = i;
+			/**/
+		}	equal_index++;
+
+		return result;
+	}
+};
 
 class Driver_class
 {
