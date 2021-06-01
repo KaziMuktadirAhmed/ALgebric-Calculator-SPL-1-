@@ -846,13 +846,16 @@ public:
 		int equal_index = 0;
 		vector <Term> result, LHS, RHS;
 
-		Term plus_sign, equal_sign;
+		Term plus_sign, equal_sign, zero;
 
 		plus_sign.isOperator = true;
 		plus_sign.awperator = "+";
 
 		equal_sign.isOperator = true;
 		equal_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
 
 		for (int i=0; input_line[i].isEqualSign != true; ++i) {
 			// keeping a record of last variable term //
@@ -918,12 +921,19 @@ public:
 				}
 			}
 		}
+		
+		if (LHS.size() == 0)
+			LHS.push_back(zero);
+
+		if (RHS.size() == 0)
+			RHS.push_back(zero);
 
 		if (LHS[0].isOperator == true && LHS[0].awperator.compare("+") == 0)
 			LHS.erase(LHS.begin());
 
 		if (RHS[0].isOperator == true && RHS[0].awperator.compare("+") == 0)
 			RHS.erase(RHS.begin());
+
 
 		for (int i=0; i<LHS.size(); ++i)
 			result.push_back(LHS[i]);
@@ -940,7 +950,9 @@ public:
 	{
 		vector <Term> result, LHS, RHS;
 
-		
+		Term  zero;
+		zero.isConstant = true;
+		zero.co_efficient = 0;
 
 		int equal_index = 0;
 		for (int i=0; input_line[i].isEqualSign != true; ++i) {
