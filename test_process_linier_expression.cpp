@@ -198,11 +198,29 @@ public:
 
 	bool isEmpty()
 	{
-		if (isEqualSign == false && isOperator == false && isBrace == false && isConstant == false)
+		if (isEqualSign == false && isOperator == false && isBrace == false && isConstant == false && isFraction == false)
 			if (variable_and_exponent.size() == 0)
 				return true;
 
 		return false; 	
+	}
+
+	void reset() 
+	{
+		isEqualSign = false;
+		isOperator = false;
+		isBrace = false;
+		isConstant = false;
+		isFraction = false;
+
+		awperator.clear();
+		brace.clear();
+		
+		co_efficient = 1;
+		co_efficient_fraction[0] = 1;
+		co_efficient_fraction[1] = 1;
+
+		variable_and_exponent.clear();
 	}
 };
 
@@ -851,7 +869,7 @@ public:
 		plus_sign.isOperator = true;
 		plus_sign.awperator = "+";
 
-		equal_sign.isOperator = true;
+		equal_sign.isEqualSign = true;
 		equal_sign.awperator = "=";
 
 		zero.isConstant = true;
@@ -921,7 +939,7 @@ public:
 				}
 			}
 		}
-		
+
 		if (LHS.size() == 0)
 			LHS.push_back(zero);
 
@@ -948,17 +966,125 @@ public:
 
 	vector <Term> shorten_each_side (vector <Term> input_line) 
 	{
+		int equal_sign_index = 0;
 		vector <Term> result, LHS, RHS;
+		Term temp, op_t1, op_t2, eql_sign;
 
-		Term  zero;
-		zero.isConstant = true;
-		zero.co_efficient = 0;
+		eql_sign.isEqualSign = true;
+		eql_sign.awperator = "=";
 
-		int equal_index = 0;
-		for (int i=0; input_line[i].isEqualSign != true; ++i) {
-			equal_index = i;
-			/**/
-		}	equal_index++;
+		op_t1.isOperator = true;
+		op_t2.isOperator = true;
+
+		for (int i=0; input_line[i].isEqualSign == false; ++i) {
+			if (input_line[i].isBrace == false && input_line[i].isOperator == false && input_line[i].isConstant == false) {
+				if (temp.isEmpty()) {
+					temp = input_line[i];
+					
+					if (i == 0) 
+						op_t1.awperator = "+";
+					else 
+						if (input_line[i-1].isOperator == true) {
+							op_t1.awperator = input_line[i-1].awperator;
+						}
+				} 
+				else {
+					if (input_line[i-1].isOperator == true) {
+						op_t2.awperator = input_line[i-1].awperator;
+					}
+
+					if (op_t1.awperator.compare("-") == 0 && temp.co_efficient > 0) {
+						temp.co_efficient *= -1;
+					}
+					
+					if (op_t2.awperator.compare("+") == 0) {
+						temp = algebraic_opeartion.add_term(temp, input_line[i]);
+					}
+					else if (op_t2.awperator.compare("-") == 0)
+						temp = algebraic_opeartion.sub_term(temp, input_line[i]);
+
+					if (temp.co_efficient < 0) {
+						op_t1.awperator = "-";
+						temp.co_efficient *= -1;
+					}
+					else
+						op_t1.awperator = "+";
+				}
+			}
+
+			++equal_sign_index;
+		}
+
+		if (op_t1.awperator.compare("-") == 0)
+			LHS.push_back(op_t1);
+
+		LHS.push_back(temp);
+
+		temp.reset();
+		op_t1.reset();
+		op_t2.reset();
+
+		op_t1.isOperator = true;
+		op_t2.isOperator = true;
+
+		for (int i=equal_sign_index+1; i<input_line.size(); ++i) {
+			if (input_line[i].isConstant == true) {
+				if (temp.isEmpty()) {
+					temp = input_line[i];
+					
+					if (i == 0) 
+						op_t1.awperator = "+";
+					else 
+						if (input_line[i-1].isOperator == true) {
+							op_t1.awperator = input_line[i-1].awperator;
+						}
+				} 
+				else {
+					if (input_line[i-1].isOperator == true) {
+						op_t2.awperator = input_line[i-1].awperator;
+					}
+
+					if (op_t1.awperator.compare("-") == 0 && temp.co_efficient > 0) {
+						temp.co_efficient *= -1;
+					}
+					
+					if (op_t2.awperator.compare("+") == 0) {
+						temp = algebraic_opeartion.add_term(temp, input_line[i]);
+					}
+					else if (op_t2.awperator.compare("-") == 0)
+						temp = algebraic_opeartion.sub_term(temp, input_line[i]);
+
+					if (temp.co_efficient < 0) {
+						op_t1.awperator = "-";
+						temp.co_efficient *= -1;
+					}
+					else
+						op_t1.awperator = "+";
+				}
+			}
+		}
+
+		if (op_t1.awperator.compare("-") == 0) {
+			RHS.push_back(op_t1);
+			// cout << op_t1.awperator << endl;
+			// cout << RHS[0].awperator << endl;
+		}
+		
+		RHS.push_back(temp);
+
+		// if (RHS[0].isOperator == true)
+		// 	cout << RHS[0].awperator << endl;
+
+		for (int i=0; i<LHS.size(); ++i)
+			result.push_back(LHS[i]);
+
+		result.push_back(eql_sign);
+
+		for (int i=0; i<RHS.size(); ++i) 
+			result.push_back(RHS[i]);
+
+		// if (result[2].isOperator == true)
+		// 	cout << result[2].awperator << endl;
 
 		return result;
 	}
@@ -968,7 +1094,6 @@ class Driver_class
 {
 private:
     /* data */ 
-	
 
 public:
 	
@@ -1064,9 +1189,14 @@ public:
 		// out = print_line(lexp1.initial_input);
 		// cout << out << endl;
 
-		out = print_line(lexp1.separate_variable_constant(lexp1.initial_input));
+		testing_container = lexp1.separate_variable_constant(lexp1.initial_input);
+
+		out = print_line(testing_container);
 		cout << out << endl;
 		//print_line(testing_container);
+
+		out = print_line(lexp1.shorten_each_side(testing_container));
+		cout << out << endl;
 	}
 
 };
