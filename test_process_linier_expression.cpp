@@ -1110,6 +1110,121 @@ public:
 
 		return result;
 	}
+
+	string print_line(vector<Term> container)
+	{
+		string output_line;
+
+		for (int i=0; i<container.size(); ++i) {
+			if (container[i].isOperator == true) {
+				output_line += container[i].awperator;
+				// continue;
+			} 
+			else if (container[i].isBrace == true) {
+				output_line += container[i].brace;
+			} 
+			else if (container[i].isEqualSign == true) {
+				output_line += container[i].awperator;
+			}
+			else if (container[i].isConstant == true) {
+				if (container[i].isFraction == true) {
+					output_line += to_string(container[i].co_efficient_fraction[0]);
+					output_line += "/";
+					output_line += to_string(container[i].co_efficient_fraction[1]);
+					output_line += " ";
+				}
+				else
+					output_line += to_string(container[i].co_efficient);
+			}
+			else {
+				if (container[i].co_efficient > 1)
+					output_line += to_string(container[i].co_efficient);
+				else if (container[i].co_efficient < -1)
+					output_line += to_string(container[i].co_efficient);
+				else if (container[i].co_efficient == -1)
+					output_line += "-";
+				else if (container[i].co_efficient == 0)
+					output_line += "0";
+				else if (container[i].isFraction == true) {
+					output_line += to_string(container[i].co_efficient_fraction[0]);
+					output_line += "/";
+					output_line += to_string(container[i].co_efficient_fraction[1]);
+					output_line += " ";
+				}
+
+				for (int j=0; j<container[i].get_variable_count(); ++j) {
+					output_line += container[i].variable_and_exponent[j].first;
+
+					if (container[i].variable_and_exponent[j].second != 1) {
+						output_line += "^";
+						output_line += to_string(container[i].variable_and_exponent[j].second);
+					}
+				}
+			}
+
+			output_line += " ";
+		}
+
+		return output_line;
+	}
+
+
+	vector <vector <Term>> solve () 
+	{
+		vector <vector <Term>> whole_process;
+		vector <Term> last_processable_line, temp_line;
+
+		Term div_sign, mul_sign, constant;
+	
+		if (initial_input.size() == 0) {
+			cout << "No initial input line given\n";
+			return whole_process;
+		}
+
+		div_sign.isOperator = true;
+		div_sign.awperator = "/";
+
+		mul_sign.isOperator = true;
+		mul_sign.awperator = "*";
+
+		whole_process.push_back(initial_input);
+		whole_process.push_back(separate_variable_constant(initial_input));
+
+		last_processable_line = shorten_each_side(whole_process[1]);
+		whole_process.push_back(shorten_each_side(last_processable_line));
+
+		int flag = -1, temp_index = 0;
+		for (int i=0; i<last_processable_line.size(); ++i) {
+			if (last_processable_line[i].isOperator && last_processable_line[i].awperator.compare("-") == 0)
+				flag = i;
+			else {
+				temp_line.push_back(last_processable_line[i]);
+				
+				if (i == flag + 1 && last_processable_line[i].isEqualSign == false) {
+					temp_line[temp_index].co_efficient *= -1;
+					flag = -1;
+				}				
+
+				++temp_index;
+			}
+		}
+
+		string out = print_line(temp_line);
+		cout << out;
+
+		constant.isConstant = true;
+		constant.co_efficient = temp_line[0].co_efficient;
+
+		temp_line[0] = algebraic_opeartion.div_term(temp_line[0], constant);
+		temp_line[2] = algebraic_opeartion.div_term(temp_line[2], constant);
+
+		out = print_line(temp_line);
+		cout << out;
+
+		whole_process.push_back(temp_line);
+
+		return whole_process;
+	}
 };
 
 class Driver_class
@@ -1223,6 +1338,8 @@ public:
 		cout << out << endl;
 
 		p1.test_term_container(lexp1.shorten_each_side(testing_container));
+
+		lexp1.solve();
 	}
 
 };
