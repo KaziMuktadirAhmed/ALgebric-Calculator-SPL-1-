@@ -489,6 +489,27 @@ public:
 			}
 		}
 	}
+
+	void test_term_container(vector <Term> terms)
+	{
+		for(int i=0; i<terms.size(); ++i) {
+			if (terms[i].isOperator)
+				cout << "Term type: operator.\tTerm: " << terms[i].awperator << endl;
+			else if (terms[i].isBrace)
+				cout << "Term type: Brace.\tTerm: " << terms[i].brace << endl;
+			else if (terms[i].isEqualSign)
+				cout << "Term type: eqaul_sign.\tTerm: " << terms[i].awperator << endl;
+			else if (terms[i].isConstant)
+				cout << "Term type: constant.\tTerm: " << terms[i].co_efficient << endl;
+			else {
+				cout << "Term type: Cx^n.\tTerm: " << terms[i].co_efficient << "  ";
+
+				for(int j=0; j<terms[i].get_variable_count(); ++j) {
+					cout << terms[i].variable_and_exponent[j].first << "^" << terms[i].variable_and_exponent[j].second << " ";
+				} cout << endl;
+			}
+		}
+	}
 };
 
 class Handle_Fractions
@@ -968,10 +989,13 @@ public:
 	{
 		int equal_sign_index = 0;
 		vector <Term> result, LHS, RHS;
-		Term temp, op_t1, op_t2, eql_sign;
+		Term temp, op_t1, op_t2, eql_sign, zero;
 
 		eql_sign.isEqualSign = true;
 		eql_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
 
 		op_t1.isOperator = true;
 		op_t2.isOperator = true;
@@ -1017,6 +1041,9 @@ public:
 
 		if (op_t1.awperator.compare("-") == 0)
 			LHS.push_back(op_t1);
+
+		if (temp.co_efficient == 0)
+			temp = zero;
 
 		LHS.push_back(temp);
 
@@ -1066,14 +1093,12 @@ public:
 
 		if (op_t1.awperator.compare("-") == 0) {
 			RHS.push_back(op_t1);
-			// cout << op_t1.awperator << endl;
-			// cout << RHS[0].awperator << endl;
 		}
+
+		if (temp.co_efficient == 0)
+			temp = zero;
 		
 		RHS.push_back(temp);
-
-		// if (RHS[0].isOperator == true)
-		// 	cout << RHS[0].awperator << endl;
 
 		for (int i=0; i<LHS.size(); ++i)
 			result.push_back(LHS[i]);
@@ -1082,9 +1107,6 @@ public:
 
 		for (int i=0; i<RHS.size(); ++i) 
 			result.push_back(RHS[i]);
-
-		// if (result[2].isOperator == true)
-		// 	cout << result[2].awperator << endl;
 
 		return result;
 	}
@@ -1133,6 +1155,8 @@ public:
 					output_line += to_string(container[i].co_efficient);
 				else if (container[i].co_efficient == -1)
 					output_line += "-";
+				else if (container[i].co_efficient == 0)
+					output_line += "0";
 				else if (container[i].isFraction == true) {
 					output_line += to_string(container[i].co_efficient_fraction[0]);
 					output_line += "/";
@@ -1197,6 +1221,8 @@ public:
 
 		out = print_line(lexp1.shorten_each_side(testing_container));
 		cout << out << endl;
+
+		p1.test_term_container(lexp1.shorten_each_side(testing_container));
 	}
 
 };
