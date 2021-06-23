@@ -1193,7 +1193,7 @@ public:
 		last_processable_line = shorten_each_side(whole_process[1]);
 		whole_process.push_back(shorten_each_side(last_processable_line));
 
-		int flag = -1, temp_index = 0;
+		int flag = -99999, temp_index = 0;
 		for (int i=0; i<last_processable_line.size(); ++i) {
 			if (last_processable_line[i].isOperator && last_processable_line[i].awperator.compare("-") == 0)
 				flag = i;
