@@ -1209,8 +1209,8 @@ public:
 			}
 		}
 
-		string out = print_line(temp_line);
-		cout << out;
+		// string out = print_line(temp_line);
+		// cout << out;
 
 		constant.isConstant = true;
 		constant.co_efficient = temp_line[0].co_efficient;
@@ -1218,8 +1218,8 @@ public:
 		temp_line[0] = algebraic_opeartion.div_term(temp_line[0], constant);
 		temp_line[2] = algebraic_opeartion.div_term(temp_line[2], constant);
 
-		out = print_line(temp_line);
-		cout << out;
+		// out = print_line(temp_line);
+		// cout << out;
 
 		whole_process.push_back(temp_line);
 
@@ -1323,6 +1323,7 @@ public:
 		cout << endl << out << endl;
     
 		vector <Term> testing_container;
+		vector <vector <Term>> process_container;
 		lexp1.get_input(inpt);
 
 		// out = print_line(lexp1.initial_input);
@@ -1339,7 +1340,11 @@ public:
 
 		p1.test_term_container(lexp1.shorten_each_side(testing_container));
 
-		lexp1.solve();
+		process_container = lexp1.solve();
+		for (int i=0; i<process_container.size(); ++i) {
+			out = print_line(process_container[i]);
+			cout << out << endl;
+		}
 	}
 
 };
