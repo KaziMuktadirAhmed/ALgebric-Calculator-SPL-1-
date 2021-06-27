@@ -16,6 +16,7 @@ public:
     Term();
     int get_variable_count();
     bool isEmpty();
+    void reset();
 
     bool isEqualSign = false;
     bool isOperator = false;
@@ -30,7 +31,7 @@ public:
     int co_efficient = 1;
     int co_efficient_fraction[2];
 
-    vector< pair <string, int> > variable_and_exponent;
+    vector< pair <string, int> > variable_and_exponent;  
 };
 
 #endif // TERM_H

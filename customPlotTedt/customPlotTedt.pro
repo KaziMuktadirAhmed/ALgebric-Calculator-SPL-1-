@@ -19,6 +19,7 @@ SOURCES += \
     Algebraic_Opeartion.cpp \
     Handle_Fractions.cpp \
     Parser.cpp \
+    Process_Linear_Expression.cpp \
     Term.cpp \
     Tokenizer.cpp \
     main.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     Algebraic_Opeartion.h \
     Handle_Fractions.h \
     Parser.h \
+    Process_Linear_Expression.h \
     Term.h \
     Tokenizer.h \
     mainwindow.h \
