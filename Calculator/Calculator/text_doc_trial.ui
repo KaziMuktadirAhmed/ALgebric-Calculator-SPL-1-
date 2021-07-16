@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>text_doc_trial</class>
+ <widget class="QDialog" name="text_doc_trial">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="3">
+    <widget class="QTextEdit" name="textEdit"/>
+   </item>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="btn_normal">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: #C0C0C0;
+	broder: 1px solid gray;
+	padding: 5px;
+}
+
+QPushButton:pressed {
+	background-color: #A9A9A9;
+	broder: 1px solid gray;
+	padding: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Normal</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QPushButton" name="btn_back">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: #C0C0C0;
+	broder: 1px solid gray;
+	padding: 5px;
+}
+
+QPushButton:pressed {
+	background-color: #A9A9A9;
+	broder: 1px solid gray;
+	padding: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string>back</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="btn_sub">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: #C0C0C0;
+	broder: 1px solid gray;
+	padding: 5px;
+}
+
+QPushButton:pressed {
+	background-color: #A9A9A9;
+	broder: 1px solid gray;
+	padding: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Subscript</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="btn_sup">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: #C0C0C0;
+	broder: 1px solid gray;
+	padding: 5px;
+}
+
+QPushButton:pressed {
+	background-color: #A9A9A9;
+	broder: 1px solid gray;
+	padding: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Superscript</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
