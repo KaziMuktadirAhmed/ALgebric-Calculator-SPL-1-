@@ -2,6 +2,11 @@
 #define TEXT_DOC_TRIAL_H
 
 #include <QDialog>
+#include <QtDebug>
+#include <QTextCursor>
+#include <bits/stdc++.h>
+#include <cstdlib>
+#include <string>
 
 namespace Ui {
 class text_doc_trial;
@@ -24,8 +29,13 @@ private slots:
 
     void on_btn_normal_clicked();
 
+    void on_btn_copy_clicked();
+
+    void on_btn_test_clicked();
+
 private:
     QWidget *parent;
+    std::string parseHTML(QString htmlInput);
 
     Ui::text_doc_trial *ui;
 };

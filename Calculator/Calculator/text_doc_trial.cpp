@@ -49,3 +49,50 @@ void text_doc_trial::on_btn_normal_clicked()
 
     edit->setCurrentCharFormat(format);
 }
+
+void text_doc_trial::on_btn_copy_clicked()
+{
+    QTextEdit *edit = ui->textEdit;
+    QTextDocument *doc = edit->document();
+
+    QString qstr = "\n";
+    qstr += doc->toHtml();
+    // edit->append(qstr);
+    // edit->insertPlainText(qstr);
+
+    std::string str = parseHTML(qstr);
+    qstr = QString::fromStdString(str);
+    edit->append(qstr);
+} 
+
+void text_doc_trial::on_btn_test_clicked()
+{
+    QTextEdit *edit = ui->textEdit;
+    // QTextDocument *doc = edit->document();
+
+    QTextCursor cursor = edit->textCursor();
+    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
+}
+
+std::string text_doc_trial::parseHTML(QString htmlInput)
+{
+    std::string plainString, htmlStr = htmlInput.toStdString();
+    size_t ind_p_start = htmlStr.find("<p"), ind_p_end = htmlStr.find("</p");
+    size_t start_read_int = htmlStr.find(">", ind_p_start) + 1;
+
+    for (size_t i=start_read_int; i<ind_p_end; ++i) {
+        if (htmlStr[i] == '<') {
+            if(htmlStr[i+1] == '/')
+                for (;htmlStr[i] != '>'; ++i);
+            if(htmlStr[i+1] == 's'){
+                for (;htmlStr[i] != '>'; ++i);
+                plainString += "^";
+            }
+        }
+        else{
+            plainString += htmlStr[i];
+        }
+    }
+
+    return plainString;
+}

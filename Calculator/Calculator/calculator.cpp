@@ -13,12 +13,8 @@ Calculator::~Calculator()
     delete ui;
 }
 
-
 void Calculator::on_btn_next_clicked()
 {
-//    Dialog dlg;
-//    dlg.setModal(true);
-//    dlg.exec();
     this->hide();
     dlg = new Dialog(this);
     dlg->show();
