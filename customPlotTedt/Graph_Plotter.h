@@ -26,10 +26,14 @@ private slots:
 
     void on_btn_zoomFull_clicked();
 
+    void on_btn_back_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     QVector<double> qv_x, qv_y;
+
+    QWidget *parent;
 
 };
 #endif // MAINWINDOW_H

@@ -6,11 +6,12 @@ Graph_Plotter::Graph_Plotter(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->parent = parent;
 
     // custom plot
     ui->plot->addGraph();
     ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-    //ui->plot->graph(0)->setLineStyle(QCPGraph::lsNone);
+    // ui->plot->graph(0)->setLineStyle(QCPGraph::lsNone);
 
     // interactive zoom and drag
     ui->plot->setInteraction(QCP::iRangeDrag, true);
@@ -19,6 +20,7 @@ Graph_Plotter::Graph_Plotter(QWidget *parent)
 
 Graph_Plotter::~Graph_Plotter()
 {
+    parent->show();
     delete ui;
 }
 
@@ -59,4 +61,9 @@ void Graph_Plotter::on_btn_zoomFull_clicked()
     ui->plot->xAxis->setRange(*std::min_element(qv_x.begin(), qv_x.end()), *std::max_element(qv_x.begin(), qv_x.end()));
     ui->plot->yAxis->setRange(*std::min_element(qv_y.begin(), qv_y.end()), *std::max_element(qv_y.begin(), qv_y.end()));
     plot();
+}
+
+void Graph_Plotter::on_btn_back_clicked()
+{
+    this->~Graph_Plotter();
 }

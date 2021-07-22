@@ -1,11 +1,11 @@
-#include "Graph_Plotter.h"
-
+// #include "Graph_Plotter.h"
+#include "Algebric_Calculator.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Graph_Plotter w;
+    Algebric_Calculator w;
     w.show();
     return a.exec();
 }

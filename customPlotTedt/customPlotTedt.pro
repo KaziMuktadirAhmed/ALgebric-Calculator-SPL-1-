@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Algebraic_Opeartion.cpp \
+    Algebric_Calculator.cpp \
     Graph_Plotter.cpp \
     Handle_Fractions.cpp \
     Parser.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
 
 HEADERS += \
     Algebraic_Opeartion.h \
+    Algebric_Calculator.h \
     Graph_Plotter.h \
     Handle_Fractions.h \
     Parser.h \
@@ -38,6 +40,7 @@ HEADERS += \
     qcustomplot.h
 
 FORMS += \
+    Algebric_Calculator.ui \
     Graph_Plotter.ui
 
 # Default rules for deployment.
