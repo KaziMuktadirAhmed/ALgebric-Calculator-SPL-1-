@@ -1,11 +1,11 @@
-#include "mainwindow.h"
+#include "Graph_Plotter.h"
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+    Graph_Plotter w;
     w.show();
     return a.exec();
 }

@@ -17,28 +17,28 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Algebraic_Opeartion.cpp \
+    Graph_Plotter.cpp \
     Handle_Fractions.cpp \
     Parser.cpp \
     Process_Linear_Expression.cpp \
     Term.cpp \
     Tokenizer.cpp \
     main.cpp \
-    mainwindow.cpp \
     qcustomplot.cpp
 
 HEADERS += \
     Algebraic_Opeartion.h \
+    Graph_Plotter.h \
     Handle_Fractions.h \
     Parser.h \
     Process_Linear_Expression.h \
     Term.h \
     Tokenizer.h \
-    mainwindow.h \
     qcustomplot.h \
     qcustomplot.h
 
 FORMS += \
-    mainwindow.ui
+    Graph_Plotter.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
