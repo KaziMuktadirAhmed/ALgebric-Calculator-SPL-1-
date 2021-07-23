@@ -29,12 +29,17 @@ public:
     QPushButton *btn_sub;
     QPushButton *btn_clear;
     QPushButton *btn_copy;
+    QPushButton *btn_html;
 
     void setupUi(QDialog *text_doc_trial)
     {
         if (text_doc_trial->objectName().isEmpty())
             text_doc_trial->setObjectName(QString::fromUtf8("text_doc_trial"));
-        text_doc_trial->resize(591, 433);
+        text_doc_trial->resize(416, 312);
+        QFont font;
+        font.setFamily(QString::fromUtf8("Arial"));
+        font.setPointSize(8);
+        text_doc_trial->setFont(font);
         gridLayout = new QGridLayout(text_doc_trial);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         btn_back = new QPushButton(text_doc_trial);
@@ -87,6 +92,10 @@ public:
 
         textEdit = new QTextEdit(text_doc_trial);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Arial"));
+        font1.setPointSize(14);
+        textEdit->setFont(font1);
 
         gridLayout->addWidget(textEdit, 0, 0, 1, 3);
 
@@ -136,7 +145,23 @@ public:
 "	padding: 5px;\n"
 "}"));
 
-        gridLayout->addWidget(btn_copy, 4, 0, 1, 2);
+        gridLayout->addWidget(btn_copy, 4, 0, 1, 1);
+
+        btn_html = new QPushButton(text_doc_trial);
+        btn_html->setObjectName(QString::fromUtf8("btn_html"));
+        btn_html->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"	background-color: #C0C0C0;\n"
+"	broder: 1px solid gray;\n"
+"	padding: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"	background-color: #A9A9A9;\n"
+"	broder: 1px solid gray;\n"
+"	padding: 5px;\n"
+"}"));
+
+        gridLayout->addWidget(btn_html, 4, 1, 1, 1);
 
 
         retranslateUi(text_doc_trial);
@@ -153,6 +178,7 @@ public:
         btn_sub->setText(QCoreApplication::translate("text_doc_trial", "Subscript", nullptr));
         btn_clear->setText(QCoreApplication::translate("text_doc_trial", "clear last char", nullptr));
         btn_copy->setText(QCoreApplication::translate("text_doc_trial", "copy", nullptr));
+        btn_html->setText(QCoreApplication::translate("text_doc_trial", "show html", nullptr));
     } // retranslateUi
 
 };

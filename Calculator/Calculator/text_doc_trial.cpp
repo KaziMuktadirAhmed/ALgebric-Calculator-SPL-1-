@@ -86,18 +86,25 @@ std::string text_doc_trial::parseHTML(QString htmlInput)
     size_t ind_p_start = htmlStr.find("<p"), ind_p_end = htmlStr.find("</p");
     size_t start_read_int = htmlStr.find(">", ind_p_start) + 1;
 
-    for (size_t i=start_read_int; i<ind_p_end; ++i) {
-        if (htmlStr[i] == '<') {
-            if(htmlStr[i+1] == '/')
-                for (;htmlStr[i] != '>'; ++i);
-
-            if(htmlStr[i+1] == 's'){
-                for (;htmlStr[i] != '>'; ++i);
-                plainString += "^";
+    while(ind_p_start != std::string::npos){
+        for (size_t i=start_read_int; i<ind_p_end; ++i) {
+            if (htmlStr[i] == '<') {
+                if(htmlStr[i+1] == '/')
+                    for (;htmlStr[i] != '>'; ++i);
+                else if(htmlStr[i+1] == 's'){
+                    for (;htmlStr[i] != '>'; ++i);
+                    plainString += "^";
+                }
+                else
+                    for (;htmlStr[i] != '>'; ++i);
             }
+            else
+                plainString += htmlStr[i];
         }
-        else
-            plainString += htmlStr[i];
+
+        ind_p_start = htmlStr.find("<p", ind_p_end);
+        start_read_int = htmlStr.find(">", ind_p_start) + 1;
+        ind_p_end = htmlStr.find("</p", start_read_int);
     }
 
     return plainString;
@@ -113,4 +120,11 @@ void text_doc_trial::on_btn_clear_clicked()
 
     cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
     cursor.deletePreviousChar();
+}
+
+void text_doc_trial::on_btn_html_clicked()
+{
+    QTextEdit *edit = ui->textEdit;
+    QString qstr = edit->toHtml();
+    edit->insertPlainText(qstr);
 }

@@ -33,6 +33,8 @@ private slots:
 
     void on_btn_clear_clicked();
 
+    void on_btn_html_clicked();
+
 private:
     QWidget *parent;
     std::string parseHTML(QString htmlInput);

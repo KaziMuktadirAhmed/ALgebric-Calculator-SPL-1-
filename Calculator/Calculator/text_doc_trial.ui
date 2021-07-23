@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>591</width>
-    <height>433</height>
+    <width>416</width>
+    <height>312</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>8</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -75,7 +81,14 @@ QPushButton:pressed {
     </widget>
    </item>
    <item row="0" column="0" colspan="3">
-    <widget class="QTextEdit" name="textEdit"/>
+    <widget class="QTextEdit" name="textEdit">
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+    </widget>
    </item>
    <item row="2" column="1">
     <widget class="QPushButton" name="btn_sub">
@@ -117,7 +130,7 @@ QPushButton:pressed {
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item row="4" column="0">
     <widget class="QPushButton" name="btn_copy">
      <property name="styleSheet">
       <string notr="true">QPushButton {
@@ -134,6 +147,26 @@ QPushButton:pressed {
      </property>
      <property name="text">
       <string>copy</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QPushButton" name="btn_html">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: #C0C0C0;
+	broder: 1px solid gray;
+	padding: 5px;
+}
+
+QPushButton:pressed {
+	background-color: #A9A9A9;
+	broder: 1px solid gray;
+	padding: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string>show html</string>
      </property>
     </widget>
    </item>
