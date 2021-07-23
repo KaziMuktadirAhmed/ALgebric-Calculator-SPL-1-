@@ -27,7 +27,7 @@ public:
     QPushButton *btn_sup;
     QTextEdit *textEdit;
     QPushButton *btn_sub;
-    QPushButton *btn_test;
+    QPushButton *btn_clear;
     QPushButton *btn_copy;
 
     void setupUi(QDialog *text_doc_trial)
@@ -106,9 +106,9 @@ public:
 
         gridLayout->addWidget(btn_sub, 2, 1, 1, 1);
 
-        btn_test = new QPushButton(text_doc_trial);
-        btn_test->setObjectName(QString::fromUtf8("btn_test"));
-        btn_test->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        btn_clear = new QPushButton(text_doc_trial);
+        btn_clear->setObjectName(QString::fromUtf8("btn_clear"));
+        btn_clear->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "	background-color: #C0C0C0;\n"
 "	broder: 1px solid gray;\n"
 "	padding: 5px;\n"
@@ -120,7 +120,7 @@ public:
 "	padding: 5px;\n"
 "}"));
 
-        gridLayout->addWidget(btn_test, 4, 2, 1, 1);
+        gridLayout->addWidget(btn_clear, 4, 2, 1, 1);
 
         btn_copy = new QPushButton(text_doc_trial);
         btn_copy->setObjectName(QString::fromUtf8("btn_copy"));
@@ -151,7 +151,7 @@ public:
         btn_normal->setText(QCoreApplication::translate("text_doc_trial", "Normal", nullptr));
         btn_sup->setText(QCoreApplication::translate("text_doc_trial", "Superscript", nullptr));
         btn_sub->setText(QCoreApplication::translate("text_doc_trial", "Subscript", nullptr));
-        btn_test->setText(QCoreApplication::translate("text_doc_trial", "test button", nullptr));
+        btn_clear->setText(QCoreApplication::translate("text_doc_trial", "clear last char", nullptr));
         btn_copy->setText(QCoreApplication::translate("text_doc_trial", "copy", nullptr));
     } // retranslateUi
 

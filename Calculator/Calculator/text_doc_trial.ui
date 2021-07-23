@@ -98,7 +98,7 @@ QPushButton:pressed {
     </widget>
    </item>
    <item row="4" column="2">
-    <widget class="QPushButton" name="btn_test">
+    <widget class="QPushButton" name="btn_clear">
      <property name="styleSheet">
       <string notr="true">QPushButton {
 	background-color: #C0C0C0;
@@ -113,7 +113,7 @@ QPushButton:pressed {
 }</string>
      </property>
      <property name="text">
-      <string>test button</string>
+      <string>clear last char</string>
      </property>
     </widget>
    </item>

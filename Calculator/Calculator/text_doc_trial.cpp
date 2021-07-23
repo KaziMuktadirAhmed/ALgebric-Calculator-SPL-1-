@@ -30,6 +30,7 @@ void text_doc_trial::on_btn_sup_clicked()
     format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
     cursor.insertText("sup",format);
+
     // edit->setCurrentCharFormat(format);
     // edit->insertPlainText("sup");
 }
@@ -79,18 +80,6 @@ void text_doc_trial::on_btn_copy_clicked()
     edit->append(qstr);
 } 
 
-void text_doc_trial::on_btn_test_clicked()
-{
-    QTextEdit *edit = ui->textEdit;
-    QTextDocument *doc = edit->document();
-    QTextCursor cursor(doc);
-
-    edit->setTextCursor(cursor);
-
-    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
-    cursor.deletePreviousChar();
-}
-
 std::string text_doc_trial::parseHTML(QString htmlInput)
 {
     std::string plainString, htmlStr = htmlInput.toStdString();
@@ -112,4 +101,16 @@ std::string text_doc_trial::parseHTML(QString htmlInput)
     }
 
     return plainString;
+}
+
+void text_doc_trial::on_btn_clear_clicked()
+{
+    QTextEdit *edit = ui->textEdit;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    edit->setTextCursor(cursor);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+    cursor.deletePreviousChar();
 }

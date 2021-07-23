@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_text_doc_trial_t {
     QByteArrayData data[8];
-    char stringdata0[136];
+    char stringdata0[137];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,13 +39,13 @@ QT_MOC_LITERAL(3, 36, 18), // "on_btn_sup_clicked"
 QT_MOC_LITERAL(4, 55, 18), // "on_btn_sub_clicked"
 QT_MOC_LITERAL(5, 74, 21), // "on_btn_normal_clicked"
 QT_MOC_LITERAL(6, 96, 19), // "on_btn_copy_clicked"
-QT_MOC_LITERAL(7, 116, 19) // "on_btn_test_clicked"
+QT_MOC_LITERAL(7, 116, 20) // "on_btn_clear_clicked"
 
     },
     "text_doc_trial\0on_btn_back_clicked\0\0"
     "on_btn_sup_clicked\0on_btn_sub_clicked\0"
     "on_btn_normal_clicked\0on_btn_copy_clicked\0"
-    "on_btn_test_clicked"
+    "on_btn_clear_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -92,7 +92,7 @@ void text_doc_trial::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 2: _t->on_btn_sub_clicked(); break;
         case 3: _t->on_btn_normal_clicked(); break;
         case 4: _t->on_btn_copy_clicked(); break;
-        case 5: _t->on_btn_test_clicked(); break;
+        case 5: _t->on_btn_clear_clicked(); break;
         default: ;
         }
     }

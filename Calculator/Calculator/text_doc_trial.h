@@ -31,7 +31,7 @@ private slots:
 
     void on_btn_copy_clicked();
 
-    void on_btn_test_clicked();
+    void on_btn_clear_clicked();
 
 private:
     QWidget *parent;
