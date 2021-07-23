@@ -28,6 +28,7 @@ void text_doc_trial::on_btn_sup_clicked()
     format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
 
     edit->setCurrentCharFormat(format);
+    edit->insertPlainText("sup");
 }
 
 void text_doc_trial::on_btn_sub_clicked()
@@ -38,6 +39,7 @@ void text_doc_trial::on_btn_sub_clicked()
     format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
 
     edit->setCurrentCharFormat(format);
+    edit->insertPlainText("sub");
 }
 
 void text_doc_trial::on_btn_normal_clicked()
@@ -48,6 +50,7 @@ void text_doc_trial::on_btn_normal_clicked()
     format.setVerticalAlignment(QTextCharFormat::AlignNormal);
 
     edit->setCurrentCharFormat(format);
+    edit->insertPlainText("normal");
 }
 
 void text_doc_trial::on_btn_copy_clicked()
@@ -84,14 +87,14 @@ std::string text_doc_trial::parseHTML(QString htmlInput)
         if (htmlStr[i] == '<') {
             if(htmlStr[i+1] == '/')
                 for (;htmlStr[i] != '>'; ++i);
+
             if(htmlStr[i+1] == 's'){
                 for (;htmlStr[i] != '>'; ++i);
                 plainString += "^";
             }
         }
-        else{
+        else
             plainString += htmlStr[i];
-        }
     }
 
     return plainString;

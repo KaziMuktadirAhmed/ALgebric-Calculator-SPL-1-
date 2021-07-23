@@ -31,8 +31,6 @@ void Calculator::on_pushButton_clicked()
 
 void Calculator::on_pushButton_19_clicked()
 {
-    // QPushButton *btn = ui->pushButton_19;
-
     this->close();
 }
 
