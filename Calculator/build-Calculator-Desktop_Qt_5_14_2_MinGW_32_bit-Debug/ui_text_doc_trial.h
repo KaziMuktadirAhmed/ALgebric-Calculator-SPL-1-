@@ -34,7 +34,7 @@ public:
     {
         if (text_doc_trial->objectName().isEmpty())
             text_doc_trial->setObjectName(QString::fromUtf8("text_doc_trial"));
-        text_doc_trial->resize(400, 300);
+        text_doc_trial->resize(591, 433);
         gridLayout = new QGridLayout(text_doc_trial);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         btn_back = new QPushButton(text_doc_trial);

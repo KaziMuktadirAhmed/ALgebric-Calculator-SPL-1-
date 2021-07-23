@@ -23,43 +23,54 @@ void text_doc_trial::on_btn_back_clicked()
 void text_doc_trial::on_btn_sup_clicked()
 {
     QTextEdit *edit = ui->textEdit;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
     QTextCharFormat format;
 
     format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-
-    edit->setCurrentCharFormat(format);
-    edit->insertPlainText("sup");
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+    cursor.insertText("sup",format);
+    // edit->setCurrentCharFormat(format);
+    // edit->insertPlainText("sup");
 }
 
 void text_doc_trial::on_btn_sub_clicked()
 {
     QTextEdit *edit = ui->textEdit;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
     QTextCharFormat format;
 
     format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+    cursor.insertText("sub",format);
 
-    edit->setCurrentCharFormat(format);
-    edit->insertPlainText("sub");
+//    edit->setCurrentCharFormat(format);
+//    edit->insertPlainText("sub");
 }
 
 void text_doc_trial::on_btn_normal_clicked()
 {
     QTextEdit *edit = ui->textEdit;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
     QTextCharFormat format;
 
     format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+    cursor.insertText("normal",format);
 
-    edit->setCurrentCharFormat(format);
-    edit->insertPlainText("normal");
+//    edit->setCurrentCharFormat(format);
+//    edit->insertPlainText("normal");
 }
 
 void text_doc_trial::on_btn_copy_clicked()
 {
     QTextEdit *edit = ui->textEdit;
-    QTextDocument *doc = edit->document();
+    // QTextDocument *doc = edit->document();
 
     QString qstr = "\n";
-    qstr += doc->toHtml();
+    qstr += edit->toHtml();
     // edit->append(qstr);
     // edit->insertPlainText(qstr);
 
@@ -71,10 +82,13 @@ void text_doc_trial::on_btn_copy_clicked()
 void text_doc_trial::on_btn_test_clicked()
 {
     QTextEdit *edit = ui->textEdit;
-    // QTextDocument *doc = edit->document();
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
 
-    QTextCursor cursor = edit->textCursor();
-    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
+    edit->setTextCursor(cursor);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+    cursor.deletePreviousChar();
 }
 
 std::string text_doc_trial::parseHTML(QString htmlInput)
