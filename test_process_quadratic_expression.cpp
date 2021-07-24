@@ -1237,6 +1237,15 @@ public:
 	}
 };
 
+class Process_Quadratic_Equation{
+    private:
+        Parser parser;
+        Algebraic_Operation algebraic_operation;
+        Process_Linear_Expression process_linear_expression;
+
+    public:
+};
+
 class Driver_class
 {
 private:
