@@ -1178,7 +1178,6 @@ public:
 		return output_line;
 	}
 
-
 	vector <vector <Term>> solve () 
 	{
 		vector <vector <Term>> whole_process;
@@ -1237,13 +1236,141 @@ public:
 	}
 };
 
-class Process_Quadratic_Equation{
-    private:
-        Parser parser;
-        Algebraic_Operation algebraic_operation;
-        Process_Linear_Expression process_linear_expression;
+class Process_Quadratic_Equation
+{
+private:
+    Parser parser;
+    Algebraic_Operation algebraic_operation;
+    Process_Linear_Expression process_linear_expression;
+    vector <Term> initial_equation;
+	vector <vector <Term>> factor_eqations;
 
-    public:
+public:
+    void get_input (string str_input) 
+    {
+        parser.take_input(str_input);
+
+        for (int i=0; i<parser.terms.size(); ++i)
+            initial_equation.push_back(parser.terms[i]);
+
+	    algebraic_operation.normalize_terms(initial_equation);
+    }
+
+    void get_input (vector <Term> vec_input) 
+    {
+        for (int i=0; i<vec_input.size(); ++i)
+            initial_equation.push_back(vec_input[i]);
+
+	    algebraic_operation.normalize_terms(initial_equation);
+    }
+
+    int find_highest_exponent (vector <Term> input) 
+    {
+        int highest_exponent = 0;
+
+        algebraic_operation.normalize_terms(input);
+
+        for (int i=0; i<input.size(); ++i) {
+            if (input[i].isBrace || input[i].isEqualSign || input[i].isOperator || input[i].isEmpty())
+                continue;
+
+            for (int j=0; j<input[i].get_variable_count(); ++j) {
+                if (input[i].variable_and_exponent[j].second > highest_exponent)
+                    highest_exponent = input[i].variable_and_exponent[j].second;
+            }
+        }
+
+        return highest_exponent;
+    }
+
+	bool isQuadraticEqation (vector <Term> input) 
+	{
+		bool returnValue = false;
+
+		if(find_highest_exponent(input) == 2)
+			returnValue = true;
+
+		return returnValue;
+	}
+
+    Term reverse_operator (Term input)
+    {
+        Term result;
+
+        if (input.isOperator == true) {
+
+            if (input.awperator.compare("+") == 0) {
+                result.isOperator = true;
+                result.awperator = "-";
+            }
+            else if (input.awperator.compare("-") == 0) {
+                result.isOperator = true;
+                result.awperator = "+";
+            }
+            else if (input.awperator.compare("*") == 0) {
+                result.isOperator = true;
+                result.awperator = "/";
+            }
+            else if (input.awperator.compare("/") == 0) {
+                result.isOperator = true;
+                result.awperator = "*";
+            }
+        }
+
+        return result;
+    }
+
+    vector <Term> substitution_of_terms (vector <Term> input) 
+	{
+		vector <Term> final_expression;
+		int equal_index = 0;
+		bool foundEqualSign = false;
+		Term plus_sign, minus_sign, equal_sign, zero;
+
+		plus_sign.isOperator = true;
+		plus_sign.awperator = "+";
+
+		minus_sign.isOperator = true;
+		minus_sign.awperator = "-";
+
+		equal_sign.isEqualSign = true;
+		equal_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
+		
+		for (equal_index=0; equal_index<input[equal_index].isEqualSign == false; ++equal_index)
+			final_expression.push_back(input[equal_index]);
+
+		bool passed_operator = false;
+
+		for (int i = equal_index + 1; i<input.size(); ++i) {
+			if (input[i].isOperator == true) {
+				if (input[i].awperator[0] == '+')
+					final_expression.push_back(minus_sign);
+				else if (input[i].awperator[0] == '-')
+					final_expression.push_back(plus_sign);
+
+				passed_operator = true;
+			}
+			else {
+				if (passed_operator == true) 
+					final_expression.push_back(input[i]);
+				else {
+					final_expression.push_back(minus_sign);
+					final_expression.push_back(input[i]);
+				}
+			}
+		}
+		
+		final_expression.push_back(equal_sign);
+		final_expression.push_back(zero);
+
+		return final_expression;
+	}
+
+
+        
 };
 
 class Driver_class
@@ -1252,7 +1379,6 @@ private:
     /* data */ 
 
 public:
-	
 
     Driver_class(/* args */) {} 
     ~Driver_class() {}
