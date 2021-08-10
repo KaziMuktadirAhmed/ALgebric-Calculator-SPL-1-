@@ -1242,10 +1242,11 @@ private:
     Parser parser;
     Algebraic_Operation algebraic_operation;
     Process_Linear_Expression process_linear_expression;
+
+public:
     vector <Term> initial_equation;
 	vector <vector <Term>> factor_eqations;
 
-public:
     void get_input (string str_input) 
     {
         parser.take_input(str_input);
@@ -1282,6 +1283,16 @@ public:
 
         return highest_exponent;
     }
+
+	bool isQuadraticEqation () 
+	{
+		bool returnValue = false;
+
+		if(find_highest_exponent(initial_equation) == 2)
+			returnValue = true;
+
+		return returnValue;
+	} 
 
 	bool isQuadraticEqation (vector <Term> input) 
 	{
@@ -1339,7 +1350,7 @@ public:
 		zero.isConstant = true;
 		zero.co_efficient = 0;
 		
-		for (equal_index=0; equal_index<input[equal_index].isEqualSign == false; ++equal_index)
+		for (equal_index=0; input[equal_index].isEqualSign == false; ++equal_index)
 			final_expression.push_back(input[equal_index]);
 
 		bool passed_operator = false;
@@ -1446,6 +1457,7 @@ public:
     	Parser p1;
     	Algebraic_Operation alg1;
 		Process_Linear_Expression lexp1;
+		Process_Quadratic_Equation qexp1;
 
         /* Taking input form the user */
         
@@ -1490,6 +1502,15 @@ public:
 			out = print_line(process_container[i]);
 			cout << out << endl;
 		}
+
+		cout << "input a quadratic eqation\n";
+		getline(cin, inpt, '\n');
+
+		qexp1.get_input(inpt);
+		testing_container.clear();
+		testing_container = qexp1.substitution_of_terms(qexp1.initial_equation);
+		out = print_line(testing_container);
+		cout << out;
 	}
 
 };
