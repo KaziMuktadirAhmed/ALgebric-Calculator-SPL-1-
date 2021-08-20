@@ -1480,6 +1480,42 @@ public:
 
 		return final_expression;
 	}
+
+	bool cheak_for_integer_root (vector <Term> input) 
+	{
+		bool has_integer_root = false;
+		
+		int a,b,c;
+
+		for (int i=0; input[i].isEqualSign == false; ++i) {
+			if (!input[i].isOperator && !input[i].isBrace) {
+				if (input[i].isConstant == true)
+					c = input[i].co_efficient;
+				else if (input[i].variable_and_exponent[0].second == 1)
+					b = input[i].co_efficient;
+				else if (input[i].variable_and_exponent[0].second == 2)
+					a = input[i].co_efficient;
+			}
+		}
+
+		cout << a << " " << b << " " << c << endl;;
+
+		int discriminant = b*b - 4*a*c, temp;
+		double cheak = 0.0;
+
+		if (discriminant > 0) {
+			temp = sqrt(discriminant);
+			cheak = sqrt(discriminant);
+			
+			cheak -= (double)temp;
+			cout << cheak << endl;
+
+			if (cheak == 0.0)
+				has_integer_root = true;
+		}
+		
+		return has_integer_root;
+	}
         
 };
 
@@ -1614,7 +1650,12 @@ public:
 		testing_container = qexp1.convert_to_standard_form(testing_container);
 		// cout << "okay";
 		out = print_line(testing_container);
-		cout << out;
+		cout << out << endl;
+
+		if (qexp1.cheak_for_integer_root(testing_container))
+			cout << "yes";
+		else 
+			cout << "no";
 	}
 
 };
