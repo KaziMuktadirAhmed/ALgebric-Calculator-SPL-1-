@@ -216,9 +216,9 @@ public:
 		awperator.clear();
 		brace.clear();
 		
-		co_efficient = 1;
-		co_efficient_fraction[0] = 1;
-		co_efficient_fraction[1] = 1;
+		co_efficient = 0;
+		co_efficient_fraction[0] = 0;
+		co_efficient_fraction[1] = 0;
 
 		variable_and_exponent.clear();
 	}
@@ -1380,7 +1380,106 @@ public:
 		return final_expression;
 	}
 
+	vector <Term> convert_to_standard_form (vector<Term> input)
+	{
+		vector <Term> final_expression;
 
+		int highest_power = find_highest_exponent(input);
+
+		bool flag = false;
+		Term demo, demo_op, plus_sign, minus_sign, equal_sign, zero;
+
+		plus_sign.isOperator = true;
+		plus_sign.awperator = "+";
+
+		minus_sign.isOperator = true;
+		minus_sign.awperator = "-";
+
+		equal_sign.isEqualSign = true;
+		equal_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
+
+
+		while (highest_power > -1) 
+		{
+			if (highest_power > 0) 
+			{
+				for (int i=0; input[i].isEqualSign == false; ++i) {
+					if(!input[i].isConstant && !input[i].isBrace && !input[i].isOperator && input[i].variable_and_exponent[0].second == highest_power) {
+						if (!flag) {
+							demo = input[i];
+							if (i == 0)	demo_op = plus_sign;
+							else demo_op = input[i-1];
+							flag = true;
+						}
+						else {
+							if (demo_op.awperator[0] == input[i-1].awperator[0]) {
+								demo = algebraic_operation.add_term(demo, input[i]);
+								demo_op = input[i-1];
+							}
+							else {
+								if (demo.co_efficient > input[i].co_efficient) 
+									demo = algebraic_operation.sub_term(demo, input[i]);
+								else {
+									demo = algebraic_operation.sub_term(input[i], demo);
+									demo_op = input[i-1];
+								}
+							}
+						}
+					}
+				} 
+			}
+
+			else {
+				for (int i=0; i<input.size(); ++i) {
+					if (input[i].isConstant == true) {
+						if (!flag) {
+							demo = input[i];
+							if (i == 0) demo_op = plus_sign;
+							else demo_op = input[i-1];
+							flag = true;
+						}
+						else {
+							if (demo_op.awperator[0] == input[i-1].awperator[0]) {
+								demo = algebraic_operation.add_term(demo, input[i]);
+								demo_op = input[i-1];
+							}
+							else {
+								if (demo.co_efficient > input[i].co_efficient) 
+									demo = algebraic_operation.sub_term(demo, input[i]);
+								else {
+									demo = algebraic_operation.sub_term(input[i], demo);
+									demo_op = input[i-1];
+								}
+							}
+						}
+					}
+				}
+
+			}
+
+			if (!demo.isEmpty() && !demo_op.isEmpty()){
+				final_expression.push_back (demo_op);
+				final_expression.push_back (demo);
+			}
+
+			demo.reset();
+			demo_op.reset();
+			flag = false;
+
+			--highest_power;
+		}
+
+		if (final_expression[0].isOperator == true && final_expression[0].awperator[0] == '+')
+			final_expression.erase(final_expression.begin() + 0);
+
+		final_expression.push_back (equal_sign);
+		final_expression.push_back (zero);
+
+		return final_expression;
+	}
         
 };
 
@@ -1509,6 +1608,11 @@ public:
 		qexp1.get_input(inpt);
 		testing_container.clear();
 		testing_container = qexp1.substitution_of_terms(qexp1.initial_equation);
+		out = print_line(testing_container);
+		cout << out << endl;
+
+		testing_container = qexp1.convert_to_standard_form(testing_container);
+		// cout << "okay";
 		out = print_line(testing_container);
 		cout << out;
 	}
