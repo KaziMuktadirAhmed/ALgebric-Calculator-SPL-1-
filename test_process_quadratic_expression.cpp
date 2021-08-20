@@ -1489,12 +1489,18 @@ public:
 
 		for (int i=0; input[i].isEqualSign == false; ++i) {
 			if (!input[i].isOperator && !input[i].isBrace) {
-				if (input[i].isConstant == true)
+				if (input[i].isConstant == true){
 					c = input[i].co_efficient;
-				else if (input[i].variable_and_exponent[0].second == 1)
+					if (i > 0 && input[i-1].awperator[0] == '-')	c *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 1) {
 					b = input[i].co_efficient;
-				else if (input[i].variable_and_exponent[0].second == 2)
+					if (i > 0 && input[i-1].awperator[0] == '-')	b *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 2) {
 					a = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	a *= -1;
+				}
 			}
 		}
 
@@ -1513,6 +1519,42 @@ public:
 		
 		return has_integer_root;
 	}
+
+	pair <int, int> find_int_root (vector <Term> input) 
+	{
+		if (cheak_for_integer_root(input) == false)
+			return make_pair(INT_MIN, INT_MIN);
+		
+		int a,b,c;
+		pair <int, int> root;
+
+		for (int i=0; input[i].isEqualSign == false; ++i) {
+			if (!input[i].isOperator && !input[i].isBrace) {
+				if (input[i].isConstant == true){
+					c = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	c *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 1) {
+					b = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	b *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 2) {
+					a = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	a *= -1;
+				}
+			}
+		}
+
+		int temp = (-b + sqrt(b*b - 4*a*c))/(2*a);
+		root.first = temp;
+
+		temp = (-b - sqrt(b*b - 4*a*c))/(2*a);
+		root.second = temp;
+
+		return root;
+	}
+
+	
         
 };
 
@@ -1649,8 +1691,10 @@ public:
 		out = print_line(testing_container);
 		cout << out << endl;
 
-		if (qexp1.cheak_for_integer_root(testing_container))
-			cout << "yes";
+		if (qexp1.cheak_for_integer_root(testing_container)){
+			pair <int, int> root = qexp1.find_int_root(testing_container);
+			cout << "yes" << root.first << " " << root.second;
+		}
 		else 
 			cout << "no";
 	}
