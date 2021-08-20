@@ -1498,8 +1498,6 @@ public:
 			}
 		}
 
-		cout << a << " " << b << " " << c << endl;;
-
 		int discriminant = b*b - 4*a*c, temp;
 		double cheak = 0.0;
 
@@ -1508,8 +1506,7 @@ public:
 			cheak = sqrt(discriminant);
 			
 			cheak -= (double)temp;
-			cout << cheak << endl;
-
+		
 			if (cheak == 0.0)
 				has_integer_root = true;
 		}
