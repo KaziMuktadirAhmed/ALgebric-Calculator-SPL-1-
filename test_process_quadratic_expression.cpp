@@ -1367,7 +1367,8 @@ public:
 		zero.co_efficient = 0;
 		
 		for (equal_index=0; input[equal_index].isEqualSign == false; ++equal_index)
-			final_expression.push_back(input[equal_index]);
+			if (input[equal_index].co_efficient != 0)
+				final_expression.push_back(input[equal_index]);
 
 		bool passed_operator = false;
 
@@ -1380,7 +1381,7 @@ public:
 
 				passed_operator = true;
 			}
-			else {
+			else if (input[i].co_efficient != 0) {
 				if (passed_operator == true) 
 					final_expression.push_back(input[i]);
 				else {
@@ -1416,7 +1417,6 @@ public:
 
 		zero.isConstant = true;
 		zero.co_efficient = 0;
-
 
 		while (highest_power > -1) 
 		{
@@ -1579,9 +1579,14 @@ public:
 		vector <Term> factor;
 		Term demo;
 		
+		demo.reset();
 		demo.co_efficient = 1;
-		demo.variable_and_exponent[0].first = input[0].variable_and_exponent[0].first;
-		demo.variable_and_exponent[0].second = 1;
+		{
+			string str;
+			if (!input[0].isOperator)	str = input[0].variable_and_exponent[0].first;
+			else if (!input[1].isOperator)	str = input[1].variable_and_exponent[0].first;
+			demo.variable_and_exponent.push_back(make_pair(str, 1));
+		}
 
 		factor.push_back(demo);
 		demo.reset();
@@ -1611,13 +1616,20 @@ public:
 		returnVal.push_back(temp_line);
 		returnVal.push_back(temp_line);
 
-		Term op_brace, cls_brace, demo_op;
+		Term op_brace, cls_brace, equal_sign, zero;
+		Term demo_op;
 
 		op_brace.isBrace = true;
 		op_brace.brace = "(";
 
 		cls_brace.isBrace = true;
 		cls_brace.brace = ")";
+
+		equal_sign.isEqualSign = true;
+		equal_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
 
 		int j = -1;
 		demo.reset();
@@ -1632,7 +1644,29 @@ public:
 					demo = input[i];
 				}
 				else {
+					int diff, n1, n2;
 
+					if (input[i-1].isOperator && input[i-1].awperator[0] == '-') 
+						n1 = -1 * input[i].co_efficient;
+					else n1 = abs(input[i].co_efficient);
+
+					if (demo_op.isOperator && demo_op.awperator[0] == '-')
+						n2 = -1 * demo.co_efficient;
+					else n2 = abs(demo.co_efficient);
+
+					diff = n1 - n2;
+
+					if (diff > 0) {
+						demo_op.isOperator = true;
+						demo_op.awperator = "+";
+					} else if (diff < 0) {
+						demo_op.isOperator = true;
+						demo_op.awperator = "-";
+					} else break;
+					demo.co_efficient = abs(diff);
+
+					returnVal[0].push_back(demo_op);	++j;
+					returnVal[0].push_back(demo);	++j;
 				}
 				
 				// first entry 
@@ -1642,6 +1676,7 @@ public:
 				}
 
 				returnVal[0].push_back(demo);	++j;
+
 				if (demo.variable_and_exponent[0].second > 1) 
 					demo.variable_and_exponent[0].second -= 1;
 				else if (demo.variable_and_exponent[0].second == 1) {
@@ -1650,17 +1685,25 @@ public:
 				}
 				returnVal[1].push_back(demo);
 
+				returnVal[1].push_back(op_brace);
 				for(int k=0; k<factor.size(); ++k)
 					returnVal[1].push_back(factor[k]);
-				
-				if (demo_op.isOperator) {
-					demo_op = algebraic_operation.multiply_operator(demo_op, factor[2]);
-					returnVal[0].push_back(demo_op); 	++j;
-				}
+				returnVal[1].push_back(cls_brace);
 
-				demo = algebraic_operation.mul_term(demo, factor[3]);
+				if (demo_op.isOperator) 	demo_op = algebraic_operation.multiply_operator(demo_op, factor[1]);
+				else 	demo_op = factor[1];
+				returnVal[0].push_back(demo_op); 	++j;
+
+				demo = algebraic_operation.mul_term(demo, factor[2]);
+				returnVal[0].push_back(demo);	++j;
 			}
 		}
+
+		returnVal[0].push_back(equal_sign);
+		returnVal[0].push_back(zero);
+
+		returnVal[1].push_back(equal_sign);
+		returnVal[1].push_back(zero);
 
 		return returnVal;
 	}
@@ -1796,16 +1839,21 @@ public:
 		cout << out << endl;
 
 		testing_container = qexp1.convert_to_standard_form(testing_container);
-		// cout << "okay";
 		out = print_line(testing_container);
 		cout << out << endl;
 
-		if (qexp1.cheak_for_integer_root(testing_container)){
-			pair <int, int> root = qexp1.find_int_root(testing_container);
-			cout << "yes" << root.first << " " << root.second;
-		}
-		else 
-			cout << "no";
+		// if (qexp1.cheak_for_integer_root(testing_container)){
+		// 	pair <int, int> root = qexp1.find_int_root(testing_container);
+		// 	cout << "yes" << root.first << " " << root.second;
+		// }	else 	cout << "no";
+
+		out = "";
+		process_container.clear();
+		process_container = qexp1.remainder_theorum(testing_container);
+		for (int i=0; i<process_container.size(); ++i) {
+			out += print_line(process_container[i]);
+			out += "\n";
+		} 	cout << out;
 	}
 
 };
