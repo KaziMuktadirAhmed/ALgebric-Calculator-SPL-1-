@@ -1646,7 +1646,9 @@ public:
 				else {
 					int diff, n1, n2;
 
-					if (input[i-1].isOperator && input[i-1].awperator[0] == '-') 
+					if (algebraic_operation.is_operable(demo, input[i]) != 1 && algebraic_operation.is_operable(demo, input[i]) != 2)
+						n1 = 0;
+					else if (input[i-1].isOperator && input[i-1].awperator[0] == '-') 
 						n1 = -1 * input[i].co_efficient;
 					else n1 = abs(input[i].co_efficient);
 
