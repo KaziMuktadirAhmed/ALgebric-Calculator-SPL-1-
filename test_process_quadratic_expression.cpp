@@ -1664,9 +1664,6 @@ public:
 						demo_op.awperator = "-";
 					} else break;
 					demo.co_efficient = abs(diff);
-
-					returnVal[0].push_back(demo_op);	++j;
-					returnVal[0].push_back(demo);	++j;
 				}
 				
 				// first entry 
