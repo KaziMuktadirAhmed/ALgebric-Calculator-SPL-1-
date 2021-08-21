@@ -1576,7 +1576,7 @@ public:
 		pair <int, int> root = find_int_root (input);
 
 		// creating initial factor
-		vector <Term> factor;
+		vector <Term> factor, allFacotors;
 		Term demo;
 		
 		demo.reset();
@@ -1701,6 +1701,30 @@ public:
 
 		returnVal[1].push_back(equal_sign);
 		returnVal[1].push_back(zero);
+
+		// final factorized line
+		temp_line.push_back(op_brace);
+		bool shouuld_take = true;
+		for (int i=0; returnVal[1][i].isEqualSign == false; ++i) {
+			if (returnVal[1][i].isBrace && returnVal[1][i].brace[0] == '(') 
+				shouuld_take = false;
+
+			if (shouuld_take) {
+				temp_line.push_back(returnVal[1][i]);
+			} else {
+				if (returnVal[1][i].isBrace && returnVal[1][i].brace[0] == ')')
+					shouuld_take = true;
+			}
+		} temp_line.push_back(cls_brace);
+
+		temp_line.push_back(op_brace);
+		for (int i=0; i<factor.size(); ++i)
+			temp_line.push_back(factor[i]);
+		temp_line.push_back(cls_brace);
+
+		temp_line.push_back(equal_sign);
+		temp_line.push_back(zero);
+		returnVal.push_back(temp_line);
 
 		return returnVal;
 	}
