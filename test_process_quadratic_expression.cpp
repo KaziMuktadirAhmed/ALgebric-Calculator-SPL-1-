@@ -792,6 +792,22 @@ public:
 		return result;
 	}
 
+	Term multiply_operator (Term op_a, Term op_b)
+	{
+		Term returnVal;
+		returnVal.reset();
+
+		if (op_a.isOperator == true && op_b.isOperator == true) {
+			returnVal.isOperator = true;
+
+			if (op_a.awperator[0] == op_b.awperator[0])
+				returnVal.awperator = "+";
+			else 
+				returnVal.awperator = "-";
+		}
+
+		return returnVal;
+	}
 
 	// Normalizing utility functions
 
@@ -1460,7 +1476,7 @@ public:
 
 			}
 
-			if (!demo.isEmpty() && !demo_op.isEmpty()){
+			if (!demo.isEmpty() && !demo_op.isEmpty() && demo.co_efficient != 0){
 				final_expression.push_back (demo_op);
 				final_expression.push_back (demo);
 			}
@@ -1485,7 +1501,7 @@ public:
 	{
 		bool has_integer_root = false;
 		
-		int a,b,c;
+		int a = 0, b = 0, c = 0;
 
 		for (int i=0; input[i].isEqualSign == false; ++i) {
 			if (!input[i].isOperator && !input[i].isBrace) {
@@ -1525,7 +1541,7 @@ public:
 		if (cheak_for_integer_root(input) == false)
 			return make_pair(INT_MIN, INT_MIN);
 		
-		int a,b,c;
+		int a = 0, b = 0, c = 0;
 		pair <int, int> root;
 
 		for (int i=0; input[i].isEqualSign == false; ++i) {
@@ -1554,7 +1570,100 @@ public:
 		return root;
 	}
 
-	
+	vector <vector <Term>> remainder_theorum (vector <Term> input) 
+	{
+		vector <vector <Term>> returnVal;
+		pair <int, int> root = find_int_root (input);
+
+		// creating initial factor
+		vector <Term> factor;
+		Term demo;
+		
+		demo.co_efficient = 1;
+		demo.variable_and_exponent[0].first = input[0].variable_and_exponent[0].first;
+		demo.variable_and_exponent[0].second = 1;
+
+		factor.push_back(demo);
+		demo.reset();
+
+		demo.isOperator = true;
+		
+		if (root.first > 0) 
+			demo.awperator = "-";
+		else if (root.first < 0)
+			demo.awperator = "+";
+
+		if (root.first != 0)	
+			factor.push_back(demo);
+
+		demo.reset();
+
+		if (root.first != 0) {
+			demo.isConstant = true;
+			demo.co_efficient = abs(root.first);
+			demo.co_efficient_fraction[0] = 1; demo.co_efficient_fraction[1] = 1;
+			factor.push_back(demo);
+			demo.reset();
+		}
+		// initial factor x +/- a created
+
+		vector <Term> temp_line;
+		returnVal.push_back(temp_line);
+		returnVal.push_back(temp_line);
+
+		Term op_brace, cls_brace, demo_op;
+
+		op_brace.isBrace = true;
+		op_brace.brace = "(";
+
+		cls_brace.isBrace = true;
+		cls_brace.brace = ")";
+
+		int j = -1;
+		demo.reset();
+		demo_op.reset();
+
+		for (int i=0; input[i].isEqualSign == false; ++i) 
+		{
+			if (!input[i].isOperator && !input[i].isBrace) {
+				if (i == 0 || i == 1){
+					if (i > 0)
+						demo_op = input[i-1];			
+					demo = input[i];
+				}
+				else {
+
+				}
+				
+				// first entry 
+				if (demo_op.isOperator) { 
+					returnVal[0].push_back(demo_op);	++j; 
+					returnVal[1].push_back(demo_op);
+				}
+
+				returnVal[0].push_back(demo);	++j;
+				if (demo.variable_and_exponent[0].second > 1) 
+					demo.variable_and_exponent[0].second -= 1;
+				else if (demo.variable_and_exponent[0].second == 1) {
+					demo.isConstant = true;
+					demo.variable_and_exponent.clear();
+				}
+				returnVal[1].push_back(demo);
+
+				for(int k=0; k<factor.size(); ++k)
+					returnVal[1].push_back(factor[k]);
+				
+				if (demo_op.isOperator) {
+					demo_op = algebraic_operation.multiply_operator(demo_op, factor[2]);
+					returnVal[0].push_back(demo_op); 	++j;
+				}
+
+				demo = algebraic_operation.mul_term(demo, factor[3]);
+			}
+		}
+
+		return returnVal;
+	}
         
 };
 
