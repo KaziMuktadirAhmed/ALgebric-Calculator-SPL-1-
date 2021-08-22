@@ -446,27 +446,7 @@ public:
 	void take_input(string user_input)
 	{
 		tokenized_input.start(user_input);
-		
-		//tokenized_input.testTokenizer();
-
-        // Term temp, temp1;
-		// temp = get_term(tokenized_input.tokens.size());
-
-		// cout << temp.co_efficient << " ";
-		// for(int i=0; i<temp.variable_and_exponent.size(); ++i)
-		// 	cout << temp.variable_and_exponent[i].first << "^" << temp.variable_and_exponent[i].second << " "; 
-		// cout << endl; 
-
-		// temp1 = get_term(tokenized_input.tokens.size());
-		// if (temp1.isOperator)
-		// 	cout << temp1.awperator << endl;
-		// else if (temp1.isBrace)
-		// 	cout << temp1.brace << endl;
-		// else if (temp1.isEqualSign)
-		// 	cout << temp1.awperator << endl;
-		
 		parse_term();
-		//test_parse_term();
 	}
 
 	void test_parse_term()
@@ -1234,17 +1214,11 @@ public:
 			}
 		}
 
-		// string out = print_line(temp_line);
-		// cout << out;
-
 		constant.isConstant = true;
 		constant.co_efficient = temp_line[0].co_efficient;
 
 		temp_line[0] = algebraic_opeartion.div_term(temp_line[0], constant);
 		temp_line[2] = algebraic_opeartion.div_term(temp_line[2], constant);
-
-		// out = print_line(temp_line);
-		// cout << out;
 
 		whole_process.push_back(temp_line);
 
@@ -1730,6 +1704,39 @@ public:
 
 		return returnVal;
 	}
+
+	void extract_factor_equation (vector <Term> input) 
+	{
+		vector <Term> temp_line;
+		Term equal_sign, zero;
+
+		equal_sign.isEqualSign = true;
+		equal_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
+
+		bool should_take = false;
+		for (int i=0; input[i].isEqualSign == false; ++i) {
+			if (input[i].isBrace && input[i].brace[0] == '(')
+				should_take = true;
+
+			if (should_take) {
+				if (input[i].isBrace && input[i].brace[0] == ')') {
+					should_take = false;
+
+					temp_line.push_back(equal_sign);
+					temp_line.push_back(zero);
+
+					factor_eqations.push_back(temp_line);
+				}
+				else 
+					temp_line.push_back(input[i]);
+			}
+		}
+
+		
+	}
         
 };
 
@@ -1864,11 +1871,6 @@ public:
 		testing_container = qexp1.convert_to_standard_form(testing_container);
 		out = print_line(testing_container);
 		cout << out << endl;
-
-		// if (qexp1.cheak_for_integer_root(testing_container)){
-		// 	pair <int, int> root = qexp1.find_int_root(testing_container);
-		// 	cout << "yes" << root.first << " " << root.second;
-		// }	else 	cout << "no";
 
 		out = "";
 		process_container.clear();
