@@ -22,6 +22,7 @@ SOURCES += \
     Handle_Fractions.cpp \
     Parser.cpp \
     Process_Linear_Expression.cpp \
+    Process_Quadratic_Expression.cpp \
     Term.cpp \
     Tokenizer.cpp \
     main.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     Handle_Fractions.h \
     Parser.h \
     Process_Linear_Expression.h \
+    Process_Quadratic_Expression.h \
     Term.h \
     Tokenizer.h \
     qcustomplot.h \

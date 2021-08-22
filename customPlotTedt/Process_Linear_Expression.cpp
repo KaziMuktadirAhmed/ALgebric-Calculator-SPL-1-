@@ -7,6 +7,7 @@ Process_Linear_Expression::Process_Linear_Expression()
 
 void Process_Linear_Expression::get_input(string str_input)
 {
+    initial_input.clear();
     parser.take_input(str_input);
 
     for (size_t i=0; i<parser.terms.size(); ++i)
@@ -17,6 +18,7 @@ void Process_Linear_Expression::get_input(string str_input)
 
 void Process_Linear_Expression::get_input(vector<Term> vec_input)
 {
+    initial_input.clear();
     for (size_t i=0; i<vec_input.size(); ++i)
         initial_input.push_back(vec_input[i]);
 

@@ -34,6 +34,9 @@ public:
     void shroten_terms (Term &container);
     void normalize_terms (vector <Term> &container);
 
+    Term multiply_operator (Term op_a, Term op_b);
+    bool compare_line (vector <Term> line1, vector<Term> line2);
+
 };
 
 #endif // ALGEBRAIC_OPEARTION_H

@@ -209,3 +209,43 @@ void Algebraic_Opeartion::normalize_terms(vector<Term> &container)
         shroten_terms(container[i]);
     }
 }
+
+Term Algebraic_Opeartion::multiply_operator(Term op_a, Term op_b)
+{
+    Term returnVal;
+    returnVal.reset();
+
+    if (op_a.isOperator == true && op_b.isOperator == true) {
+        returnVal.isOperator = true;
+
+        if (op_a.awperator[0] == op_b.awperator[0])
+            returnVal.awperator = "+";
+        else
+            returnVal.awperator = "-";
+    }
+
+    return returnVal;
+}
+
+bool Algebraic_Opeartion::compare_line(vector<Term> line1, vector<Term> line2)
+{
+    bool isEqual = true;
+
+    if (line1.size() != line2.size())
+        isEqual = false;
+    else {
+        for (size_t i=0; i < line1.size(); ++i) {
+            if (is_operable(line1[i], line2[i]) != 1 && is_operable(line1[i], line2[i]) != 2) {
+                isEqual = false;
+                break;
+            }
+            else
+                if (line1[i].co_efficient != line2[i].co_efficient) {
+                    isEqual = false;
+                    break;
+                }
+        }
+    }
+
+    return isEqual;
+}

@@ -34,6 +34,7 @@ private:
     int token_to_int(string temp);
     void clear_pair(pair <char, int> &pr);
     void test_parse_term();
+    void test_term_container(vector <Term> terms);
 
     // Parsing functions
     Term get_term(int token_count);

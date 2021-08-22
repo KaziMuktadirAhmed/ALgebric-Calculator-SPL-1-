@@ -44,6 +44,27 @@ void Parser::test_parse_term()
     }
 }
 
+void Parser::test_term_container(vector<Term> terms)
+{
+    for(size_t i=0; i<terms.size(); ++i) {
+        if (terms[i].isOperator)
+            cout << "Term type: operator.\tTerm: " << terms[i].awperator << endl;
+        else if (terms[i].isBrace)
+            cout << "Term type: Brace.\tTerm: " << terms[i].brace << endl;
+        else if (terms[i].isEqualSign)
+            cout << "Term type: eqaul_sign.\tTerm: " << terms[i].awperator << endl;
+        else if (terms[i].isConstant)
+            cout << "Term type: constant.\tTerm: " << terms[i].co_efficient << endl;
+        else {
+            cout << "Term type: Cx^n.\tTerm: " << terms[i].co_efficient << "  ";
+
+            for(int j=0; j<terms[i].get_variable_count(); ++j) {
+                cout << terms[i].variable_and_exponent[j].first << "^" << terms[i].variable_and_exponent[j].second << " ";
+            } cout << endl;
+        }
+    }
+}
+
 // Parsing Functions
 
 Term Parser::get_term(int token_count)
