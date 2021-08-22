@@ -1705,6 +1705,63 @@ public:
 		return returnVal;
 	}
 
+	string print_line(vector<Term> container)
+	{
+		string output_line;
+
+		for (int i=0; i<container.size(); ++i) {
+			if (container[i].isOperator == true) {
+				output_line += container[i].awperator;
+				// continue;
+			} 
+			else if (container[i].isBrace == true) {
+				output_line += container[i].brace;
+			} 
+			else if (container[i].isEqualSign == true) {
+				output_line += container[i].awperator;
+			}
+			else if (container[i].isConstant == true) {
+				if (container[i].isFraction == true) {
+					output_line += to_string(container[i].co_efficient_fraction[0]);
+					output_line += "/";
+					output_line += to_string(container[i].co_efficient_fraction[1]);
+					output_line += " ";
+				}
+				else
+					output_line += to_string(container[i].co_efficient);
+			}
+			else {
+				if (container[i].co_efficient > 1)
+					output_line += to_string(container[i].co_efficient);
+				else if (container[i].co_efficient < -1)
+					output_line += to_string(container[i].co_efficient);
+				else if (container[i].co_efficient == -1)
+					output_line += "-";
+				else if (container[i].co_efficient == 0)
+					output_line += "0";
+				else if (container[i].isFraction == true) {
+					output_line += to_string(container[i].co_efficient_fraction[0]);
+					output_line += "/";
+					output_line += to_string(container[i].co_efficient_fraction[1]);
+					output_line += " ";
+				}
+
+				for (int j=0; j<container[i].get_variable_count(); ++j) {
+					output_line += container[i].variable_and_exponent[j].first;
+
+					if (container[i].variable_and_exponent[j].second != 1) {
+						output_line += "^";
+						output_line += to_string(container[i].variable_and_exponent[j].second);
+					}
+				}
+			}
+
+			output_line += " ";
+		}
+
+		return output_line;
+	}
+
 	void extract_factor_equation (vector <Term> input) 
 	{
 		vector <Term> temp_line;
@@ -1718,8 +1775,10 @@ public:
 
 		bool should_take = false;
 		for (int i=0; input[i].isEqualSign == false; ++i) {
-			if (input[i].isBrace && input[i].brace[0] == '(')
+			if (input[i].isBrace && input[i].brace[0] == '(') {
 				should_take = true;
+				continue;
+			}
 
 			if (should_take) {
 				if (input[i].isBrace && input[i].brace[0] == ')') {
@@ -1729,13 +1788,18 @@ public:
 					temp_line.push_back(zero);
 
 					factor_eqations.push_back(temp_line);
+					temp_line.clear();
 				}
 				else 
 					temp_line.push_back(input[i]);
 			}
 		}
 
-		
+		string out = "";
+		for (int i=0; i<factor_eqations.size(); ++i) {
+			out += print_line(factor_eqations[i]);
+			out += '\n';
+		} cout << out;
 	}
         
 };
@@ -1879,6 +1943,8 @@ public:
 			out += print_line(process_container[i]);
 			out += "\n";
 		} 	cout << out;
+
+		qexp1.extract_factor_equation(process_container[process_container.size()-1]);
 	}
 
 };
