@@ -1769,7 +1769,7 @@ public:
 	vector <vector <Term>> solve () 
 	{
 		vector <vector <Term>> whole_process, temp_process_container;
-		vector <Term> last_processed_line, temp_line;
+		vector <Term> last_processed_line, temp_line, end_line;
 
 		last_processed_line.assign(initial_equation.begin(), initial_equation.end());
 		whole_process.push_back(last_processed_line);
@@ -1799,12 +1799,18 @@ public:
 		last_processed_line = whole_process[whole_process.size()-1];
 		extract_factor_equation(last_processed_line);
 
+		Term end_sign;
+		end_sign.isEqualSign = true;
+		end_sign.awperator = "#";
+		end_line.push_back(end_sign);
+
 		for (int i=0; i<factor_eqations.size(); ++i) {
 			process_linear_expression.get_input(factor_eqations[i]);
 
 			temp_process_container.clear();
 			temp_process_container = process_linear_expression.solve();
 
+			whole_process.push_back(end_line);
 			whole_process.insert(whole_process.end(), temp_process_container.begin(), temp_process_container.end());
 		}
 
@@ -1939,29 +1945,18 @@ public:
 		process_container.clear();
 		process_container = qexp1.solve();
 
+		bool temp_flag = true;
 		out = "";
 		for (int i=0; i<process_container.size(); ++i) {
+			if (process_container[i][0].isEqualSign && process_container[i][0].awperator[0] == '#') {
+				out += "\n\n";
+				if (temp_flag) { out += "If,\n";	temp_flag=false; }
+				else			 out += "Again,\n";
+				continue;
+			}
 			out += print_line(process_container[i]);
 			out += '\n';
 		} cout << out;
-		// testing_container.clear();
-		// testing_container = qexp1.substitution_of_terms(qexp1.initial_equation);
-		// out = print_line(testing_container);
-		// cout << out << endl;
-
-		// testing_container = qexp1.convert_to_standard_form(testing_container);
-		// out = print_line(testing_container);
-		// cout << out << endl;
-
-		// out = "";
-		// process_container.clear();
-		// process_container = qexp1.remainder_theorum(testing_container);
-		// for (int i=0; i<process_container.size(); ++i) {
-		// 	out += print_line(process_container[i]);
-		// 	out += "\n";
-		// } 	cout << out;
-
-		// qexp1.extract_factor_equation(process_container[process_container.size()-1]);
 	}
 
 };
