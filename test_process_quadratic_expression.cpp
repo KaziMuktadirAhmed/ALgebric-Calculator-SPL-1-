@@ -789,6 +789,29 @@ public:
 		return returnVal;
 	}
 
+	bool compare_line (vector <Term> line1, vector<Term> line2)
+	{
+		bool isEqual = true;
+
+		if (line1.size() != line2.size())
+			isEqual = false;
+		else {
+			for (int i=0; i < line1.size(); ++i) {
+				if (is_operable(line1[i], line2[i]) != 1 && is_operable(line1[i], line2[i]) != 2) {
+					isEqual = false;
+					break;
+				}
+				else 
+					if (line1[i].co_efficient != line2[i].co_efficient) {
+						isEqual = false;
+						break;
+					}
+			}
+		}
+
+		return isEqual;
+	} 
+
 	// Normalizing utility functions
 
 	void shroten_terms (Term &container)
@@ -843,6 +866,7 @@ public:
 
     void get_input (string str_input) 
     {
+		initial_input.clear();
         parser.take_input(str_input);
 
         for (int i=0; i<parser.terms.size(); ++i)
@@ -853,6 +877,7 @@ public:
 
     void get_input (vector <Term> vec_input) 
     {
+		initial_input.clear();
         for (int i=0; i<vec_input.size(); ++i)
             initial_input.push_back(vec_input[i]);
 
@@ -1239,6 +1264,7 @@ public:
 
     void get_input (string str_input) 
     {
+		initial_equation.clear();
         parser.take_input(str_input);
 
         for (int i=0; i<parser.terms.size(); ++i)
@@ -1249,6 +1275,7 @@ public:
 
     void get_input (vector <Term> vec_input) 
     {
+		initial_equation.clear();
         for (int i=0; i<vec_input.size(); ++i)
             initial_equation.push_back(vec_input[i]);
 
@@ -1705,63 +1732,6 @@ public:
 		return returnVal;
 	}
 
-	string print_line(vector<Term> container)
-	{
-		string output_line;
-
-		for (int i=0; i<container.size(); ++i) {
-			if (container[i].isOperator == true) {
-				output_line += container[i].awperator;
-				// continue;
-			} 
-			else if (container[i].isBrace == true) {
-				output_line += container[i].brace;
-			} 
-			else if (container[i].isEqualSign == true) {
-				output_line += container[i].awperator;
-			}
-			else if (container[i].isConstant == true) {
-				if (container[i].isFraction == true) {
-					output_line += to_string(container[i].co_efficient_fraction[0]);
-					output_line += "/";
-					output_line += to_string(container[i].co_efficient_fraction[1]);
-					output_line += " ";
-				}
-				else
-					output_line += to_string(container[i].co_efficient);
-			}
-			else {
-				if (container[i].co_efficient > 1)
-					output_line += to_string(container[i].co_efficient);
-				else if (container[i].co_efficient < -1)
-					output_line += to_string(container[i].co_efficient);
-				else if (container[i].co_efficient == -1)
-					output_line += "-";
-				else if (container[i].co_efficient == 0)
-					output_line += "0";
-				else if (container[i].isFraction == true) {
-					output_line += to_string(container[i].co_efficient_fraction[0]);
-					output_line += "/";
-					output_line += to_string(container[i].co_efficient_fraction[1]);
-					output_line += " ";
-				}
-
-				for (int j=0; j<container[i].get_variable_count(); ++j) {
-					output_line += container[i].variable_and_exponent[j].first;
-
-					if (container[i].variable_and_exponent[j].second != 1) {
-						output_line += "^";
-						output_line += to_string(container[i].variable_and_exponent[j].second);
-					}
-				}
-			}
-
-			output_line += " ";
-		}
-
-		return output_line;
-	}
-
 	void extract_factor_equation (vector <Term> input) 
 	{
 		vector <Term> temp_line;
@@ -1794,12 +1764,51 @@ public:
 					temp_line.push_back(input[i]);
 			}
 		}
+	}
 
-		string out = "";
+	vector <vector <Term>> solve () 
+	{
+		vector <vector <Term>> whole_process, temp_process_container;
+		vector <Term> last_processed_line, temp_line;
+
+		last_processed_line.assign(initial_equation.begin(), initial_equation.end());
+		whole_process.push_back(last_processed_line);
+
+		temp_line.clear();
+		temp_line = substitution_of_terms(last_processed_line);
+
+		if (!algebraic_operation.compare_line(temp_line, last_processed_line)){
+			last_processed_line.clear();
+			last_processed_line = temp_line;
+			whole_process.push_back(temp_line);
+		}
+
+		temp_line.clear();
+		temp_line = convert_to_standard_form(last_processed_line);
+		
+		if (!algebraic_operation.compare_line(temp_line, last_processed_line)){
+			last_processed_line.clear();
+			last_processed_line = temp_line;
+			whole_process.push_back(temp_line);
+		}
+
+		temp_process_container = remainder_theorum(last_processed_line);
+		for (int i=0; i<temp_process_container.size();  ++i)
+			whole_process.push_back(temp_process_container[i]);
+
+		last_processed_line = whole_process[whole_process.size()-1];
+		extract_factor_equation(last_processed_line);
+
 		for (int i=0; i<factor_eqations.size(); ++i) {
-			out += print_line(factor_eqations[i]);
-			out += '\n';
-		} cout << out;
+			process_linear_expression.get_input(factor_eqations[i]);
+
+			temp_process_container.clear();
+			temp_process_container = process_linear_expression.solve();
+
+			whole_process.insert(whole_process.end(), temp_process_container.begin(), temp_process_container.end());
+		}
+
+		return whole_process;
 	}
         
 };
@@ -1927,24 +1936,32 @@ public:
 		getline(cin, inpt, '\n');
 
 		qexp1.get_input(inpt);
-		testing_container.clear();
-		testing_container = qexp1.substitution_of_terms(qexp1.initial_equation);
-		out = print_line(testing_container);
-		cout << out << endl;
-
-		testing_container = qexp1.convert_to_standard_form(testing_container);
-		out = print_line(testing_container);
-		cout << out << endl;
+		process_container.clear();
+		process_container = qexp1.solve();
 
 		out = "";
-		process_container.clear();
-		process_container = qexp1.remainder_theorum(testing_container);
 		for (int i=0; i<process_container.size(); ++i) {
 			out += print_line(process_container[i]);
-			out += "\n";
-		} 	cout << out;
+			out += '\n';
+		} cout << out;
+		// testing_container.clear();
+		// testing_container = qexp1.substitution_of_terms(qexp1.initial_equation);
+		// out = print_line(testing_container);
+		// cout << out << endl;
 
-		qexp1.extract_factor_equation(process_container[process_container.size()-1]);
+		// testing_container = qexp1.convert_to_standard_form(testing_container);
+		// out = print_line(testing_container);
+		// cout << out << endl;
+
+		// out = "";
+		// process_container.clear();
+		// process_container = qexp1.remainder_theorum(testing_container);
+		// for (int i=0; i<process_container.size(); ++i) {
+		// 	out += print_line(process_container[i]);
+		// 	out += "\n";
+		// } 	cout << out;
+
+		// qexp1.extract_factor_equation(process_container[process_container.size()-1]);
 	}
 
 };
