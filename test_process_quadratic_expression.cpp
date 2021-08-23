@@ -789,6 +789,54 @@ public:
 		return returnVal;
 	}
 
+	// Normalizing utility functions
+
+	bool compare_term (Term term1, Term term2) 
+	{
+		bool isEqual = true;
+
+		if (term1.isBrace == term2.isBrace)
+			if (term1.brace.compare(term2.brace) != 0)
+				isEqual = false;
+		else	isEqual = false;
+	
+		if (term1.isOperator == term2.isOperator)
+			if (term1.awperator.compare(term2.awperator) != 0)
+				isEqual = false;
+		else	isEqual = false;
+
+		if (term1.isEqualSign != term2.isEqualSign)
+			isEqual = false;
+		
+		if (term1.isConstant == term2.isConstant)
+			if (term1.co_efficient != term2.co_efficient)
+				isEqual = false;
+			else {
+				shroten_terms(term1);
+				shroten_terms(term2);
+
+				if (term1.get_variable_count() != term2.get_variable_count())
+					isEqual = false;
+				else {
+					// bool isVariableEqual = true;
+					for (int i=0; i<term1.get_variable_count(); ++i) {
+						if (term1.variable_and_exponent[i].first[0] != term2.variable_and_exponent[i].first[0]) {
+							isEqual = false;
+							break;
+						}
+						
+						if (term1.variable_and_exponent[i].second != term2.variable_and_exponent[i].second) {
+							isEqual = false;
+							break;
+						}
+					}	
+				}
+			}
+		else	isEqual = false;
+
+		return isEqual;
+	}
+
 	bool compare_line (vector <Term> line1, vector<Term> line2)
 	{
 		bool isEqual = true;
@@ -797,22 +845,15 @@ public:
 			isEqual = false;
 		else {
 			for (int i=0; i < line1.size(); ++i) {
-				if (is_operable(line1[i], line2[i]) != 1 && is_operable(line1[i], line2[i]) != 2) {
+				if (compare_term(line1[i], line2[i])){
 					isEqual = false;
 					break;
 				}
-				else 
-					if (line1[i].co_efficient != line2[i].co_efficient) {
-						isEqual = false;
-						break;
-					}
 			}
 		}
 
 		return isEqual;
 	} 
-
-	// Normalizing utility functions
 
 	void shroten_terms (Term &container)
 	{
