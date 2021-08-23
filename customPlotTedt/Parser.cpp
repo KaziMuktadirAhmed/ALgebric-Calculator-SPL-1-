@@ -250,9 +250,6 @@ void Parser::parse_term()
     }
 }
 
-
-
-
 // User Interface part
 
 void Parser::take_input(string user_input)

@@ -35,6 +35,7 @@ public:
     void normalize_terms (vector <Term> &container);
 
     Term multiply_operator (Term op_a, Term op_b);
+    bool compare_term (Term term1, Term term2);
     bool compare_line (vector <Term> line1, vector<Term> line2);
 
 };
