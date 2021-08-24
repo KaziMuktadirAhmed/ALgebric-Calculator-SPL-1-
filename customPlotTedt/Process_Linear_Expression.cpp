@@ -397,3 +397,9 @@ string Process_Linear_Expression::print_line(vector<Term> container)
     return output_line;
 
 }
+
+void Process_Linear_Expression::clear_all()
+{
+    initial_input.clear();
+    parser.clear_all();
+}

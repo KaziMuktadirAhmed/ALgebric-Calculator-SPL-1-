@@ -257,7 +257,7 @@ void Parser::take_input(string user_input)
     Term temp, temp1;
 
     tokenized_input.start(user_input);
-    tokenized_input.testTokenizer();
+    // tokenized_input.testTokenizer();
     // temp = get_term(tokenized_input.tokens.size());
 
     // cout << temp.co_efficient << " ";
@@ -274,5 +274,13 @@ void Parser::take_input(string user_input)
     // 	cout << temp1.awperator << endl;
 
     parse_term();
-    test_parse_term();
+    // test_parse_term();
+}
+
+void Parser::clear_all()
+{
+    terms.clear();
+    start_index = 0;
+    get_term_flag = false;
+    tokenized_input.clear_data();
 }

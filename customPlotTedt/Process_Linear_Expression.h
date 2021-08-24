@@ -15,7 +15,6 @@ using namespace std;
 #ifndef PROCESS_LINEAR_EXPRESSION_H
 #define PROCESS_LINEAR_EXPRESSION_H
 
-
 class Process_Linear_Expression
 {
 private:
@@ -37,6 +36,7 @@ public:
 
     // testing utility
     string print_line(vector<Term> container);
+    void clear_all();
 };
 
 #endif // PROCESS_LINEAR_EXPRESSION_H

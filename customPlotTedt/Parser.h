@@ -48,6 +48,7 @@ public:
 
     // User interface part
     void take_input(string user_input);
+    void clear_all ();
 };
 
 #endif // PARSER_H

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "Graph_Plotter.h"
+#include "Print_Output.h"
 
 namespace Ui {
 class Algebric_Calculator;
@@ -19,9 +20,17 @@ public:
 private slots:
     void on_btn_graph_plotter_clicked();
 
+    void on_btn_calculate_clicked();
+
+    void on_btn_clear_clicked();
+
 private:
     Graph_Plotter *graph_plotter;
     Ui::Algebric_Calculator *ui;
+
+    Print_Output print_output;
+
+    std::string parseHTML(QString htmlInput);
 
 };
 

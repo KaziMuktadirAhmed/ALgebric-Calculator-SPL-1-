@@ -21,6 +21,7 @@ SOURCES += \
     Graph_Plotter.cpp \
     Handle_Fractions.cpp \
     Parser.cpp \
+    Print_Output.cpp \
     Process_Linear_Expression.cpp \
     Process_Quadratic_Expression.cpp \
     Term.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     Graph_Plotter.h \
     Handle_Fractions.h \
     Parser.h \
+    Print_Output.h \
     Process_Linear_Expression.h \
     Process_Quadratic_Expression.h \
     Term.h \
