@@ -1833,6 +1833,17 @@ public:
 			whole_process.push_back(temp_line);
 		}
 
+		if (isQuadraticEqation(last_processed_line) == false) {
+			process_linear_expression.get_input(last_processed_line);
+
+			temp_process_container.clear();
+			temp_process_container = process_linear_expression.solve();
+
+			whole_process.insert(whole_process.end(), temp_process_container.begin(), temp_process_container.end());
+
+			return whole_process;
+		}
+
 		temp_process_container = remainder_theorum(last_processed_line);
 		for (int i=0; i<temp_process_container.size();  ++i)
 			whole_process.push_back(temp_process_container[i]);
