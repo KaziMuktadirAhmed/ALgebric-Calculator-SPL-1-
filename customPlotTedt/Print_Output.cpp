@@ -86,10 +86,20 @@ string Print_Output::solve()
     string output = "";
     vector <vector<Term>> temp_process_container;
 
-    process_quadratic_expression.get_input(inital_input_str);
-
     temp_process_container.clear();
-    temp_process_container = process_quadratic_expression.solve();
+
+    int degree = algebraic_operation.highest_degree(initial_input_line);
+
+    if (degree == 2){
+        process_quadratic_expression.get_input(initial_input_line);
+        temp_process_container = process_quadratic_expression.solve();
+    }
+    else if (degree == 1){
+        process_linear_expression.get_input(initial_input_line);
+        temp_process_container = process_linear_expression.solve();
+    } else {
+        return  output;
+    }
 
     bool temp_flag = true;
     for (size_t i=0; i<temp_process_container.size(); ++i){

@@ -1,3 +1,17 @@
+#include <iostream>
+#include <cctype>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <vector>
+#include <bits/stdc++.h>
+
+#include "Term.h"
+#include "Parser.h"
+#include "Algebraic_Opeartion.h"
+#include "Process_Linear_Expression.h"
+#include "Process_Quadratic_Expression.h"
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

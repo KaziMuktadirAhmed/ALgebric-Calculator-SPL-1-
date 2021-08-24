@@ -511,7 +511,7 @@ void Process_Quadratic_Equation::extract_factor_equation(vector<Term> input)
     }
 }
 
-vector<vector<Term> > Process_Quadratic_Equation::solve()
+vector <vector<Term>> Process_Quadratic_Equation::solve()
 {
     vector <vector <Term>> whole_process, temp_process_container;
     vector <Term> last_processed_line, temp_line, end_line;

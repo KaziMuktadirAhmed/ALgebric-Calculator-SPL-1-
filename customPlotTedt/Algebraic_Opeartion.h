@@ -21,6 +21,7 @@ public:
     Algebraic_Opeartion();
 
     int is_operable(Term a, Term b);
+    int highest_degree(vector <Term> input);
 
     // Basic operations
 

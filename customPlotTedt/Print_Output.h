@@ -36,7 +36,6 @@ private:
     vector <Term> initial_input_line;
 
     string print_line(vector<Term> container);
-
 };
 
 #endif // PRINT_OUTPUT_H

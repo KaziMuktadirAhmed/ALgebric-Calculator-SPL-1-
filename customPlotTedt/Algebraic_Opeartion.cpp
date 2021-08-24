@@ -54,6 +54,25 @@ int Algebraic_Opeartion::is_operable(Term a, Term b)
             }
 }
 
+int Algebraic_Opeartion::highest_degree(vector<Term> input)
+{
+    int highest_exponent = 0;
+
+    normalize_terms(input);
+
+    for (size_t i=0; i<input.size(); ++i) {
+        if (input[i].isBrace || input[i].isEqualSign || input[i].isOperator || input[i].isEmpty())
+            continue;
+
+        for (size_t j=0; j<input[i].get_variable_count(); ++j) {
+            if (input[i].variable_and_exponent[j].second > highest_exponent)
+                highest_exponent = input[i].variable_and_exponent[j].second;
+        }
+    }
+
+    return highest_exponent;
+}
+
 // Basic Operations //
 
 Term Algebraic_Opeartion::add_term(Term A, Term B)
