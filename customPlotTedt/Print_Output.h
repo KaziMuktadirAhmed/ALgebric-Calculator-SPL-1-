@@ -21,6 +21,9 @@ using namespace std;
 class Print_Output
 {
 public:
+    string inital_input_str = "";
+    vector <Term> initial_input_line;
+
     Print_Output();
     void take_input_from_ui(string input);
     void clear_all();
@@ -31,9 +34,6 @@ private:
     Algebraic_Opeartion algebraic_operation;
     Process_Linear_Expression process_linear_expression;
     Process_Quadratic_Equation process_quadratic_expression;
-
-    string inital_input_str = "";
-    vector <Term> initial_input_line;
 
     string print_line(vector<Term> container);
 };

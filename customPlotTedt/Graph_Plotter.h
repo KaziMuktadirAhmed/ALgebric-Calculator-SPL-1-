@@ -29,6 +29,7 @@ public:
     Graph_Plotter(QWidget *parent = nullptr);
     ~Graph_Plotter();
 
+    void plot_graph(vector<Term> input);
     void addPoint(double x, double y);
     void clearData();
     void plot();
@@ -48,6 +49,8 @@ private:
     QVector<double> qv_x, qv_y;
 
     QWidget *parent;
+
+    double calculate_term (Term term, double val_x);
 
 };
 #endif // MAINWINDOW_H
