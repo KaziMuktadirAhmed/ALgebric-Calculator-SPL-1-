@@ -15,8 +15,22 @@ Algebric_Calculator::~Algebric_Calculator()
 
 void Algebric_Calculator::on_btn_graph_plotter_clicked()
 {
-    this->hide();
+    QTextEdit *edit = ui->txtedt_input;
+
+    QString qstr = "", temp_qstr = "";
+    qstr += edit->toHtml();
+
+    std::string str = parseHTML(qstr);
+
+    if (str.length() == 0)    return;
+
+    print_output.clear_all();
+    print_output.take_input_from_ui(str);
+
     graph_plotter = new Graph_Plotter(this);
+    graph_plotter->plot_graph(print_output.initial_input_line);
+
+    this->hide();
     graph_plotter->show();
 }
 

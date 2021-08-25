@@ -332,6 +332,9 @@ vector<vector<Term> > Process_Linear_Expression::solve()
     temp_line[0] = algebraic_opeartion.div_term(temp_line[0], constant);
     temp_line[2] = algebraic_opeartion.div_term(temp_line[2], constant);
 
+    if (!temp_line[2].isConstant)
+        temp_line[2].isConstant = true;
+
     // out = print_line(temp_line);
     // cout << out;
 
