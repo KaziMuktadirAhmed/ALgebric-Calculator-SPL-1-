@@ -28,7 +28,7 @@ void Algebric_Calculator::on_btn_graph_plotter_clicked()
     print_output.take_input_from_ui(str);
 
     graph_plotter = new Graph_Plotter(this);
-    graph_plotter->plot_graph(print_output.initial_input_line);
+    graph_plotter->plot_graph(print_output.return_graph_expression());
 
     this->hide();
     graph_plotter->show();
@@ -127,4 +127,18 @@ void Algebric_Calculator::on_btn_clear_clicked()
     edit->clear();
 
     print_output.clear_all();
+}
+
+void Algebric_Calculator::on_btn_exp_2_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+    QTextCharFormat sup_format, normal_format;
+
+    sup_format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    normal_format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+    cursor.insertText("2",sup_format);
+    cursor.insertText(" ", normal_format);
 }

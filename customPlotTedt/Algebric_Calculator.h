@@ -24,6 +24,8 @@ private slots:
 
     void on_btn_clear_clicked();
 
+    void on_btn_exp_2_clicked();
+
 private:
     Graph_Plotter *graph_plotter;
     Ui::Algebric_Calculator *ui;

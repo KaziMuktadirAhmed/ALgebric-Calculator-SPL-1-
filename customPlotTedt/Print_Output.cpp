@@ -81,6 +81,24 @@ void Print_Output::clear_all()
     process_quadratic_expression.clear_all();
 }
 
+vector<Term> Print_Output::return_graph_expression()
+{
+    vector <Term> temp_line, returnVall;
+
+    int degree = algebraic_operation.highest_degree(initial_input_line);
+    if (degree == 2) {
+        temp_line = process_quadratic_expression.substitution_of_terms(initial_input_line);
+        returnVall = process_quadratic_expression.convert_to_standard_form(temp_line);
+    }
+    else if (degree == 1) {
+        temp_line = process_linear_expression.separate_variable_constant(initial_input_line);
+        returnVall = process_linear_expression.shorten_each_side(temp_line);
+        // returnVall = process_quadratic_expression.convert_to_standard_form(returnVall);
+    }
+
+    return  returnVall;
+}
+
 string Print_Output::solve()
 {
     string output = "";

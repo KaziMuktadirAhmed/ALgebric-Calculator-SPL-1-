@@ -26,7 +26,10 @@ public:
 
     Print_Output();
     void take_input_from_ui(string input);
+
     void clear_all();
+
+    vector <Term> return_graph_expression();
     string solve();
 
 private:
