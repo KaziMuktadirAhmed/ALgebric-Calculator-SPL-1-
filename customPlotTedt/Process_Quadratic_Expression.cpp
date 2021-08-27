@@ -312,15 +312,18 @@ pair<int, int> Process_Quadratic_Equation::find_int_root(vector<Term> input)
     }
 
     double t1 = (-b + sqrt(b*b - 4*a*c))/(2*a), t2 = (-b - sqrt(b*b - 4*a*c))/(2*a);
+    int temp1 = (-b + sqrt(b*b - 4*a*c))/(2*a), temp2 = (-b - sqrt(b*b - 4*a*c))/(2*a);
 
-    int temp = (-b + sqrt(b*b - 4*a*c))/(2*a);
-    if ((t1 - (double)temp) == 0.0)
+    if ((t1 - (double)temp1) == 0.0){
         root.first = t1;
-    else
+        root.second = t2;
+    }
+    else if ((t2 - (double)temp2) == 0.0){
         root.first = t2;
-
-    temp = (-b - sqrt(b*b - 4*a*c))/(2*a);
-    root.second = temp;
+        root.second = t1;
+    }
+    else
+        return root;
 
     return root;
 }
@@ -593,9 +596,9 @@ vector <vector<Term>> Process_Quadratic_Equation::solve()
         return whole_process;
     }
 
-    if (cheak_for_integer_root(last_processed_line) < 1)
+    if (cheak_for_integer_root(last_processed_line) < 1 || find_int_root(last_processed_line).first == INT_MIN)
     {
-        if (cheak_for_integer_root(last_processed_line) == 0) {
+        if (cheak_for_integer_root(last_processed_line) == 0 || find_int_root(last_processed_line).first == INT_MIN) {
             Term var_x, const_val, equal_sign;
             pair <double, double> real_root = find_real_root(last_processed_line);
 
