@@ -185,9 +185,12 @@ public:
 
     bool isConstant = false;
 	bool isFraction = false;
+	bool hasHardVal = false;
 
     int co_efficient = 1;
 	int co_efficient_fraction[2];
+
+	double hard_value = 0.0;
 
     vector< pair <string, int> > variable_and_exponent;
 
@@ -212,13 +215,15 @@ public:
 		isBrace = false;
 		isConstant = false;
 		isFraction = false;
+		hasHardVal = false;
 
 		awperator.clear();
 		brace.clear();
 		
-		co_efficient = 1;
-		co_efficient_fraction[0] = 1;
-		co_efficient_fraction[1] = 1;
+		co_efficient = 0;
+		hard_value = 0.0;
+		co_efficient_fraction[0] = 0;
+		co_efficient_fraction[1] = 0;
 
 		variable_and_exponent.clear();
 	}
@@ -446,27 +451,7 @@ public:
 	void take_input(string user_input)
 	{
 		tokenized_input.start(user_input);
-		
-		//tokenized_input.testTokenizer();
-
-        // Term temp, temp1;
-		// temp = get_term(tokenized_input.tokens.size());
-
-		// cout << temp.co_efficient << " ";
-		// for(int i=0; i<temp.variable_and_exponent.size(); ++i)
-		// 	cout << temp.variable_and_exponent[i].first << "^" << temp.variable_and_exponent[i].second << " "; 
-		// cout << endl; 
-
-		// temp1 = get_term(tokenized_input.tokens.size());
-		// if (temp1.isOperator)
-		// 	cout << temp1.awperator << endl;
-		// else if (temp1.isBrace)
-		// 	cout << temp1.brace << endl;
-		// else if (temp1.isEqualSign)
-		// 	cout << temp1.awperator << endl;
-		
 		parse_term();
-		//test_parse_term();
 	}
 
 	void test_parse_term()
@@ -509,6 +494,14 @@ public:
 				} cout << endl;
 			}
 		}
+	}
+
+	void clear_all()
+	{
+    	terms.clear();
+    	start_index = 0;
+    	get_term_flag = false;
+    	tokenized_input.clear_data();
 	}
 };
 
@@ -792,8 +785,88 @@ public:
 		return result;
 	}
 
+	Term multiply_operator (Term op_a, Term op_b)
+	{
+		Term returnVal;
+		returnVal.reset();
+
+		if (op_a.isOperator == true && op_b.isOperator == true) {
+			returnVal.isOperator = true;
+
+			if (op_a.awperator[0] == op_b.awperator[0])
+				returnVal.awperator = "+";
+			else 
+				returnVal.awperator = "-";
+		}
+
+		return returnVal;
+	}
 
 	// Normalizing utility functions
+
+	bool compare_term (Term term1, Term term2) 
+	{
+		bool isEqual = true;
+
+		if (term1.isBrace == term2.isBrace)
+			if (term1.brace.compare(term2.brace) != 0)
+				isEqual = false;
+		else	isEqual = false;
+	
+		if (term1.isOperator == term2.isOperator)
+			if (term1.awperator.compare(term2.awperator) != 0)
+				isEqual = false;
+		else	isEqual = false;
+
+		if (term1.isEqualSign != term2.isEqualSign)
+			isEqual = false;
+		
+		if (term1.isConstant == term2.isConstant)
+			if (term1.co_efficient != term2.co_efficient)
+				isEqual = false;
+			else {
+				shroten_terms(term1);
+				shroten_terms(term2);
+
+				if (term1.get_variable_count() != term2.get_variable_count())
+					isEqual = false;
+				else {
+					// bool isVariableEqual = true;
+					for (int i=0; i<term1.get_variable_count(); ++i) {
+						if (term1.variable_and_exponent[i].first[0] != term2.variable_and_exponent[i].first[0]) {
+							isEqual = false;
+							break;
+						}
+						
+						if (term1.variable_and_exponent[i].second != term2.variable_and_exponent[i].second) {
+							isEqual = false;
+							break;
+						}
+					}	
+				}
+			}
+		else	isEqual = false;
+
+		return isEqual;
+	}
+
+	bool compare_line (vector <Term> line1, vector<Term> line2)
+	{
+		bool isEqual = true;
+
+		if (line1.size() != line2.size())
+			isEqual = false;
+		else {
+			for (int i=0; i < line1.size(); ++i) {
+				if (compare_term(line1[i], line2[i])){
+					isEqual = false;
+					break;
+				}
+			}
+		}
+
+		return isEqual;
+	} 
 
 	void shroten_terms (Term &container)
 	{
@@ -847,6 +920,7 @@ public:
 
     void get_input (string str_input) 
     {
+		initial_input.clear();
         parser.take_input(str_input);
 
         for (int i=0; i<parser.terms.size(); ++i)
@@ -857,6 +931,7 @@ public:
 
     void get_input (vector <Term> vec_input) 
     {
+		initial_input.clear();
         for (int i=0; i<vec_input.size(); ++i)
             initial_input.push_back(vec_input[i]);
 
@@ -1218,22 +1293,23 @@ public:
 			}
 		}
 
-		// string out = print_line(temp_line);
-		// cout << out;
-
 		constant.isConstant = true;
 		constant.co_efficient = temp_line[0].co_efficient;
 
 		temp_line[0] = algebraic_opeartion.div_term(temp_line[0], constant);
 		temp_line[2] = algebraic_opeartion.div_term(temp_line[2], constant);
 
-		// out = print_line(temp_line);
-		// cout << out;
-
 		whole_process.push_back(temp_line);
 
 		return whole_process;
 	}
+
+	void clear_all()
+	{
+    	initial_input.clear();
+	    parser.clear_all();
+	}
+
 };
 
 class Process_Quadratic_Equation
@@ -1249,6 +1325,7 @@ public:
 
     void get_input (string str_input) 
     {
+		initial_equation.clear();
         parser.take_input(str_input);
 
         for (int i=0; i<parser.terms.size(); ++i)
@@ -1259,6 +1336,7 @@ public:
 
     void get_input (vector <Term> vec_input) 
     {
+		initial_equation.clear();
         for (int i=0; i<vec_input.size(); ++i)
             initial_equation.push_back(vec_input[i]);
 
@@ -1351,7 +1429,8 @@ public:
 		zero.co_efficient = 0;
 		
 		for (equal_index=0; input[equal_index].isEqualSign == false; ++equal_index)
-			final_expression.push_back(input[equal_index]);
+			if (input[equal_index].co_efficient != 0)
+				final_expression.push_back(input[equal_index]);
 
 		bool passed_operator = false;
 
@@ -1364,7 +1443,7 @@ public:
 
 				passed_operator = true;
 			}
-			else {
+			else if (input[i].co_efficient != 0) {
 				if (passed_operator == true) 
 					final_expression.push_back(input[i]);
 				else {
@@ -1380,7 +1459,530 @@ public:
 		return final_expression;
 	}
 
+	vector <Term> convert_to_standard_form (vector<Term> input)
+	{
+		vector <Term> final_expression;
 
+		int highest_power = find_highest_exponent(input);
+
+		bool flag = false;
+		Term demo, demo_op, plus_sign, minus_sign, equal_sign, zero;
+
+		plus_sign.isOperator = true;
+		plus_sign.awperator = "+";
+
+		minus_sign.isOperator = true;
+		minus_sign.awperator = "-";
+
+		equal_sign.isEqualSign = true;
+		equal_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
+
+		while (highest_power > -1) 
+		{
+			if (highest_power > 0) 
+			{
+				for (int i=0; input[i].isEqualSign == false; ++i) {
+					if(!input[i].isConstant && !input[i].isBrace && !input[i].isOperator && input[i].variable_and_exponent[0].second == highest_power) {
+						if (!flag) {
+							demo = input[i];
+							if (i == 0)	demo_op = plus_sign;
+							else demo_op = input[i-1];
+							flag = true;
+						}
+						else {
+							if (demo_op.awperator[0] == input[i-1].awperator[0]) {
+								demo = algebraic_operation.add_term(demo, input[i]);
+								demo_op = input[i-1];
+							}
+							else {
+								if (demo.co_efficient > input[i].co_efficient) 
+									demo = algebraic_operation.sub_term(demo, input[i]);
+								else {
+									demo = algebraic_operation.sub_term(input[i], demo);
+									demo_op = input[i-1];
+								}
+							}
+						}
+					}
+				} 
+			}
+
+			else {
+				for (int i=0; i<input.size(); ++i) {
+					if (input[i].isConstant == true) {
+						if (!flag) {
+							demo = input[i];
+							if (i == 0) demo_op = plus_sign;
+							else demo_op = input[i-1];
+							flag = true;
+						}
+						else {
+							if (demo_op.awperator[0] == input[i-1].awperator[0]) {
+								demo = algebraic_operation.add_term(demo, input[i]);
+								demo_op = input[i-1];
+							}
+							else {
+								if (demo.co_efficient > input[i].co_efficient) 
+									demo = algebraic_operation.sub_term(demo, input[i]);
+								else {
+									demo = algebraic_operation.sub_term(input[i], demo);
+									demo_op = input[i-1];
+								}
+							}
+						}
+					}
+				}
+
+			}
+
+			if (!demo.isEmpty() && !demo_op.isEmpty() && demo.co_efficient != 0){
+				final_expression.push_back (demo_op);
+				final_expression.push_back (demo);
+			}
+
+			demo.reset();
+			demo_op.reset();
+			flag = false;
+
+			--highest_power;
+		}
+
+		if (final_expression[0].isOperator == true && final_expression[0].awperator[0] == '+')
+			final_expression.erase(final_expression.begin() + 0);
+
+		final_expression.push_back (equal_sign);
+		final_expression.push_back (zero);
+
+		return final_expression;
+	}
+
+	int cheak_for_integer_root (vector <Term> input) 
+	{
+		int has_integer_root = -1;
+		
+		int a = 0, b = 0, c = 0;
+
+		for (int i=0; input[i].isEqualSign == false; ++i) {
+			if (!input[i].isOperator && !input[i].isBrace) {
+				if (input[i].isConstant == true){
+					c = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	c *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 1) {
+					b = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	b *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 2) {
+					a = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	a *= -1;
+				}
+			}
+		}
+
+		int discriminant = b*b - 4*a*c, temp;
+		
+		if (discriminant < 0.0)
+			return has_integer_root;
+		else
+			has_integer_root = 0;
+
+		double cheak = 0.0;
+
+		if (discriminant >= 0) {
+			temp = sqrt(discriminant);
+			cheak = sqrt(discriminant);
+			
+			cheak -= (double)temp;
+		
+			if (cheak == 0.0) {
+				has_integer_root = 1;
+				cout << "found one";
+			}
+		}
+		
+		return has_integer_root;
+	}
+
+	pair <int, int> find_int_root (vector <Term> input) 
+	{
+		if (cheak_for_integer_root(input) < 1)
+			return find_real_root(input);
+		
+		int a = 0, b = 0, c = 0;
+		pair <int, int> root;
+
+		for (int i=0; input[i].isEqualSign == false; ++i) {
+			if (!input[i].isOperator && !input[i].isBrace) {
+				if (input[i].isConstant == true){
+					c = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	c *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 1) {
+					b = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	b *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 2) {
+					a = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	a *= -1;
+				}
+			}
+		}
+
+		double t1 = (-b + sqrt(b*b - 4*a*c))/(2*a), t2 = (-b - sqrt(b*b - 4*a*c))/(2*a);
+
+		int temp = (-b + sqrt(b*b - 4*a*c))/(2*a);
+		if ((t1 - (double)temp) > 0.0)
+			root.first = t1;
+		else
+			root.first = t2;
+			
+		temp = (-b - sqrt(b*b - 4*a*c))/(2*a);
+		root.second = temp;
+
+		return root;
+	}
+
+	pair <double, double> find_real_root (vector <Term> input) 
+	{
+		if (cheak_for_integer_root(input) < 0)
+			return make_pair(INT_MIN, INT_MIN);
+		
+		int a = 0, b = 0, c = 0;
+		pair <double, double> root;
+
+		for (int i=0; input[i].isEqualSign == false; ++i) {
+			if (!input[i].isOperator && !input[i].isBrace) {
+				if (input[i].isConstant == true){
+					c = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	c *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 1) {
+					b = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	b *= -1;
+				}
+				else if (input[i].variable_and_exponent[0].second == 2) {
+					a = input[i].co_efficient;
+					if (i > 0 && input[i-1].awperator[0] == '-')	a *= -1;
+				}
+			}
+		}
+
+		double temp = (-b + sqrt(b*b - 4*a*c))/(2*a);
+		root.first = temp;
+
+		temp = (-b - sqrt(b*b - 4*a*c))/(2*a);
+		root.second = temp;
+
+		return root;
+	}
+
+	vector <vector <Term>> remainder_theorum (vector <Term> input) 
+	{
+		vector <vector <Term>> returnVal;
+		pair <int, int> root = find_int_root (input);
+
+		// creating initial factor
+		vector <Term> factor, allFacotors;
+		Term demo;
+		
+		demo.reset();
+		demo.co_efficient = 1;
+		{
+			string str;
+			if (!input[0].isOperator)	str = input[0].variable_and_exponent[0].first;
+			else if (!input[1].isOperator)	str = input[1].variable_and_exponent[0].first;
+			demo.variable_and_exponent.push_back(make_pair(str, 1));
+		}
+
+		factor.push_back(demo);
+		demo.reset();
+
+		demo.isOperator = true;
+		
+		if (root.first > 0) 
+			demo.awperator = "-";
+		else if (root.first < 0)
+			demo.awperator = "+";
+
+		if (root.first != 0)	
+			factor.push_back(demo);
+
+		demo.reset();
+
+		if (root.first != 0) {
+			demo.isConstant = true;
+			demo.co_efficient = abs(root.first);
+			demo.co_efficient_fraction[0] = 1; demo.co_efficient_fraction[1] = 1;
+			factor.push_back(demo);
+			demo.reset();
+		}
+		// initial factor x +/- a created
+
+		vector <Term> temp_line;
+		returnVal.push_back(temp_line);
+		returnVal.push_back(temp_line);
+
+		Term op_brace, cls_brace, equal_sign, zero;
+		Term demo_op;
+
+		op_brace.isBrace = true;
+		op_brace.brace = "(";
+
+		cls_brace.isBrace = true;
+		cls_brace.brace = ")";
+
+		equal_sign.isEqualSign = true;
+		equal_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
+
+		int j = -1;
+		demo.reset();
+		demo_op.reset();
+
+		for (int i=0; input[i].isEqualSign == false; ++i) 
+		{
+			if (!input[i].isOperator && !input[i].isBrace) {
+				if (i == 0 || i == 1){
+					if (i > 0)
+						demo_op = input[i-1];			
+					demo = input[i];
+				}
+				else {
+					int diff, n1, n2;
+
+					if (algebraic_operation.is_operable(demo, input[i]) != 1 && algebraic_operation.is_operable(demo, input[i]) != 2)
+						n1 = 0;
+					else if (input[i-1].isOperator && input[i-1].awperator[0] == '-') 
+						n1 = -1 * input[i].co_efficient;
+					else n1 = abs(input[i].co_efficient);
+
+					if (demo_op.isOperator && demo_op.awperator[0] == '-')
+						n2 = -1 * demo.co_efficient;
+					else n2 = abs(demo.co_efficient);
+
+					diff = n1 - n2;
+
+					if (diff > 0) {
+						demo_op.isOperator = true;
+						demo_op.awperator = "+";
+					} else if (diff < 0) {
+						demo_op.isOperator = true;
+						demo_op.awperator = "-";
+					} else break;
+					demo.co_efficient = abs(diff);
+				}
+				
+				// first entry 
+				if (demo_op.isOperator) { 
+					returnVal[0].push_back(demo_op);	++j; 
+					returnVal[1].push_back(demo_op);
+				}
+
+				returnVal[0].push_back(demo);	++j;
+
+				if (demo.variable_and_exponent[0].second > 1) 
+					demo.variable_and_exponent[0].second -= 1;
+				else if (demo.variable_and_exponent[0].second == 1) {
+					demo.isConstant = true;
+					demo.variable_and_exponent.clear();
+				}
+				returnVal[1].push_back(demo);
+
+				returnVal[1].push_back(op_brace);
+				for(int k=0; k<factor.size(); ++k)
+					returnVal[1].push_back(factor[k]);
+				returnVal[1].push_back(cls_brace);
+
+				if (demo_op.isOperator) 	demo_op = algebraic_operation.multiply_operator(demo_op, factor[1]);
+				else 	demo_op = factor[1];
+				returnVal[0].push_back(demo_op); 	++j;
+
+				demo = algebraic_operation.mul_term(demo, factor[2]);
+				returnVal[0].push_back(demo);	++j;
+			}
+		}
+
+		returnVal[0].push_back(equal_sign);
+		returnVal[0].push_back(zero);
+
+		returnVal[1].push_back(equal_sign);
+		returnVal[1].push_back(zero);
+
+		// final factorized line
+		temp_line.push_back(op_brace);
+		bool shouuld_take = true;
+		for (int i=0; returnVal[1][i].isEqualSign == false; ++i) {
+			if (returnVal[1][i].isBrace && returnVal[1][i].brace[0] == '(') 
+				shouuld_take = false;
+
+			if (shouuld_take) {
+				temp_line.push_back(returnVal[1][i]);
+			} else {
+				if (returnVal[1][i].isBrace && returnVal[1][i].brace[0] == ')')
+					shouuld_take = true;
+			}
+		} temp_line.push_back(cls_brace);
+
+		temp_line.push_back(op_brace);
+		for (int i=0; i<factor.size(); ++i)
+			temp_line.push_back(factor[i]);
+		temp_line.push_back(cls_brace);
+
+		temp_line.push_back(equal_sign);
+		temp_line.push_back(zero);
+		returnVal.push_back(temp_line);
+
+		return returnVal;
+	}
+
+	void extract_factor_equation (vector <Term> input) 
+	{
+		vector <Term> temp_line;
+		Term equal_sign, zero;
+
+		equal_sign.isEqualSign = true;
+		equal_sign.awperator = "=";
+
+		zero.isConstant = true;
+		zero.co_efficient = 0;
+
+		bool should_take = false;
+		for (int i=0; input[i].isEqualSign == false; ++i) {
+			if (input[i].isBrace && input[i].brace[0] == '(') {
+				should_take = true;
+				continue;
+			}
+
+			if (should_take) {
+				if (input[i].isBrace && input[i].brace[0] == ')') {
+					should_take = false;
+
+					temp_line.push_back(equal_sign);
+					temp_line.push_back(zero);
+
+					factor_eqations.push_back(temp_line);
+					temp_line.clear();
+				}
+				else 
+					temp_line.push_back(input[i]);
+			}
+		}
+	}
+
+	vector <vector <Term>> solve () 
+	{
+		vector <vector <Term>> whole_process, temp_process_container;
+		vector <Term> last_processed_line, temp_line, end_line;
+
+		last_processed_line.assign(initial_equation.begin(), initial_equation.end());
+		whole_process.push_back(last_processed_line);
+
+		temp_line.clear();
+		temp_line = substitution_of_terms(last_processed_line);
+
+		if (!algebraic_operation.compare_line(temp_line, last_processed_line)){
+			last_processed_line.clear();
+			last_processed_line = temp_line;
+			whole_process.push_back(temp_line);
+		}
+
+		temp_line.clear();
+		temp_line = convert_to_standard_form(last_processed_line);
+		
+		if (!algebraic_operation.compare_line(temp_line, last_processed_line)){
+			last_processed_line.clear();
+			last_processed_line = temp_line;
+			whole_process.push_back(temp_line);
+		}
+
+		if (isQuadraticEqation(last_processed_line) == false) {
+			process_linear_expression.get_input(last_processed_line);
+
+			temp_process_container.clear();
+			temp_process_container = process_linear_expression.solve();
+
+			whole_process.insert(whole_process.end(), temp_process_container.begin(), temp_process_container.end());
+
+			return whole_process;
+		}
+
+		if (cheak_for_integer_root(last_processed_line) < 1) 
+		{
+			if (cheak_for_integer_root(last_processed_line) == 0) {
+				Term var_x, const_val, equal_sign;
+				pair <double, double> real_root = find_real_root(last_processed_line);
+
+				var_x.co_efficient = 1;
+				for (int i=0; i<last_processed_line.size(); ++i)
+					if (!last_processed_line[i].isBrace && !last_processed_line[i].isOperator && !last_processed_line[i].isEqualSign && !last_processed_line[i].isConstant) {
+						var_x.variable_and_exponent.push_back(make_pair(last_processed_line[i].variable_and_exponent[0].first, 1));
+						break;
+					} 
+
+				equal_sign.isOperator = true;
+				equal_sign.awperator = "=";
+
+				const_val.hasHardVal = true;
+				const_val.hard_value = real_root.first;
+
+				temp_line.clear();
+				temp_line.push_back(var_x);
+				temp_line.push_back(equal_sign);
+				temp_line.push_back(const_val);
+
+				whole_process.push_back(temp_line);
+
+				temp_line.clear();
+				const_val.hard_value = real_root.second;
+
+				temp_line.push_back(var_x);
+				temp_line.push_back(equal_sign);
+				temp_line.push_back(const_val);
+
+				whole_process.push_back(temp_line);
+			}
+
+			return whole_process;
+		}
+
+		temp_process_container = remainder_theorum(last_processed_line);
+		for (int i=0; i<temp_process_container.size();  ++i)
+			whole_process.push_back(temp_process_container[i]);
+
+		last_processed_line = whole_process[whole_process.size()-1];
+		extract_factor_equation(last_processed_line);
+
+		Term end_sign;
+		end_sign.isEqualSign = true;
+		end_sign.awperator = "#";
+		end_line.push_back(end_sign);
+
+		for (int i=0; i<factor_eqations.size(); ++i) {
+			process_linear_expression.get_input(factor_eqations[i]);
+
+			temp_process_container.clear();
+			temp_process_container = process_linear_expression.solve();
+
+			whole_process.push_back(end_line);
+			whole_process.insert(whole_process.end(), temp_process_container.begin(), temp_process_container.end());
+		}
+
+		return whole_process;
+	}
+
+	void clear_all()
+	{
+ 		parser.clear_all();
+    	process_linear_expression.clear_all();
+
+    	initial_equation.clear();
+    	factor_eqations.clear();
+	}
         
 };
 
@@ -1419,6 +2021,9 @@ public:
 				else
 					output_line += to_string(container[i].co_efficient);
 			}
+			else if (container[i].hasHardVal == true) {
+				output_line += to_string(container[i].hard_value);
+			}
 			else {
 				if (container[i].co_efficient > 1)
 					output_line += to_string(container[i].co_efficient);
@@ -1449,6 +2054,28 @@ public:
 		}
 
 		return output_line;
+	}
+
+	double calculate_term(Term term, double val_x)
+	{
+    	double val_y = 0.0, temp = 1;
+
+    	if (!term.isBrace && !term.isOperator && !term.isEqualSign)
+    	{
+        	if (term.isFraction)    val_y = (double)term.co_efficient_fraction[0] / (double)term.co_efficient_fraction[1];
+        	else val_y = term.co_efficient;
+
+        	if (!term.isConstant) {
+            	for (int i=0; i<term.get_variable_count(); ++i) {
+                	for (int j=0; j<term.variable_and_exponent[i].second; ++j)
+                    	temp *= val_x;
+            	}
+
+            	val_y *= temp;
+        	}
+    	}
+
+    	return val_y;
 	}
 
     void start ()
@@ -1507,11 +2134,33 @@ public:
 		getline(cin, inpt, '\n');
 
 		qexp1.get_input(inpt);
+		process_container.clear();
+		process_container = qexp1.solve();
+
+		bool temp_flag = true;
+		out = "";
+		for (int i=0; i<process_container.size(); ++i) {
+			if (process_container[i][0].isEqualSign && process_container[i][0].awperator[0] == '#') {
+				out += "\n\n";
+				if (temp_flag) { out += "If,\n";	temp_flag=false; }
+				else			 out += "Again,\n";
+				continue;
+			}
+			out += print_line(process_container[i]);
+			out += '\n';
+		} cout << out;
+
 		testing_container.clear();
+
+		qexp1.clear_all();
+		qexp1.get_input(inpt);
 		testing_container = qexp1.substitution_of_terms(qexp1.initial_equation);
+		testing_container = qexp1.convert_to_standard_form(testing_container);
+
 		out = print_line(testing_container);
 		cout << out;
 	}
+
 
 };
 
