@@ -26,6 +26,7 @@ public:
 
     Print_Output();
     void take_input_from_ui(string input);
+    string print_line(vector<Term> container);
 
     void clear_all();
 
@@ -38,7 +39,7 @@ private:
     Process_Linear_Expression process_linear_expression;
     Process_Quadratic_Equation process_quadratic_expression;
 
-    string print_line(vector<Term> container);
+//    string print_line(vector<Term> container);
 };
 
 #endif // PRINT_OUTPUT_H

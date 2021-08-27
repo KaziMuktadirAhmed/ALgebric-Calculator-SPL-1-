@@ -144,6 +144,19 @@
      <string>Back</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btn_zoomCenter">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>680</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Zoom Center</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

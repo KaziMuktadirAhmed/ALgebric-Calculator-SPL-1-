@@ -43,6 +43,8 @@ private slots:
 
     void on_btn_back_clicked();
 
+    void on_btn_zoomCenter_clicked();
+
 private:
     Ui::MainWindow *ui;
 

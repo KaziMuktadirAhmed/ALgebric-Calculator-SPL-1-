@@ -27,6 +27,14 @@ void Algebric_Calculator::on_btn_graph_plotter_clicked()
     print_output.clear_all();
     print_output.take_input_from_ui(str);
 
+    // test
+    QTextEdit *newEdit = ui->txtedt_output;
+    newEdit->clear();
+
+    QString tempa_qstr = QString::fromStdString(print_output.print_line(print_output.return_graph_expression()));
+    newEdit->setText(tempa_qstr);
+    // end of test
+
     graph_plotter = new Graph_Plotter(this);
     graph_plotter->plot_graph(print_output.return_graph_expression());
 

@@ -17,8 +17,8 @@ Graph_Plotter::Graph_Plotter(QWidget *parent)
     ui->plot->xAxis->setLabel("x");
     ui->plot->yAxis->setLabel("y");
 
-    ui->plot->xAxis->setRange(-100.0, 100.0);
-    ui->plot->yAxis->setRange(-100.0, 100.0);
+    ui->plot->xAxis->setRange(-10.0, 10.0);
+    ui->plot->yAxis->setRange(-10.0, 10.0);
 
     // interactive zoom and drag
     ui->plot->setInteraction(QCP::iRangeDrag, true);
@@ -135,4 +135,11 @@ double Graph_Plotter::calculate_line(std::vector<Term> input, double val_x)
     }
 
     return val_y;
+}
+
+void Graph_Plotter::on_btn_zoomCenter_clicked()
+{
+    ui->plot->xAxis->setRange(-10.0, 10.0);
+    ui->plot->yAxis->setRange(-10.0, 10.0);
+    plot();
 }

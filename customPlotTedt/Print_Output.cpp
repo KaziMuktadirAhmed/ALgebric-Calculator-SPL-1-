@@ -98,7 +98,7 @@ vector<Term> Print_Output::return_graph_expression()
 //        returnVall = process_linear_expression.shorten_each_side(temp_line);
 //        returnVall = process_quadratic_expression.convert_to_standard_form(returnVall);
 //    }
-
+    algebraic_operation.normalize_terms(initial_input_line);
     temp_line = process_quadratic_expression.substitution_of_terms(initial_input_line);
     returnVall = process_quadratic_expression.convert_to_standard_form(temp_line);
 
