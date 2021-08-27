@@ -1599,7 +1599,7 @@ public:
 		
 			if (cheak == 0.0) {
 				has_integer_root = 1;
-				cout << "found one";
+				// cout << "found one";
 			}
 		}
 		
@@ -1634,7 +1634,7 @@ public:
 		double t1 = (-b + sqrt(b*b - 4*a*c))/(2*a), t2 = (-b - sqrt(b*b - 4*a*c))/(2*a);
 
 		int temp = (-b + sqrt(b*b - 4*a*c))/(2*a);
-		if ((t1 - (double)temp) > 0.0)
+		if ((t1 - (double)temp) == 0.0)
 			root.first = t1;
 		else
 			root.first = t2;

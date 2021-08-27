@@ -314,7 +314,7 @@ pair<int, int> Process_Quadratic_Equation::find_int_root(vector<Term> input)
     double t1 = (-b + sqrt(b*b - 4*a*c))/(2*a), t2 = (-b - sqrt(b*b - 4*a*c))/(2*a);
 
     int temp = (-b + sqrt(b*b - 4*a*c))/(2*a);
-    if ((t1 - (double)temp) > 0.0)
+    if ((t1 - (double)temp) == 0.0)
         root.first = t1;
     else
         root.first = t2;
