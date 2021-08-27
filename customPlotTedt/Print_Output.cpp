@@ -30,6 +30,9 @@ string Print_Output::print_line(vector<Term> container)
             else
                 output_line += to_string(container[i].co_efficient);
         }
+        else if (container[i].hasHardVal == true) {
+                output_line += to_string(container[i].hard_value);
+        }
         else {
             if (container[i].co_efficient > 1)
                 output_line += to_string(container[i].co_efficient);

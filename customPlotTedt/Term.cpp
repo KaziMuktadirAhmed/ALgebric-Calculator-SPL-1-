@@ -26,11 +26,13 @@ void Term::reset()
     isBrace = false;
     isConstant = false;
     isFraction = false;
+    hasHardVal = false;
 
     awperator.clear();
     brace.clear();
 
-    co_efficient = 1;
+    co_efficient = 0;
+    hard_value = 0.0;
     co_efficient_fraction[0] = 1;
     co_efficient_fraction[1] = 1;
 

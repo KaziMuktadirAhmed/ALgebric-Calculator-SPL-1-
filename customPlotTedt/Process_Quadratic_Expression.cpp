@@ -241,9 +241,9 @@ vector<Term> Process_Quadratic_Equation::convert_to_standard_form(vector<Term> i
     return final_expression;
 }
 
-bool Process_Quadratic_Equation::cheak_for_integer_root(vector<Term> input)
+int Process_Quadratic_Equation::cheak_for_integer_root(vector<Term> input)
 {
-    bool has_integer_root = false;
+    int has_integer_root = -1;
 
     int a = 0, b = 0, c = 0;
 
@@ -265,16 +265,22 @@ bool Process_Quadratic_Equation::cheak_for_integer_root(vector<Term> input)
     }
 
     int discriminant = b*b - 4*a*c, temp;
+
+    if (discriminant < 0.0)
+        return has_integer_root;
+    else
+        has_integer_root = 0;
+
     double cheak = 0.0;
 
-    if (discriminant > 0) {
+    if (discriminant >= 0) {
         temp = sqrt(discriminant);
         cheak = sqrt(discriminant);
 
         cheak -= (double)temp;
 
         if (cheak == 0.0)
-            has_integer_root = true;
+            has_integer_root = 1;
     }
 
     return has_integer_root;
@@ -305,7 +311,46 @@ pair<int, int> Process_Quadratic_Equation::find_int_root(vector<Term> input)
         }
     }
 
+    double t1 = (-b + sqrt(b*b - 4*a*c))/(2*a), t2 = (-b - sqrt(b*b - 4*a*c))/(2*a);
+
     int temp = (-b + sqrt(b*b - 4*a*c))/(2*a);
+    if ((t1 - (double)temp) > 0.0)
+        root.first = t1;
+    else
+        root.first = t2;
+
+    temp = (-b - sqrt(b*b - 4*a*c))/(2*a);
+    root.second = temp;
+
+    return root;
+}
+
+pair<double, double> Process_Quadratic_Equation::find_real_root(vector<Term> input)
+{
+    if (cheak_for_integer_root(input) < 0)
+        return make_pair(INT_MIN, INT_MIN);
+
+    int a = 0, b = 0, c = 0;
+    pair <double, double> root;
+
+    for (int i=0; input[i].isEqualSign == false; ++i) {
+        if (!input[i].isOperator && !input[i].isBrace) {
+            if (input[i].isConstant == true){
+                c = input[i].co_efficient;
+                if (i > 0 && input[i-1].awperator[0] == '-')	c *= -1;
+            }
+            else if (input[i].variable_and_exponent[0].second == 1) {
+                b = input[i].co_efficient;
+                if (i > 0 && input[i-1].awperator[0] == '-')	b *= -1;
+            }
+            else if (input[i].variable_and_exponent[0].second == 2) {
+                a = input[i].co_efficient;
+                if (i > 0 && input[i-1].awperator[0] == '-')	a *= -1;
+            }
+        }
+    }
+
+    double temp = (-b + sqrt(b*b - 4*a*c))/(2*a);
     root.first = temp;
 
     temp = (-b - sqrt(b*b - 4*a*c))/(2*a);
@@ -544,6 +589,45 @@ vector <vector<Term>> Process_Quadratic_Equation::solve()
         temp_process_container = process_linear_expression.solve();
 
         whole_process.insert(whole_process.end(), temp_process_container.begin(), temp_process_container.end());
+
+        return whole_process;
+    }
+
+    if (cheak_for_integer_root(last_processed_line) < 1)
+    {
+        if (cheak_for_integer_root(last_processed_line) == 0) {
+            Term var_x, const_val, equal_sign;
+            pair <double, double> real_root = find_real_root(last_processed_line);
+
+            var_x.co_efficient = 1;
+            for (int i=0; i<last_processed_line.size(); ++i)
+                if (!last_processed_line[i].isBrace && !last_processed_line[i].isOperator && !last_processed_line[i].isEqualSign && !last_processed_line[i].isConstant) {
+                    var_x.variable_and_exponent.push_back(make_pair(last_processed_line[i].variable_and_exponent[0].first, 1));
+                    break;
+            }
+
+            equal_sign.isOperator = true;
+            equal_sign.awperator = "=";
+
+            const_val.hasHardVal = true;
+            const_val.hard_value = real_root.first;
+
+            temp_line.clear();
+            temp_line.push_back(var_x);
+            temp_line.push_back(equal_sign);
+            temp_line.push_back(const_val);
+
+            whole_process.push_back(temp_line);
+
+            temp_line.clear();
+            const_val.hard_value = real_root.second;
+
+            temp_line.push_back(var_x);
+            temp_line.push_back(equal_sign);
+            temp_line.push_back(const_val);
+
+            whole_process.push_back(temp_line);
+        }
 
         return whole_process;
     }

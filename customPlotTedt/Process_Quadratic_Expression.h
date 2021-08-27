@@ -45,8 +45,9 @@ public:
     vector <Term> convert_to_standard_form (vector<Term> input);
 
     // Remainder theorum implementation functions
-    bool cheak_for_integer_root (vector <Term> input);
+    int cheak_for_integer_root (vector <Term> input);
     pair <int, int> find_int_root (vector <Term> input);
+    pair <double, double> find_real_root (vector <Term> input);
     vector <vector <Term>> remainder_theorum (vector <Term> input);
 
     // Factor extracting functions

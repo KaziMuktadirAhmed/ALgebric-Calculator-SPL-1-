@@ -159,6 +159,11 @@ Term Algebraic_Opeartion::div_term(Term A, Term B)
 
                     reduce_fraction.start(temp_fraction);
 
+                    if (temp_fraction[1] < 0 && temp_fraction[0] > 0) {
+                        temp_fraction[0] *= -1;
+                        temp_fraction[1] *= -1;
+                    }
+
                     result.isFraction = true;
                     result.co_efficient_fraction[0] = temp_fraction[0];
                     result.co_efficient_fraction[1] = temp_fraction[1];

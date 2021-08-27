@@ -27,9 +27,11 @@ public:
 
     bool isConstant = false;
     bool isFraction = false;
+    bool hasHardVal = false;
 
     int co_efficient = 1;
     int co_efficient_fraction[2];
+    double hard_value = 0.0;
 
     vector< pair <string, int> > variable_and_exponent;  
 };

@@ -37,9 +37,9 @@ void Graph_Plotter::plot_graph(vector<Term> input)
 
     for (double val_x = -10000.0; val_x<10000.0; val_x+=0.1){
         for (size_t i=0; i<input.size(); ++i) {
-            if (!input[i].isBrace && !input[i].isOperator && !input[i].isEqualSign)
-                val_y += multiplyer * calculate_term(input[i], val_x);
-            else if (input[i].isEqualSign)
+            val_y += multiplyer * calculate_term(input[i], val_x);
+
+            if (input[i].isEqualSign)
                 passed_eql_sign = true;
             else if (input[i].isOperator) {
                 if (!passed_eql_sign) {
@@ -105,7 +105,7 @@ void Graph_Plotter::on_btn_back_clicked()
 
 double Graph_Plotter::calculate_term(Term term, double val_x)
 {
-    double val_y = 0, temp = 1;
+    double val_y = 0.0, temp = 1;
 
     if (!term.isBrace && !term.isOperator && !term.isEqualSign)
     {

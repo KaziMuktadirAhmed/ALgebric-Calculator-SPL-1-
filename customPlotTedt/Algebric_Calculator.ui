@@ -667,7 +667,7 @@ QPushButton:pressed {
 }</string>
       </property>
       <property name="text">
-       <string>Claculate</string>
+       <string>Calculate</string>
       </property>
      </widget>
     </item>
