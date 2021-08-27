@@ -2081,6 +2081,28 @@ public:
     	return val_y;
 	}
 
+	double calculate_line (vector<Term> input, double val_x)
+	{
+		double val_y = 0.0, multiplyer = 1, temp = 0.0;
+
+		for (int i=0; i<input[i].isEqualSign == false; ++i) {
+			if (!input[i].isOperator && !input[i].isBrace) {
+				temp = calculate_term(input[i], val_x);
+
+				if (i > 0){
+					if (input[i-1].awperator[0] == '+')
+						multiplyer = 1;
+					else if (input[i-1].awperator[0] == '-')
+						multiplyer = -1;						
+				}
+
+				val_y += multiplyer*temp;
+			}
+		}
+
+		return val_y;
+	}
+
     void start ()
     {
 		Tokenizer t1;
@@ -2159,9 +2181,24 @@ public:
 		qexp1.get_input(inpt);
 		testing_container = qexp1.substitution_of_terms(qexp1.initial_equation);
 		testing_container = qexp1.convert_to_standard_form(testing_container);
-
+		
 		out = print_line(testing_container);
-		cout << out;
+		cout << out << endl;
+
+		out =  "";
+		double temp_val_x = -0.5;
+		for (int i=0; i<testing_container.size(); ++i) {
+			if(testing_container[i].isOperator || testing_container[i].isEqualSign)
+				out += testing_container[i].awperator;
+			else {
+				out += to_string(calculate_term(testing_container[i], temp_val_x));
+			}
+		} cout << out << endl;
+		// cout << "1st test " << calculate_line(testing_container, temp_val_x) << endl;
+
+		for (temp_val_x = -5.0; temp_val_x <= 5.0; temp_val_x += 0.5){
+			cout << "x " << temp_val_x << "\ty " << calculate_line(testing_container, temp_val_x) << endl;
+		}
 	}
 
 

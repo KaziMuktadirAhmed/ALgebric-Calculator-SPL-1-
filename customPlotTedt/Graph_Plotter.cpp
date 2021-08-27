@@ -14,6 +14,12 @@ Graph_Plotter::Graph_Plotter(QWidget *parent)
     ui->plot->graph(0)->setLineStyle(QCPGraph::lsLine);
     // ui->plot->graph(0)->setLineStyle(QCPGraph::lsNone);
 
+    ui->plot->xAxis->setLabel("x");
+    ui->plot->yAxis->setLabel("y");
+
+    ui->plot->xAxis->setRange(-100.0, 100.0);
+    ui->plot->yAxis->setRange(-100.0, 100.0);
+
     // interactive zoom and drag
     ui->plot->setInteraction(QCP::iRangeDrag, true);
     ui->plot->setInteraction(QCP::iRangeZoom, true);
@@ -27,30 +33,14 @@ Graph_Plotter::~Graph_Plotter()
     delete ui;
 }
 
-void Graph_Plotter::plot_graph(vector<Term> input)
+void Graph_Plotter::plot_graph(std::vector<Term> input)
 {
-    double val_y = 0.0;
-    int multiplyer = 1;
-    bool passed_eql_sign = false;
-
     clearData();
 
-    for (double val_x = -10000.0; val_x<10000.0; val_x+=0.1){
-        for (size_t i=0; i<input.size(); ++i) {
-            val_y += multiplyer * calculate_term(input[i], val_x);
+    double val_x, val_y;
 
-            if (input[i].isEqualSign)
-                passed_eql_sign = true;
-            else if (input[i].isOperator) {
-                if (!passed_eql_sign) {
-                    if (input[i].awperator[0] == '+')   multiplyer = 1;
-                    else if (input[i].awperator[0] == '-')    multiplyer = -1;
-                } else {
-                    if (input[i].awperator[0] == '+')   multiplyer = -1;
-                    else if (input[i].awperator[0] == '-')    multiplyer = 1;
-                }
-            }
-        }
+    for (val_x = -100.0; val_x<100.0; val_x+=0.1){
+        val_y = calculate_line(input, val_x);
 
         qv_x.append(val_x);
         qv_y.append(val_y);
@@ -119,6 +109,28 @@ double Graph_Plotter::calculate_term(Term term, double val_x)
             }
 
             val_y *= temp;
+        }
+    }
+
+    return val_y;
+}
+
+double Graph_Plotter::calculate_line(std::vector<Term> input, double val_x)
+{
+    double val_y = 0.0, multiplyer = 1, temp = 0.0;
+
+    for (int i=0; i<input[i].isEqualSign == false; ++i) {
+        if (!input[i].isOperator && !input[i].isBrace) {
+            temp = calculate_term(input[i], val_x);
+
+            if (i > 0){
+                if (input[i-1].awperator[0] == '+')
+                    multiplyer = 1;
+                else if (input[i-1].awperator[0] == '-')
+                    multiplyer = -1;
+            }
+
+            val_y += multiplyer*temp;
         }
     }
 
