@@ -72,6 +72,24 @@ void Print_Output::take_input_from_ui(string input)
 
     for (size_t i=0; i<parser.terms.size(); ++i)
         this->initial_input_line.push_back(parser.terms[i]);
+
+    bool eql_sign_found = false;
+    for (int i=0; i<initial_input_line.size(); ++i)
+        if (initial_input_line[i].isEqualSign)
+            eql_sign_found = true;
+
+    Term eql_sign, zero;
+
+    eql_sign.isEqualSign = true;
+    eql_sign.awperator = "=";
+
+    zero.isConstant = true;
+    zero.co_efficient = 0;
+
+    if (!eql_sign_found) {
+        initial_input_line.push_back(eql_sign);
+        initial_input_line.push_back(zero);
+    }
 }
 
 void Print_Output::clear_all()

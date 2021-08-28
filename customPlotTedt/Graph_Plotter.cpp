@@ -68,7 +68,6 @@ void Graph_Plotter::plot()
     ui->plot->update();
 }
 
-
 void Graph_Plotter::on_btn_clear_clicked()
 {
     clearData();
