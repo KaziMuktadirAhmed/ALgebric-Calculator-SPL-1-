@@ -24,100 +24,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="bx_x">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>640</y>
-      <width>101</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <double>-9999.000000000000000</double>
-    </property>
-    <property name="maximum">
-     <double>9999.000000000000000</double>
-    </property>
-   </widget>
-   <widget class="QDoubleSpinBox" name="bx_y">
-    <property name="geometry">
-     <rect>
-      <x>650</x>
-      <y>640</y>
-      <width>101</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <double>-9999.000000000000000</double>
-    </property>
-    <property name="maximum">
-     <double>9999.000000000000000</double>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_x">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>640</y>
-      <width>20</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>x :</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="llbl_y">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>640</y>
-      <width>21</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>y :</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_add">
-    <property name="geometry">
-     <rect>
-      <x>800</x>
-      <y>640</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Add</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_clear">
-    <property name="geometry">
-     <rect>
-      <x>920</x>
-      <y>640</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Clear</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btn_zoomFull">
     <property name="geometry">
      <rect>
@@ -127,6 +33,24 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	background-color: #C0C0C0;
+	broder: 1px solid gray;
+	padding: 5px;
+}
+
+QPushButton:pressed {
+	background-color: #A9A9A9;
+	broder: 1px solid gray;
+	padding: 5px;
+}</string>
+    </property>
     <property name="text">
      <string>Zoom full</string>
     </property>
@@ -134,11 +58,29 @@
    <widget class="QPushButton" name="btn_back">
     <property name="geometry">
      <rect>
-      <x>1040</x>
+      <x>1000</x>
       <y>640</y>
-      <width>75</width>
-      <height>23</height>
+      <width>111</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	background-color: #C0C0C0;
+	broder: 1px solid gray;
+	padding: 5px;
+}
+
+QPushButton:pressed {
+	background-color: #A9A9A9;
+	broder: 1px solid gray;
+	padding: 5px;
+}</string>
     </property>
     <property name="text">
      <string>Back</string>
@@ -152,6 +94,24 @@
       <width>131</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	background-color: #C0C0C0;
+	broder: 1px solid gray;
+	padding: 5px;
+}
+
+QPushButton:pressed {
+	background-color: #A9A9A9;
+	broder: 1px solid gray;
+	padding: 5px;
+}</string>
     </property>
     <property name="text">
      <string>Zoom Center</string>

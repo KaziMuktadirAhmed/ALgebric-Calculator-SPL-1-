@@ -69,12 +69,6 @@ void Graph_Plotter::plot()
 }
 
 
-void Graph_Plotter::on_btn_add_clicked()
-{
-    addPoint(ui->bx_x->value(), ui->bx_y->value());
-    plot();
-}
-
 void Graph_Plotter::on_btn_clear_clicked()
 {
     clearData();

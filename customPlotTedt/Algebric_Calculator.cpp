@@ -147,6 +147,205 @@ void Algebric_Calculator::on_btn_exp_2_clicked()
     sup_format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     normal_format.setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
     cursor.insertText("2",sup_format);
     cursor.insertText(" ", normal_format);
+}
+
+void Algebric_Calculator::on_btn_1_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("1");
+}
+
+void Algebric_Calculator::on_btn_2_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("2");
+}
+
+void Algebric_Calculator::on_btn_3_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("3");
+}
+
+void Algebric_Calculator::on_btn_4_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("4");
+}
+
+void Algebric_Calculator::on_btn_5_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("5");
+}
+
+void Algebric_Calculator::on_btn_6_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("6");
+}
+
+void Algebric_Calculator::on_btn_7_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("7");
+}
+
+void Algebric_Calculator::on_btn_8_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("8");
+}
+
+void Algebric_Calculator::on_btn_9_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("9");
+}
+
+void Algebric_Calculator::on_btn_0_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("0");
+}
+
+void Algebric_Calculator::on_btn_dot_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText(".");
+}
+
+void Algebric_Calculator::on_btn_x_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("x");
+}
+
+void Algebric_Calculator::on_btn_equal_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("=");
+}
+
+void Algebric_Calculator::on_btn_plus_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("+");
+}
+
+void Algebric_Calculator::on_btn_minus_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("-");
+}
+
+void Algebric_Calculator::on_btn_mul_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("*");
+}
+
+void Algebric_Calculator::on_btn_div_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.insertText("/");
+}
+
+void Algebric_Calculator::on_btn_delete_clicked()
+{
+    QTextEdit *edit = ui->txtedt_input;
+    QTextDocument *doc = edit->document();
+    QTextCursor cursor(doc);
+
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveMode::MoveAnchor);
+
+    cursor.deletePreviousChar();
 }

@@ -35,7 +35,6 @@ public:
     void plot();
 
 private slots:
-    void on_btn_add_clicked();
 
     void on_btn_clear_clicked();
 
