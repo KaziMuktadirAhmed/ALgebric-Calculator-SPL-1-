@@ -119,7 +119,7 @@ double Graph_Plotter::calculate_line(std::vector<Term> input, double val_x)
 {
     double val_y = 0.0, multiplyer = 1, temp = 0.0;
 
-    for (int i=0; i<input[i].isEqualSign == false; ++i) {
+    for (int i=0; input[i].isEqualSign == false; ++i) {
         if (!input[i].isOperator && !input[i].isBrace) {
             temp = calculate_term(input[i], val_x);
 
